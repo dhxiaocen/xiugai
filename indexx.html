@@ -1,0 +1,5000 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>批量自动工具</title>
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f6f8;
+  color: #333;
+  line-height: 1.6;
+  padding: 20px;
+  padding-top: calc(20px + env(safe-area-inset-top));
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  padding-left: calc(20px + env(safe-area-inset-left));
+  padding-right: calc(20px + env(safe-area-inset-right));
+  overflow-x: hidden;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+  font-size: 16px; /* 防止iOS聚焦输入框时自动放大 */
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* 触摸友好的按钮基础样式 */
+button, .btn {
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+}
+
+.section {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title::before {
+  content: "";
+  width: 4px;
+  height: 16px;
+  background: #4a6cf7;
+  border-radius: 2px;
+}
+
+.input-group {
+  margin-bottom: 12px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.input-group input[type="text"],
+.input-group input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-group input[type="text"]:focus,
+.input-group input[type="number"]:focus {
+  border-color: #4a6cf7;
+}
+
+.manual-item {
+  display: grid;
+  grid-template-columns: 1fr 120px auto;
+  gap: 10px;
+  align-items: end;
+  padding: 12px;
+  background: #f8f9fb;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.manual-item .input-group {
+  margin-bottom: 0;
+}
+
+.delete-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: #4a6cf7;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #3a5ae6;
+}
+
+.btn-secondary {
+  background: #f0f2f5;
+  color: #333;
+  border: 1px solid #e0e0e0;
+}
+
+.btn-secondary:hover {
+  background: #e8eaed;
+}
+
+.btn-success {
+  background: #27ae60;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: #219a52;
+}
+
+.btn-warning {
+  background: #f39c12;
+  color: #fff;
+}
+
+.btn-warning:hover {
+  background: #e67e22;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.add-btn-wrap {
+  margin-top: 12px;
+}
+
+.similarity-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-group input[type="range"] {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #e0e0e0;
+  border-radius: 3px;
+  outline: none;
+}
+
+.slider-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #4a6cf7;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.slider-group input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #4a6cf7;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.slider-value {
+  min-width: 60px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a6cf7;
+}
+
+.similarity-tip {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.filter-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  margin: 12px 0 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eee;
+}
+
+.switch-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.switch-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.btn-add {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: #4a6cf7;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.btn-add:hover {
+  background: #3a5ce7;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #e74c3c;
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+.switch-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.switch-row:last-child {
+  border-bottom: none;
+}
+
+.switch-row .switch-label-text {
+  font-size: 14px;
+  color: #333;
+}
+
+.digit-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+.digit-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.digit-btn:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+.digit-btn.active {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: #fff;
+}
+
+.digit-label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.duanzu-item {
+  background: #f8f9fb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.duanzu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.duanzu-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+}
+
+.duanzu-delete-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #999;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.duanzu-delete-btn:hover {
+  background: #fff0f0;
+  color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+.duanzu-inputs {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.duanzu-inputs input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.duanzu-inputs input:focus {
+  border-color: #e74c3c;
+}
+
+.duanzu-sep {
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+}
+
+.rongcuo-item {
+  background: #f8f9fb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.rongcuo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.rongcuo-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+}
+
+.rongcuo-delete-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #999;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.rongcuo-delete-btn:hover {
+  background: #fff0f0;
+  color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.filter-item input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.filter-item .delete-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #999;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.filter-item .delete-btn:hover {
+  background: #fff0f0;
+  color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.result-count {
+  font-size: 14px;
+  color: #666;
+}
+
+.result-content {
+  background: #f8f9fb;
+  border-radius: 8px;
+  padding: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+  font-family: "SF Mono", Consolas, Monaco, monospace;
+  font-size: 13px;
+  line-height: 2;
+  color: #333;
+}
+
+.result-line {
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.result-line.copied {
+  background: #d7e3ff;
+}
+
+.result-line:hover {
+  background: #eef0f3;
+}
+
+.result-line-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-body {
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.result-source {
+  color: #4a6cf7;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.result-idx {
+  color: #999;
+  margin-right: 4px;
+  min-width: 22px;
+  display: inline-block;
+  text-align: right;
+}
+
+.result-code {
+  margin-right: 8px;
+  color: #333;
+}
+
+.copy-line-btn {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.copy-line-btn:hover {
+  background: #4a6cf7;
+  color: #fff;
+  border-color: #4a6cf7;
+}
+
+.result-divider {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  padding: 8px 0;
+  margin: 4px 0;
+  border-top: 1px dashed #e0e0e0;
+}
+
+.result-group-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  padding: 8px 4px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  background: #eef1f6;
+  border-radius: 4px;
+  padding-left: 10px;
+}
+
+.history-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f5f7fa;
+  font-size: 12px;
+  color: #888;
+}
+
+.history-delete-btn {
+  font-size: 12px;
+  padding: 2px 6px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  color: #666;
+  cursor: pointer;
+}
+
+.history-delete-btn:hover {
+  background: #ff4d4f;
+  color: #fff;
+  border-color: #ff4d4f;
+}
+
+.history-content {
+  padding: 8px;
+}
+
+.copy-btn-wrap {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.empty-tip {
+  text-align: center;
+  color: #999;
+  padding: 40px 0;
+  font-size: 14px;
+}
+
+/* === 移动端全面适配 === */
+@media (max-width: 640px) {
+  body {
+    padding-top: calc(12px + env(safe-area-inset-top));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    padding-left: calc(12px + env(safe-area-inset-left));
+    padding-right: calc(12px + env(safe-area-inset-right));
+  }
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .section {
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: 15px;
+  }
+
+  /* 手动录入 */
+  .manual-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    position: relative;
+    padding: 12px;
+    padding-right: 48px;
+  }
+
+  .delete-btn {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    width: 32px;
+    height: 32px;
+  }
+
+  /* 输入框增大触摸区域 */
+  .input-group input[type="text"],
+  .input-group input[type="number"] {
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+
+  .input-group label {
+    font-size: 13px;
+  }
+
+  /* 按钮最小触摸高度 */
+  .btn {
+    padding: 12px 16px;
+    min-height: 44px;
+    font-size: 15px;
+  }
+
+  /* 相似度调控 */
+  .similarity-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .slider-group input[type="range"] {
+    height: 8px;
+  }
+
+  .slider-group input[type="range"]::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .slider-group input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* 筛选条件标题增大触摸区域 */
+  .filter-subtitle {
+    font-size: 14px;
+    min-height: 44px;
+    padding: 10px 0;
+  }
+
+  /* 开关行 */
+  .switch-row {
+    min-height: 44px;
+    padding: 12px 0;
+  }
+
+  .switch-label-text {
+    font-size: 14px;
+  }
+
+  /* 输出格式下拉框增大 */
+  #outputFormat {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    min-height: 36px;
+  }
+
+  /* 开关增大 */
+  .toggle-switch {
+    width: 48px;
+    height: 28px;
+  }
+
+  .toggle-slider:before {
+    height: 22px;
+    width: 22px;
+  }
+
+  .toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+  }
+
+  /* 数字选择器 */
+  .digit-picker {
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .digit-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 15px;
+  }
+
+  /* 断组输入适配 */
+  .duanzu-inputs {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 6px;
+  }
+
+  .duanzu-inputs input {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+
+  /* 容错数字选择器 */
+  .rongcuo-picker .digit-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 13px;
+  }
+
+  /* 操作按钮 */
+  .action-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* 结果展示 */
+  .result-content {
+    font-size: 13px;
+    padding: 12px;
+    max-height: 350px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .result-line {
+    flex-wrap: wrap;
+    padding: 8px 6px;
+  }
+
+  .result-line-content {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  .copy-line-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    min-height: 36px;
+    align-self: flex-end;
+  }
+
+  .result-group-title {
+    font-size: 12px;
+  }
+
+  /* 历史记录触摸区域 */
+  .history-header {
+    min-height: 44px;
+    padding: 10px 12px;
+  }
+
+  /* 全屏历史记录适配 */
+  #historyFullscreen > div {
+    padding-left: calc(12px + env(safe-area-inset-left));
+    padding-right: calc(12px + env(safe-area-inset-right));
+  }
+
+  #historyFullscreen > div > div:first-child {
+    padding-top: calc(12px + env(safe-area-inset-top)) !important;
+    padding-bottom: 12px !important;
+  }
+
+  #historyFullscreenContent {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* 数据修改模块 */
+  #dmContent {
+    padding: 12px 0;
+  }
+
+  #dmDanmaPicker .digit-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dm-inputs-row .input-group {
+    min-width: calc(50% - 4px) !important;
+  }
+
+  /* 模态框全宽 */
+  .modal-content {
+    width: calc(100% - 24px);
+    max-width: 100%;
+  }
+
+  .modal-body {
+    padding: 16px;
+    max-height: 60vh;
+  }
+}
+
+/* === 超小屏幕适配（<=380px） === */
+@media (max-width: 380px) {
+  .digit-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .rongcuo-picker .digit-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  #dmDanmaPicker .digit-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+
+  .section {
+    padding: 12px;
+  }
+
+  .result-content {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .duanzu-inputs {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .duanzu-sep {
+    display: none;
+  }
+}
+
+/* === 横屏优化 === */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+  .result-content {
+    max-height: 200px;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .section {
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>批量自动工具</h1>
+  <div style="text-align:right;margin-bottom:8px;"><a href="notepad.html" style="color:#1890ff;text-decoration:none;font-size:13px;">方案记事本 →</a></div>
+
+  <div class="section">
+    <div class="result-header" onclick="toggleManualSection()" style="cursor:pointer;">
+      <div class="section-title" style="margin-bottom: 0;"><span id="manualSectionArrow">▼</span> 手动录入区</div>
+    </div>
+    <div id="manualContent">
+      <div id="manualList"></div>
+      <div class="add-btn-wrap">
+        <button class="btn btn-secondary btn-block" onclick="addManualItem()">＋ 新增一组</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="randomSection">
+    <div class="section-title">批量随机生成五码</div>
+    <div class="input-group">
+      <label>随机生成五码数量组（自动随机五注号码）</label>
+      <input type="number" id="randomCount" min="0" max="100" value="10" inputmode="numeric" placeholder="请输入数量" oninput="updateSimilarity('group');saveConfig()">
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="result-header" onclick="toggleSimilaritySection()" style="cursor:pointer;">
+      <div class="section-title" style="margin-bottom: 0;"><span id="similaritySectionArrow">▼</span> 相似度百分比调控</div>
+    </div>
+    <div id="similarityContent">
+      <div class="similarity-row">
+        <div class="input-group">
+          <label>组选重复相似度上限（%）</label>
+          <div class="slider-group">
+            <input type="range" id="groupSimilarity" min="0" max="100" value="100" oninput="updateSimilarity('group');saveConfig()">
+            <span class="slider-value" id="groupSimilarityValue">100%</span>
+          </div>
+          <div class="similarity-tip" id="groupSimilarityTip">组选最多允许重复 0 注</div>
+        </div>
+        <div class="input-group">
+          <label>直选重复相似度上限（%）</label>
+          <div class="slider-group">
+            <input type="range" id="straightSimilarity" min="0" max="100" value="100" oninput="updateSimilarity('straight');saveConfig()">
+            <span class="slider-value" id="straightSimilarityValue">100%</span>
+          </div>
+          <div class="similarity-tip" id="straightSimilarityTip">直选最多允许重复 0 注</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="result-header" onclick="toggleFilterSection()" style="cursor:pointer;">
+      <div class="section-title" style="margin-bottom: 0;"><span id="filterSectionArrow">▼</span> 筛选条件</div>
+    </div>
+    <div id="filterContent">
+      <div class="filter-subtitle">开关设置</div>
+      <div class="switch-row">
+        <span class="switch-label-text">随机五码 适用筛选条件</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="filterRandom" checked onchange="saveConfig()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="switch-row">
+        <span class="switch-label-text">去掉组三</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="filterZuSan" onchange="saveConfig()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="switch-row">
+        <span class="switch-label-text">去掉豹子</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="filterBaozi" onchange="saveConfig()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="switch-row">
+        <span class="switch-label-text">显示胆码</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="showDanma" checked onchange="saveConfig()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="switch-row">
+        <span class="switch-label-text">输出格式</span>
+        <select id="outputFormat" onchange="onOutputFormatChange();saveConfig()" style="padding:4px 8px;border:1px solid #ddd;border-radius:6px;font-size:13px;">
+          <option value="1">格式一</option>
+          <option value="2">格式二</option>
+          <option value="3">格式三（混合注数）</option>
+        </select>
+      </div>
+      <div id="format3Settings" style="display:none;padding:12px;background:#f8f9fb;border-radius:8px;margin-top:8px;">
+        <div style="font-size:13px;color:#666;margin-bottom:8px;">设置各类注数组数</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div class="input-group" style="margin-bottom:0;">
+            <label>五码五注组数</label>
+            <input type="number" id="fmt3WumaCount" value="20" min="0" max="100" inputmode="numeric" onchange="saveConfig()">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label>四注组数</label>
+            <input type="number" id="fmt3FourCount" value="5" min="0" max="100" inputmode="numeric" onchange="saveConfig()">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label>三注组数</label>
+            <input type="number" id="fmt3ThreeCount" value="5" min="0" max="100" inputmode="numeric" onchange="saveConfig()">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label>两注组数</label>
+            <input type="number" id="fmt3TwoCount" value="2" min="0" max="100" inputmode="numeric" onchange="saveConfig()">
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-subtitle" style="cursor:pointer;user-select:none;" onclick="toggleCondition('cond1', 'cond1Arrow')"><span><span id="cond1Arrow">▼</span> 条件1 胆码</span></div>
+      <div id="cond1">
+        <div class="digit-label">选择胆</div>
+        <div class="digit-picker" id="danmaPicker"></div>
+        <div class="digit-label" style="margin-top: 12px;">至少包含几个胆</div>
+        <div class="digit-picker" id="danmaCountPicker"></div>
+      </div>
+
+      <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond2', 'cond2Arrow')"><span><span id="cond2Arrow">▼</span> 条件2 排除和尾</span></div>
+      <div id="cond2">
+        <div class="digit-label">和值尾数</div>
+        <div class="digit-picker" id="hezhiPicker"></div>
+      </div>
+
+      <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond3', 'cond3Arrow')"><span><span id="cond3Arrow">▼</span> 条件3 断组</span>
+        <button class="btn-add" onclick="addDuanzu();event.stopPropagation();">+ 添加断组</button>
+      </div>
+      <div id="cond3">
+        <div id="duanzuList"></div>
+      </div>
+
+      <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond4', 'cond4Arrow')"><span><span id="cond4Arrow">▼</span> 条件4 容错=01</span>
+        <button class="btn-add" onclick="addRongcuo();event.stopPropagation();">+ 添加容错</button>
+      </div>
+      <div id="cond4">
+        <div id="rongcuoList"></div>
+      </div>
+
+      <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond5', 'cond5Arrow')"><span><span id="cond5Arrow">▼</span> 条件5 百十个杀号</span></div>
+      <div id="cond5">
+        <div class="digit-label">百位杀</div>
+        <div class="digit-picker" id="excludeBaiPicker"></div>
+        <div class="digit-label" style="margin-top: 12px;">十位杀</div>
+        <div class="digit-picker" id="excludeShiPicker"></div>
+        <div class="digit-label" style="margin-top: 12px;">个位杀</div>
+        <div class="digit-picker" id="excludeGePicker"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="result-header" onclick="toggleDmSection()" style="cursor:pointer;">
+      <div class="section-title" style="margin-bottom: 0;"><span id="dmSectionArrow">▼</span> 数据修改</div>
+      <label class="toggle-switch" style="margin-left:auto;" onclick="event.stopPropagation();">
+        <span style="margin-right:6px;font-size:13px;color:#666;">启用</span>
+        <input type="checkbox" id="dmEnable" onchange="saveConfig()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div id="dmContent" style="padding:16px 0;">
+      <div class="digit-label">选择胆码（按点击顺序，选3个）</div>
+      <div class="digit-picker" id="dmDanmaPicker"></div>
+      <div id="dmDanmaOrder" style="margin-top:8px;font-size:13px;color:#666;">请选择3个胆码</div>
+      <div class="dm-inputs-row" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
+        <div class="input-group" style="flex:1;min-width:120px;">
+          <label>五码五注组数</label>
+          <input type="number" id="dmWumaCount" value="0" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
+        </div>
+        <div class="input-group" style="flex:1;min-width:120px;">
+          <label>两注组数</label>
+          <input type="number" id="dmTwoCount" value="0" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
+        </div>
+        <div class="input-group" style="flex:1;min-width:120px;">
+          <label>三注组数</label>
+          <input type="number" id="dmThreeCount" value="0" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
+        </div>
+        <div class="input-group" style="flex:1;min-width:120px;">
+          <label>四注组数</label>
+          <input type="number" id="dmFourCount" value="0" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
+        </div>
+      </div>
+      <div class="switch-row" style="margin-top:12px;">
+        <span class="switch-label-text">去除组三</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="dmFilterZuSan" onchange="saveConfig()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="switch-row">
+        <span class="switch-label-text">去除豹子</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="dmFilterBaozi" onchange="saveConfig()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="action-row">
+      <button class="btn btn-primary btn-block" onclick="generateAllResults()">生成全部结果</button>
+      <button class="btn btn-danger btn-block" onclick="clearAll()">清空所有内容</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="result-header">
+      <div class="section-title" style="margin-bottom: 0;">结果展示</div>
+      <span class="result-count" id="resultCount">共 0 条</span>
+    </div>
+    <div class="result-content" id="resultContent">
+      <div class="empty-tip">暂无结果，请先配置数据源并点击生成</div>
+    </div>
+    <div class="copy-btn-wrap">
+      <button class="btn btn-secondary" onclick="saveToHistory()">保存到历史记录</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="result-header" onclick="toggleHistorySection()" style="cursor:pointer;">
+      <div class="section-title" style="margin-bottom: 0;"><span id="historySectionArrow">▼</span> 历史记录</div>
+      <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();openHistoryFullscreen()" style="font-size: 12px; padding: 4px 8px;">全屏查看</button>
+    </div>
+    <div class="result-content" id="historyContent">
+      <div class="empty-tip">暂无历史记录</div>
+    </div>
+    <div class="copy-btn-wrap">
+      <button class="btn btn-danger btn-sm" onclick="clearAllHistory()" style="font-size: 12px; padding: 4px 8px;">清空全部历史</button>
+    </div>
+  </div>
+</div>
+
+<div id="historyFullscreen" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#f5f6f8;z-index:1000;">
+  <div style="max-width:960px;margin:0 auto;height:100%;display:flex;flex-direction:column;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #e0e0e0;background:#f5f6f8;flex-shrink:0;position:sticky;top:0;z-index:1;">
+      <div class="section-title" style="margin-bottom:0;">历史记录</div>
+      <button class="btn btn-primary btn-sm" onclick="closeHistoryFullscreen()" style="font-size:13px;padding:6px 16px;">关闭</button>
+    </div>
+    <div id="historyFullscreenContent" style="flex:1;overflow-y:auto;padding:16px 0;"></div>
+  </div>
+</div>
+
+<script>
+let manualItemCount = 0;
+let duanzuCount = 0;
+let rongcuoCount = 0;
+
+function initDigitPicker(containerId, onChangeCallback, digits = null, isSingleSelect = false, dataGroup = null) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  const numDigits = digits || [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  for (const i of numDigits) {
+    const btn = document.createElement('div');
+    btn.className = 'digit-btn';
+    btn.textContent = i;
+    btn.dataset.digit = i;
+    if (dataGroup) btn.dataset.group = dataGroup;
+    btn.onclick = function() {
+      if (isSingleSelect) {
+        const allBtns = container.querySelectorAll('.digit-btn');
+        allBtns.forEach(b => b.classList.remove('active'));
+      }
+      btn.classList.toggle('active');
+      if (onChangeCallback) onChangeCallback();
+    };
+    container.appendChild(btn);
+  }
+}
+
+function getSelectedDigits(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return [];
+  const activeBtns = container.querySelectorAll('.digit-btn.active');
+  return Array.from(activeBtns).map(btn => btn.dataset.digit);
+}
+
+function setSelectedDigits(containerId, digits) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const btns = container.querySelectorAll('.digit-btn');
+  btns.forEach(btn => {
+    if (digits.includes(btn.dataset.digit)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+function addDuanzu(p1 = '', p2 = '', p3 = '') {
+  duanzuCount++;
+  const id = duanzuCount;
+  const list = document.getElementById('duanzuList');
+  const item = document.createElement('div');
+  item.className = 'duanzu-item';
+  item.id = 'duanzu-' + id;
+  item.innerHTML = `
+    <div class="duanzu-header">
+      <span class="duanzu-title">断组${id}</span>
+      <button class="duanzu-delete-btn" onclick="deleteDuanzu(${id})">−</button>
+    </div>
+    <div class="duanzu-inputs">
+      <input type="text" class="duanzu-p1" placeholder="例：19" inputmode="numeric" value="${p1}" oninput="saveConfig()">
+      <span class="duanzu-sep">-</span>
+      <input type="text" class="duanzu-p2" placeholder="例：678" inputmode="numeric" value="${p2}" oninput="saveConfig()">
+      <span class="duanzu-sep">-</span>
+      <input type="text" class="duanzu-p3" placeholder="例：0235" inputmode="numeric" value="${p3}" oninput="saveConfig()">
+    </div>
+  `;
+  list.appendChild(item);
+  saveConfig();
+}
+
+function deleteDuanzu(id) {
+  const item = document.getElementById('duanzu-' + id);
+  if (item) {
+    item.remove();
+  }
+  renumberDuanzu();
+  saveConfig();
+}
+
+function renumberDuanzu() {
+  const items = document.querySelectorAll('.duanzu-item');
+  duanzuCount = items.length;
+  let newId = 1;
+  items.forEach(item => {
+    const oldId = item.id.replace('duanzu-', '');
+    item.id = 'duanzu-' + newId;
+    const titleEl = item.querySelector('.duanzu-title');
+    if (titleEl) {
+      titleEl.textContent = '断组' + newId;
+    }
+    const delBtn = item.querySelector('.duanzu-delete-btn');
+    if (delBtn) {
+      delBtn.setAttribute('onclick', 'deleteDuanzu(' + newId + ')');
+    }
+    newId++;
+  });
+}
+
+function addRongcuo(digits = []) {
+  rongcuoCount++;
+  const id = rongcuoCount;
+  const list = document.getElementById('rongcuoList');
+  const item = document.createElement('div');
+  item.className = 'rongcuo-item';
+  item.id = 'rongcuo-' + id;
+  item.innerHTML = `
+    <div class="rongcuo-header">
+      <span class="rongcuo-title">容错${id}</span>
+      <button class="rongcuo-delete-btn" onclick="deleteRongcuo(${id})">−</button>
+    </div>
+    <div class="digit-picker rongcuo-picker" id="rongcuo-picker-${id}"></div>
+  `;
+  list.appendChild(item);
+
+  const picker = item.querySelector('.rongcuo-picker');
+  for (let i = 0; i <= 9; i++) {
+    const btn = document.createElement('div');
+    btn.className = 'digit-btn';
+    btn.textContent = i;
+    btn.dataset.digit = i;
+    if (digits.includes(i.toString())) {
+      btn.classList.add('active');
+    }
+    btn.onclick = function() {
+      btn.classList.toggle('active');
+      saveConfig();
+    };
+    picker.appendChild(btn);
+  }
+
+  saveConfig();
+}
+
+function getRongcuoDigits(id) {
+  const picker = document.getElementById('rongcuo-picker-' + id);
+  if (!picker) return [];
+  const activeBtns = picker.querySelectorAll('.digit-btn.active');
+  return Array.from(activeBtns).map(btn => btn.dataset.digit);
+}
+
+function deleteRongcuo(id) {
+  const item = document.getElementById('rongcuo-' + id);
+  if (item) {
+    item.remove();
+  }
+  renumberRongcuo();
+  saveConfig();
+}
+
+function renumberRongcuo() {
+  const items = document.querySelectorAll('.rongcuo-item');
+  rongcuoCount = items.length;
+  let newId = 1;
+  items.forEach(item => {
+    const oldId = item.id.replace('rongcuo-', '');
+    item.id = 'rongcuo-' + newId;
+    const titleEl = item.querySelector('.rongcuo-title');
+    if (titleEl) {
+      titleEl.textContent = '容错' + newId;
+    }
+    const picker = item.querySelector('.rongcuo-picker');
+    if (picker) {
+      picker.id = 'rongcuo-picker-' + newId;
+    }
+    const delBtn = item.querySelector('.rongcuo-delete-btn');
+    if (delBtn) {
+      delBtn.setAttribute('onclick', 'deleteRongcuo(' + newId + ')');
+    }
+    newId++;
+  });
+}
+
+function isZuSanCode(code) {
+  const digits = code.split('').sort();
+  if (digits[0] === digits[1] && digits[1] !== digits[2]) return true;
+  if (digits[1] === digits[2] && digits[0] !== digits[1]) return true;
+  return false;
+}
+
+function hitDuanzu(code, p1, p2, p3) {
+  const parts = [p1, p2, p3].filter(s => s && s.trim() !== '');
+  if (parts.length < 2) return false;
+  const digits = new Set(code.split(''));
+  for (const part of parts) {
+    let hit = false;
+    for (const d of part) {
+      if (digits.has(d)) {
+        hit = true;
+        break;
+      }
+    }
+    if (!hit) return false;
+  }
+  return true;
+}
+
+function hitRongcuo(code, rongcuoDigits) {
+  if (!rongcuoDigits || rongcuoDigits.length === 0) return false;
+  const digits = new Set(code.split(''));
+  let count = 0;
+  for (const num of rongcuoDigits) {
+    if (digits.has(num)) {
+      count++;
+    }
+  }
+  return count >= 2;
+}
+
+// 检查五码组合是否命中容错条件（同时包含容错中的2个以上数字）
+function hitRongcuoSource(source, rongcuoDigits) {
+  if (!rongcuoDigits || rongcuoDigits.length === 0) return false;
+  const sourceDigits = source.split('');
+  let count = 0;
+  for (const num of rongcuoDigits) {
+    if (sourceDigits.includes(num)) {
+      count++;
+    }
+  }
+  return count >= 2;
+}
+
+function quickFilterCheck(source) {
+  const sourceDigits = source.split('');
+  const n = sourceDigits.length;
+
+  let totalCodes = n;
+  totalCodes += n * (n - 1) * 3;
+  totalCodes += (n * (n - 1) * (n - 2) / 6) * 6;
+
+  if (document.getElementById('filterZuSan').checked) {
+    let zuSanCount = n * (n - 1) * 2;
+    totalCodes -= zuSanCount;
+  }
+
+  if (document.getElementById('filterBaozi').checked) {
+    totalCodes -= n;
+  }
+
+  const hezhiDigits = getSelectedDigits('hezhiPicker');
+  if (hezhiDigits.length > 0) {
+    const excludeRatio = hezhiDigits.length / 10;
+    totalCodes = Math.ceil(totalCodes * (1 - excludeRatio * 0.6));
+  }
+
+  // 百十个杀号影响估算
+  const excludeBai = getSelectedDigits('excludeBaiPicker');
+  const excludeShi = getSelectedDigits('excludeShiPicker');
+  const excludeGe = getSelectedDigits('excludeGePicker');
+  if (excludeBai.length > 0) {
+    totalCodes = Math.ceil(totalCodes * (1 - excludeBai.length / 10));
+  }
+  if (excludeShi.length > 0) {
+    totalCodes = Math.ceil(totalCodes * (1 - excludeShi.length / 10));
+  }
+  if (excludeGe.length > 0) {
+    totalCodes = Math.ceil(totalCodes * (1 - excludeGe.length / 10));
+  }
+
+  const danmaDigits = getSelectedDigits('danmaPicker');
+  const danmaCountDigits = getSelectedDigits('danmaCountPicker').map(d => parseInt(d));
+  const minCount = danmaCountDigits.length > 0 ? Math.max(...danmaCountDigits) : 1;
+
+  if (danmaDigits.length > 0) {
+    if (minCount === 1) {
+      let hasAny = 0;
+      for (const d of danmaDigits) {
+        if (sourceDigits.includes(d)) hasAny++;
+      }
+      if (hasAny > 0) {
+        totalCodes = Math.ceil(totalCodes * 0.8);
+      } else {
+        return 0;
+      }
+    } else if (minCount === 2) {
+      let hasCount = 0;
+      for (const d of danmaDigits) {
+        if (sourceDigits.includes(d)) hasCount++;
+      }
+      if (hasCount >= 2) {
+        totalCodes = Math.ceil(totalCodes * 0.5);
+      } else if (hasCount === 1) {
+        totalCodes = Math.ceil(totalCodes * 0.3);
+      } else {
+        return 0;
+      }
+    } else if (minCount === 3) {
+      let hasCount = 0;
+      for (const d of danmaDigits) {
+        if (sourceDigits.includes(d)) hasCount++;
+      }
+      if (hasCount >= 3) {
+        totalCodes = Math.ceil(totalCodes * 0.2);
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  // 容错条件影响估算：每个容错条件会过滤掉同时包含2个容错数字的号码
+  const rongcuoList = getRongcuoList();
+  if (rongcuoList.length > 0) {
+    // 估算容错过滤掉的号码比例
+    let maxExcludeRatio = 0;
+    for (const rc of rongcuoList) {
+      let hitCount = 0;
+      for (const d of rc) {
+        if (sourceDigits.includes(d)) hitCount++;
+      }
+      if (hitCount >= 2) {
+        // 五码中包含容错中至少2个数字，估算被过滤比例
+        const ratio = (hitCount / n) * 0.5;
+        if (ratio > maxExcludeRatio) maxExcludeRatio = ratio;
+      }
+    }
+    totalCodes = Math.ceil(totalCodes * (1 - maxExcludeRatio));
+  }
+
+  return Math.ceil(totalCodes / 5);
+}
+
+function applyFilters(pool, isRandom) {
+  const filterRandom = document.getElementById('filterRandom').checked;
+  
+  let result = [...pool];
+
+  // 容错条件始终生效（不受filterRandom开关影响）
+  const rongcuoList = getRongcuoList();
+  if (rongcuoList.length > 0) {
+    result = result.filter(code => {
+      for (const rc of rongcuoList) {
+        if (hitRongcuo(code, rc)) return false;
+      }
+      return true;
+    });
+  }
+
+  if (isRandom && !filterRandom) {
+    return result;
+  }
+
+  if (document.getElementById('filterZuSan').checked) {
+    result = result.filter(code => !isZuSanCode(code));
+  }
+
+  if (document.getElementById('filterBaozi').checked) {
+    result = result.filter(code => !isLeopardCode(code));
+  }
+
+  const duanzuItems = document.querySelectorAll('.duanzu-item');
+  const duanzuList = [];
+  for (const item of duanzuItems) {
+    const p1 = item.querySelector('.duanzu-p1').value.trim();
+    const p2 = item.querySelector('.duanzu-p2').value.trim();
+    const p3 = item.querySelector('.duanzu-p3').value.trim();
+    if (p1 || p2 || p3) {
+      duanzuList.push({ p1, p2, p3 });
+    }
+  }
+  if (duanzuList.length > 0) {
+    result = result.filter(code => {
+      for (const dz of duanzuList) {
+        if (hitDuanzu(code, dz.p1, dz.p2, dz.p3)) return false;
+      }
+      return true;
+    });
+  }
+
+  const hezhiDigits = getSelectedDigits('hezhiPicker');
+  if (hezhiDigits.length > 0) {
+    result = result.filter(code => {
+      const sum = parseInt(code[0]) + parseInt(code[1]) + parseInt(code[2]);
+      const tail = sum % 10;
+      return !hezhiDigits.includes(tail.toString());
+    });
+  }
+
+  // 容错条件已在 applyFilters 中始终生效，此处不再重复
+
+  const danmaDigits = getSelectedDigits('danmaPicker');
+  if (danmaDigits.length > 0) {
+    const danmaCountDigits = getSelectedDigits('danmaCountPicker').map(d => parseInt(d));
+    const minCount = danmaCountDigits.length > 0 ? Math.max(...danmaCountDigits) : 1;
+    result = result.filter(code => {
+      let count = 0;
+      for (const d of danmaDigits) {
+        if (code.includes(d)) count++;
+      }
+      return count >= minCount;
+    });
+  }
+
+  const excludeBai = getSelectedDigits('excludeBaiPicker');
+  const excludeShi = getSelectedDigits('excludeShiPicker');
+  const excludeGe = getSelectedDigits('excludeGePicker');
+  if (excludeBai.length > 0 || excludeShi.length > 0 || excludeGe.length > 0) {
+    result = result.filter(code => {
+      if (excludeBai.length > 0 && excludeBai.includes(code[0])) return false;
+      if (excludeShi.length > 0 && excludeShi.includes(code[1])) return false;
+      if (excludeGe.length > 0 && excludeGe.includes(code[2])) return false;
+      return true;
+    });
+  }
+
+  return result;
+}
+
+function addManualItem() {
+  manualItemCount++;
+  const id = manualItemCount;
+  const list = document.getElementById('manualList');
+  const item = document.createElement('div');
+  item.className = 'manual-item';
+  item.id = 'manual-' + id;
+  item.innerHTML = `
+    <div class="input-group">
+      <label>数据源（4-10位不重复数字）</label>
+      <input type="text" class="source-input" placeholder="例如：12345" maxlength="10" inputmode="numeric" pattern="[0-9]*" oninput="saveConfig()">
+    </div>
+    <div class="input-group">
+      <label>铁胆（单数字/空）</label>
+      <input type="text" class="dan-input" placeholder="例如：5" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="saveConfig()">
+    </div>
+    <button class="delete-btn" onclick="deleteManualItem(${id})" title="删除">×</button>
+  `;
+  list.appendChild(item);
+  saveConfig();
+}
+
+function deleteManualItem(id) {
+  const item = document.getElementById('manual-' + id);
+  if (item) {
+    item.remove();
+  }
+  if (document.querySelectorAll('.manual-item').length === 0) {
+    addManualItem();
+  }
+  saveConfig();
+}
+
+function updateSliderValue(type) {
+  if (type === 'group') {
+    const val = document.getElementById('groupSimilarity').value;
+    document.getElementById('groupSimilarityValue').textContent = val + '%';
+  } else {
+    const val = document.getElementById('straightSimilarity').value;
+    document.getElementById('straightSimilarityValue').textContent = val + '%';
+  }
+}
+
+function isLeopardCode(code) {
+  return code[0] === code[1] && code[1] === code[2];
+}
+
+function getSourceCount() {
+  const results = window._lastResults || [];
+  if (results.length > 0) {
+    return results.length;
+  }
+
+  let count = 0;
+  const manualItems = document.querySelectorAll('.manual-item');
+  for (const item of manualItems) {
+    const source = item.querySelector('.source-input').value.trim();
+    if (source !== '') {
+      count++;
+    }
+  }
+
+  const randomCountInput = document.getElementById('randomCount');
+  let randomCount = parseInt(randomCountInput.value);
+  if (isNaN(randomCount) || randomCount < 0) {
+    randomCount = 0;
+  }
+  count += randomCount;
+
+  return count;
+}
+
+function updateSimilarity(type) {
+  if (type === 'group') {
+    const val = document.getElementById('groupSimilarity').value;
+    document.getElementById('groupSimilarityValue').textContent = val + '%';
+  } else {
+    const val = document.getElementById('straightSimilarity').value;
+    document.getElementById('straightSimilarityValue').textContent = val + '%';
+  }
+
+  const sourceCount = getSourceCount();
+  const totalCodes = sourceCount * 5;
+
+  const groupPercent = parseInt(document.getElementById('groupSimilarity').value);
+  const straightPercent = parseInt(document.getElementById('straightSimilarity').value);
+
+  let maxGroupRepeat = Math.floor(totalCodes * groupPercent / 100);
+  let maxStraightRepeat = Math.floor(totalCodes * straightPercent / 100);
+
+  if (maxGroupRepeat === 0 && groupPercent > 0) maxGroupRepeat = 1;
+  if (maxStraightRepeat === 0 && straightPercent > 0) maxStraightRepeat = 1;
+
+  document.getElementById('groupSimilarityTip').textContent = '目前共' + totalCodes + '注，组选最多重复 ' + maxGroupRepeat + ' 注';
+  document.getElementById('straightSimilarityTip').textContent = '目前共' + totalCodes + '注，直选最多重复 ' + maxStraightRepeat + ' 注';
+}
+
+function validateSource(source) {
+  if (!source || source.length < 4 || source.length > 10) {
+    return { valid: false, msg: '数据源必须是4-10位数字' };
+  }
+  if (!/^\d+$/.test(source)) {
+    return { valid: false, msg: '数据源只能包含数字' };
+  }
+  const unique = new Set(source.split(''));
+  if (unique.size !== source.length) {
+    return { valid: false, msg: '数据源数字不能重复' };
+  }
+  return { valid: true };
+}
+
+function validateDan(dan) {
+  if (dan === '') return { valid: true };
+  if (!/^\d$/.test(dan)) {
+    return { valid: false, msg: '铁胆只能是单个数字或留空' };
+  }
+  return { valid: true };
+}
+
+function generateRandomSources() {
+  const countInput = document.getElementById('randomCount');
+  let count = parseInt(countInput.value);
+
+  if (isNaN(count) || count < 1 || count > 100) {
+    alert('随机生成数量必须是1~100之间的整数');
+    return;
+  }
+
+  const sourceList = [];
+  for (let i = 0; i < count; i++) {
+    sourceList.push({ source: generateRandom5DigitsRongcuo(), dan: '' });
+  }
+
+  generateResultsFromList(sourceList);
+}
+
+function generateRandom5Digits() {
+  const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const result = [];
+  for (let i = 0; i < 5; i++) {
+    const idx = Math.floor(Math.random() * digits.length);
+    result.push(digits.splice(idx, 1)[0]);
+  }
+  return result.join('');
+}
+
+// 获取所有容错条件列表
+function getRongcuoList() {
+  const rongcuoList = [];
+  for (let i = 1; i <= rongcuoCount; i++) {
+    const item = document.getElementById('rongcuo-' + i);
+    if (item) {
+      const digits = getRongcuoDigits(i);
+      if (digits.length > 0) {
+        rongcuoList.push(digits);
+      }
+    }
+  }
+  return rongcuoList;
+}
+
+// 生成随机五码，自动过滤容错条件（五码不能同时包含容错中的2个以上数字）
+function generateRandom5DigitsRongcuo() {
+  const rongcuoList = getRongcuoList();
+  if (rongcuoList.length === 0) return generateRandom5Digits();
+  for (let attempt = 0; attempt < 200; attempt++) {
+    const candidate = generateRandom5Digits();
+    let hit = false;
+    for (const rc of rongcuoList) {
+      if (hitRongcuoSource(candidate, rc)) {
+        hit = true;
+        break;
+      }
+    }
+    if (!hit) return candidate;
+  }
+  return generateRandom5Digits();
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function generateAll3DigitCodes(sourceDigits) {
+  const digits = sourceDigits.split('');
+  const n = digits.length;
+  const codes = [];
+
+  for (let i = 0; i < n; i++) {
+    codes.push(digits[i] + digits[i] + digits[i]);
+  }
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (i === j) continue;
+      const a = digits[i];
+      const b = digits[j];
+      codes.push(a + a + b);
+      codes.push(a + b + a);
+      codes.push(b + a + a);
+    }
+  }
+
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      for (let k = j + 1; k < n; k++) {
+        const a = digits[i];
+        const b = digits[j];
+        const c = digits[k];
+        codes.push(a + b + c);
+        codes.push(a + c + b);
+        codes.push(b + a + c);
+        codes.push(b + c + a);
+        codes.push(c + a + b);
+        codes.push(c + b + a);
+      }
+    }
+  }
+
+  return codes;
+}
+
+function getGroupKey(code) {
+  return code.split('').sort().join('');
+}
+
+function generateNumberPool(source, dan, isRandom = false) {
+  const allCodes = generateAll3DigitCodes(source);
+
+  const groupMap = {};
+  for (const code of allCodes) {
+    const key = getGroupKey(code);
+    if (!groupMap[key]) {
+      groupMap[key] = [];
+    }
+    groupMap[key].push(code);
+  }
+
+  let pool = [];
+  const groupKeys = Object.keys(groupMap);
+  shuffle(groupKeys);
+
+  for (const key of groupKeys) {
+    const variants = groupMap[key];
+    shuffle(variants);
+    pool.push(variants[0]);
+  }
+
+  pool = applyFilters(pool, isRandom);
+
+  if (dan !== '') {
+    pool = pool.filter(code => code.includes(dan));
+  }
+
+  shuffle(pool);
+  return pool;
+}
+
+function onOutputFormatChange() {
+  const fmt = document.getElementById('outputFormat').value;
+  const settings = document.getElementById('format3Settings');
+  const randomSection = document.getElementById('randomSection');
+  if (fmt === '3') {
+    settings.style.display = 'block';
+    if (randomSection) randomSection.style.display = 'none';
+  } else {
+    settings.style.display = 'none';
+    if (randomSection) randomSection.style.display = 'block';
+  }
+}
+
+// 生成全局号码池（000-999经筛选）
+function generateGlobalPool() {
+  const allCodes = [];
+  for (let i = 0; i < 1000; i++) {
+    allCodes.push(String(i).padStart(3, '0'));
+  }
+
+  // 组选去重：每组只保留一个代表
+  const groupMap = {};
+  for (const code of allCodes) {
+    const key = getGroupKey(code);
+    if (!groupMap[key]) {
+      groupMap[key] = [];
+    }
+    groupMap[key].push(code);
+  }
+
+  let pool = [];
+  for (const key in groupMap) {
+    const variants = groupMap[key];
+    shuffle(variants);
+    pool.push(variants[0]);
+  }
+
+  // 应用筛选条件（强制应用，不管filterRandom）
+  pool = applyFilters(pool, false);
+
+  shuffle(pool);
+  return pool;
+}
+
+// 从号码池中选N注（号码可重复），人工排序
+// 检查候选号码是否与组内已有号码重复（直选或组选都算重复）
+function isDuplicateInGroup(candidate, existingNotes) {
+  const candidateKey = getGroupKey(candidate);
+  for (const note of existingNotes) {
+    // 直选重复
+    if (note === candidate) return true;
+    // 组选重复（相同数字不同排列）
+    if (getGroupKey(note) === candidateKey) return true;
+  }
+  return false;
+}
+
+function generateNotesFromPool(pool, noteCount) {
+  if (pool.length === 0) return [];
+
+  // 人工选号：和五码五注的 pickHumanLike 逻辑一致
+  // 1. 随机选第一注
+  // 2. 后续注数加权随机，每匹配一个已选号码的位置 +5 权重
+  // 3. 组选去重（同组号码不能重复）
+  const picked = [];
+  const usedKeys = new Set();
+
+  // 候选池（副本，会从中移除已选号码）
+  let candidates = pool.filter(code => !usedKeys.has(getGroupKey(code)));
+
+  // 第一注：纯随机
+  if (candidates.length > 0) {
+    const firstIdx = Math.floor(Math.random() * candidates.length);
+    const firstCode = candidates[firstIdx];
+    picked.push(firstCode);
+    usedKeys.add(getGroupKey(firstCode));
+    candidates.splice(firstIdx, 1);
+  }
+
+  // 后续注数：加权随机选号
+  while (picked.length < noteCount && candidates.length > 0) {
+    const weights = candidates.map(code => {
+      let w = 1;
+      for ( const p of picked) {
+        if (code[0] === p[0]) w += 5;
+        if (code[1] === p[1]) w += 5;
+        if (code[2] === p[2]) w += 5;
+      }
+      return w;
+    });
+
+    const totalW = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * totalW;
+    let pos = 0;
+    for (let i = 0; i < weights.length; i++) {
+      r -= weights[i];
+      if (r <= 0) { pos = i; break; }
+    }
+
+    const chosen = candidates[pos];
+    picked.push(chosen);
+    usedKeys.add(getGroupKey(chosen));
+    candidates.splice(pos, 1);
+  }
+
+  return reorderCodesHumanLike(picked);
+}
+
+// 格式三生成
+function generateFormat3Results() {
+  const wumaCount = parseInt(document.getElementById('fmt3WumaCount').value) || 0;
+  const fourCount = parseInt(document.getElementById('fmt3FourCount').value) || 0;
+  const threeCount = parseInt(document.getElementById('fmt3ThreeCount').value) || 0;
+  const twoCount = parseInt(document.getElementById('fmt3TwoCount').value) || 0;
+
+  if (wumaCount + fourCount + threeCount + twoCount === 0) {
+    alert('请至少设置一个大于0的组数');
+    return null;
+  }
+
+  const qihao = getCurrentQihao();
+  const results = [];
+  let serial = 1;
+
+  // 1. 五码五注：复用现有完整生成逻辑
+  if (wumaCount > 0) {
+    // 保存原始值
+    const origRandomCount = document.getElementById('randomCount').value;
+    const origFormat = document.getElementById('outputFormat').value;
+
+    try {
+      // 临时设置
+      document.getElementById('randomCount').value = wumaCount;
+      document.getElementById('outputFormat').value = '2';
+      window._fmt3WumaMode = true;
+      window._fmt3WumaResults = null;
+
+      // 构造随机数据源列表，复用 generateAllResults 的核心逻辑
+      const allList = [];
+
+      // 格式三：始终使用筛选条件查找合格五码
+      let validCandidates = [];
+      const allCombos = [];
+      const digits = ['0','1','2','3','4','5','6','7','8','9'];
+      for (let a = 0; a < 6; a++) {
+        for (let b = a+1; b < 7; b++) {
+          for (let c = b+1; c < 8; c++) {
+            for (let d = c+1; d < 9; d++) {
+              for (let e = d+1; e < 10; e++) {
+                allCombos.push(digits[a]+digits[b]+digits[c]+digits[d]+digits[e]);
+              }
+            }
+          }
+        }
+      }
+
+      // 获取容错条件列表
+      const rongcuoList = getRongcuoList();
+
+      for (const combo of allCombos) {
+        // 容错检查：五码组合不能同时包含容错中的2个以上数字
+        let rongcuoHit = false;
+        for (const rc of rongcuoList) {
+          if (hitRongcuoSource(combo, rc)) {
+            rongcuoHit = true;
+            break;
+          }
+        }
+        if (rongcuoHit) continue;
+
+        if (quickFilterCheck(combo) >= 5) {
+          // 格式三强制应用筛选：isRandom=false 确保不受 filterRandom 开关影响
+          const pool = generateNumberPool(combo, '', false);
+          if (pool.length >= 5) {
+            validCandidates.push({ source: combo, pool: pool });
+          }
+        }
+      }
+
+      shuffle(validCandidates);
+
+      if (validCandidates.length === 0) {
+        alert('当前筛选条件下没有任何五码能生成5注以上号码，请放宽筛选条件');
+        return null;
+      }
+
+      for (let i = 0; i < wumaCount; i++) {
+        if (validCandidates.length === 0) {
+          // 候选不足，用随机生成补充
+          let found = false;
+          for (let attempt = 0; attempt < 100; attempt++) {
+            const candidate = generateRandom5DigitsRongcuo();
+            const pool = generateNumberPool(candidate, '', false);
+            if (pool.length >= 5) {
+              allList.push({ source: candidate, dan: '', isRandom: true });
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            alert('候选五码不足，已生成 ' + allList.length + ' 组（请求 ' + wumaCount + ' 组），请放宽筛选条件');
+            break;
+          }
+        } else {
+          const idx = Math.floor(Math.random() * validCandidates.length);
+          const picked = validCandidates.splice(idx, 1)[0];
+          allList.push({ source: picked.source, dan: '', isRandom: true, _pool: picked.pool });
+        }
+      }
+
+      // 调用现有的选号逻辑（不会渲染，因为 _fmt3WumaMode = true）
+      generateResultsFromList(allList);
+
+      // 读取生成的结果
+      const wumaResults = window._fmt3WumaResults;
+
+      if (!wumaResults || wumaResults.length === 0) {
+        alert('五码五注生成失败，请放宽筛选条件');
+        return null;
+      }
+
+      // 转换为格式三的结果对象
+      for (const item of wumaResults) {
+        const sortedSource = sortSourceAsc(item.source);
+        results.push({
+        serial: serial++,
+        type: 'wuma',
+        typeName: '五码五注',
+        source: item.source,
+        codes: item.codes,
+        displayDanma: item.displayDanma || '',
+        isRandom: true,
+        text: qihao + '期：五码：' + sortedSource + '\n精选五注： ' + item.codes.join(' ')
+      });
+      }
+    } finally {
+      // 无论成功还是异常，都恢复原始值
+      document.getElementById('randomCount').value = origRandomCount;
+      document.getElementById('outputFormat').value = origFormat;
+      window._fmt3WumaMode = false;
+      window._fmt3WumaResults = null;
+    }
+  }
+
+  // 2. 四注/三注/两注：和五码五注相同的选号流程
+  // 先随机生成一个5位源码，用 generateNumberPool 生成聚焦号码池，再加权选号
+
+  // 确定需要的最大注数（用于quickFilterCheck判断）
+  const noteCountNeeded = Math.max(fourCount > 0 ? 4 : 0, threeCount > 0 ? 3 : 0, twoCount > 0 ? 2 : 0);
+
+  // 生成合格的5位源码（和五码五注一样的筛选逻辑）
+  function generateQualifiedSource() {
+    for (let attempt = 0; attempt < 200; attempt++) {
+      const candidate = generateRandom5DigitsRongcuo();
+      if (quickFilterCheck(candidate) >= noteCountNeeded) {
+        const pool = generateNumberPool(candidate, '', false);
+        if (pool.length >= 4) { // 至少要有4注可选
+          return { source: candidate, pool: pool };
+        }
+      }
+    }
+    // 兜底：不检查quickFilter，直接生成
+    for (let attempt = 0; attempt < 100; attempt++) {
+      const candidate = generateRandom5DigitsRongcuo();
+      const pool = generateNumberPool(candidate, '', false);
+      if (pool.length >= 2) {
+        return { source: candidate, pool: pool };
+      }
+    }
+    return null;
+  }
+
+  if (fourCount > 0 || threeCount > 0 || twoCount > 0) {
+    // 检查是否有可用的源码
+    const testSource = generateQualifiedSource();
+    if (!testSource) {
+      alert('当前筛选条件下号码池为空，请放宽筛选条件');
+      return null;
+    }
+  }
+
+  if (fourCount > 0) {
+    for (let i = 0; i < fourCount; i++) {
+      const sourceData = generateQualifiedSource();
+      if (!sourceData) continue;
+      const notes = generateNotesFromPool(sourceData.pool, 4);
+      results.push({
+        serial: serial++,
+        type: 'four',
+        typeName: '四注',
+        text: qihao + '期：' + notes.join(' ')
+      });
+    }
+  }
+
+  if (threeCount > 0) {
+    for (let i = 0; i < threeCount; i++) {
+      const sourceData = generateQualifiedSource();
+      if (!sourceData) continue;
+      const notes = generateNotesFromPool(sourceData.pool, 3);
+      results.push({
+        serial: serial++,
+        type: 'three',
+        typeName: '三注',
+        text: qihao + '期：' + notes.join(' ')
+      });
+    }
+  }
+
+  if (twoCount > 0) {
+    for (let i = 0; i < twoCount; i++) {
+      const sourceData = generateQualifiedSource();
+      if (!sourceData) continue;
+      const notes = generateNotesFromPool(sourceData.pool, 2);
+      results.push({
+        serial: serial++,
+        type: 'two',
+        typeName: '两注',
+        text: qihao + '期：' + notes.join(' ')
+      });
+    }
+  }
+
+  return results;
+}
+
+function generateAllResults() {
+  // 数据修改模式：只生成数据修改内容
+  if (isDmEnabled()) {
+    const dmResults = generateDataModification();
+    if (!dmResults) return;
+    renderDmResults(dmResults);
+    renderDmHistory();
+    saveConfig();
+    return;
+  }
+
+  // 格式三：混合注数模式
+  const outputFormat = document.getElementById('outputFormat') ? document.getElementById('outputFormat').value : '1';
+  if (outputFormat === '3') {
+    const fmt3Results = generateFormat3Results();
+    if (!fmt3Results) return;
+    renderFormat3Results(fmt3Results);
+    saveConfig();
+    return;
+  }
+
+  const manualList = [];
+  const manualItems = document.querySelectorAll('.manual-item');
+
+  for (const item of manualItems) {
+    const source = item.querySelector('.source-input').value.trim();
+    const dan = item.querySelector('.dan-input').value.trim();
+
+    if (source === '') continue;
+
+    const srcValid = validateSource(source);
+    if (!srcValid.valid) {
+      alert('数据源 "' + source + '" 无效：' + srcValid.msg);
+      return;
+    }
+
+    const danValid = validateDan(dan);
+    if (!danValid.valid) {
+      alert('铁胆无效：' + danValid.msg);
+      return;
+    }
+
+    manualList.push({ source, dan });
+  }
+
+  const randomCountInput = document.getElementById('randomCount');
+  let randomCount = parseInt(randomCountInput.value);
+  if (isNaN(randomCount) || randomCount < 0) {
+    randomCount = 0;
+  }
+  if (randomCount > 100) {
+    alert('随机生成数量不能超过100');
+    return;
+  }
+
+  if (manualList.length === 0 && randomCount === 0) {
+    alert('请至少输入一组数据源或设置随机生成数量');
+    return;
+  }
+
+  const allList = [];
+  for (const item of manualList) {
+    allList.push({ ...item, isRandom: false });
+  }
+
+  const filterRandom = document.getElementById('filterRandom').checked;
+
+  // 先找出所有能通过筛选条件的五码（C(10,5)=252种组合）
+  let validCandidates = [];
+  if (filterRandom && randomCount > 0) {
+    // 生成0-9的所有5位组合
+    const allCombos = [];
+    const digits = ['0','1','2','3','4','5','6','7','8','9'];
+    for (let a = 0; a < 6; a++) {
+      for (let b = a+1; b < 7; b++) {
+        for (let c = b+1; c < 8; c++) {
+          for (let d = c+1; d < 9; d++) {
+            for (let e = d+1; e < 10; e++) {
+              allCombos.push(digits[a]+digits[b]+digits[c]+digits[d]+digits[e]);
+            }
+          }
+        }
+      }
+    }
+
+    // 获取容错条件列表
+    const rongcuoListFmt12 = getRongcuoList();
+
+    // 用quickFilterCheck快速过滤，再实际验证
+    for (const combo of allCombos) {
+      // 容错检查：五码组合不能同时包含容错中的2个以上数字
+      let rongcuoHit = false;
+      for (const rc of rongcuoListFmt12) {
+        if (hitRongcuoSource(combo, rc)) {
+          rongcuoHit = true;
+          break;
+        }
+      }
+      if (rongcuoHit) continue;
+
+      if (quickFilterCheck(combo) >= 5) {
+        const pool = generateNumberPool(combo, '', true);
+        if (pool.length >= 5) {
+          validCandidates.push({ source: combo, pool: pool });
+        }
+      }
+    }
+
+    shuffle(validCandidates);
+
+    if (validCandidates.length === 0) {
+      alert('当前筛选条件下没有任何五码能生成5注以上号码，请放宽筛选条件');
+      return;
+    }
+  }
+
+  // 从候选五码中随机挑选，不限制相似度
+  for (let i = 0; i < randomCount; i++) {
+    let picked = null;
+
+    if (filterRandom) {
+      if (validCandidates.length > 0) {
+        const idx = Math.floor(Math.random() * validCandidates.length);
+        picked = validCandidates.splice(idx, 1)[0];
+      } else {
+        alert('候选五码数量不足，无法生成 ' + randomCount + ' 组随机数据源，请减少数量或放宽筛选条件');
+        return;
+      }
+
+      allList.push({ source: picked.source, dan: '', isRandom: true, _pool: picked.pool });
+    } else {
+      // 不启用筛选，直接随机生成（但仍应用容错条件过滤五码）
+      const source = generateRandom5DigitsRongcuo();
+      allList.push({ source, dan: '', isRandom: true });
+    }
+  }
+
+  generateResultsFromList(allList);
+}
+
+function generateResultsFromList(sourceList) {
+  const groupPercent = parseInt(document.getElementById('groupSimilarity').value);
+  const straightPercent = parseInt(document.getElementById('straightSimilarity').value);
+
+  const totalCount = sourceList.length * 5;
+  let maxGroupCount = Math.floor(totalCount * groupPercent / 100);
+  let maxStraightCount = Math.floor(totalCount * straightPercent / 100);
+
+  if (maxGroupCount === 0 && groupPercent > 0) maxGroupCount = 1;
+  if (maxStraightCount === 0 && straightPercent > 0) maxStraightCount = 1;
+
+  const allPools = [];
+  for (const item of sourceList) {
+    let pool;
+    if (item._pool) {
+      pool = item._pool;
+    } else {
+      pool = generateNumberPool(item.source, item.dan, item.isRandom);
+    }
+    if (pool.length < 5) {
+      alert('数据源 "' + item.source + '" 生成的号码池不足5注，请放宽条件');
+      return;
+    }
+    allPools.push({ ...item, pool });
+  }
+
+  const result = new Array(allPools.length);
+  const groupCountMap = {};
+  const straightCountMap = {};
+  const showDanma = document.getElementById('showDanma').checked;
+  const filterZuSan = document.getElementById('filterZuSan').checked;
+  const zuSanWeights = { 0: 15, 1: 45, 2: 40 };
+
+  const generateOne = (item, targetZuSan) => {
+    const pool = [...item.pool];
+    const allZuSan = pool.filter(c => isZuSanCode(c));
+    const allZuLiu = pool.filter(c => !isZuSanCode(c) && !isLeopardCode(c));
+    const allBaozi = pool.filter(c => isLeopardCode(c));
+    const nonZuSanCodes = [...allZuLiu, ...allBaozi];
+
+    // 真人化选号：加权随机，倾向复用已选号码的位置数字
+    const pickHumanLike = (codeList, count, alreadyPicked = [], checkLeopard = false) => {
+      const used = new Set(alreadyPicked.map(c => getGroupKey(c)));
+      const allPicked = [...alreadyPicked];
+      const result = [];
+      let candidates = codeList.filter(code => {
+        const gk = getGroupKey(code);
+        if (used.has(gk)) return false;
+        if ((groupCountMap[gk] || 0) >= maxGroupCount) return false;
+        if ((straightCountMap[code] || 0) >= maxStraightCount) return false;
+        if (checkLeopard && isLeopardCode(code) && allPicked.some(c => isLeopardCode(c))) return false;
+        return true;
+      });
+      if (candidates.length === 0 || count === 0) return [];
+      while (result.length < count && candidates.length > 0) {
+        const weights = candidates.map(code => {
+          if (checkLeopard && isLeopardCode(code) && allPicked.some(c => isLeopardCode(c))) return 0;
+          let w = 1;
+          for (const picked of allPicked) {
+            if (code[0] === picked[0]) w += 5;
+            if (code[1] === picked[1]) w += 5;
+            if (code[2] === picked[2]) w += 5;
+          }
+          return w;
+        });
+        const validIdx = [];
+        const validW = [];
+        for (let i = 0; i < weights.length; i++) {
+          if (weights[i] > 0) { validIdx.push(i); validW.push(weights[i]); }
+        }
+        if (validIdx.length === 0) break;
+        const totalW = validW.reduce((a, b) => a + b, 0);
+        let r = Math.random() * totalW;
+        let pos = 0;
+        for (let i = 0; i < validW.length; i++) {
+          r -= validW[i];
+          if (r <= 0) { pos = i; break; }
+        }
+        const pickedIdx = validIdx[pos];
+        result.push(candidates[pickedIdx]);
+        used.add(getGroupKey(candidates[pickedIdx]));
+        allPicked.push(candidates[pickedIdx]);
+        candidates.splice(pickedIdx, 1);
+      }
+      return result;
+    };
+
+    if (showDanma && item.isRandom && (!item.dan || item.dan === '')) {
+      const danmaSource = item.source.split('');
+      shuffle(danmaSource);
+
+      const retryCount = targetZuSan <= 1 ? 50 : 30;
+
+      for (const danma of danmaSource) {
+        const zsWithDanma = allZuSan.filter(c => c.includes(danma));
+        const zsWithoutDanma = allZuSan.filter(c => !c.includes(danma));
+        const nzsWithDanma = nonZuSanCodes.filter(c => c.includes(danma));
+        const nzsWithoutDanma = nonZuSanCodes.filter(c => !c.includes(danma));
+
+        const zsDanmaGroups = new Set(zsWithDanma.map(c => getGroupKey(c))).size;
+        const zsNoDanmaGroups = new Set(zsWithoutDanma.map(c => getGroupKey(c))).size;
+        const nzsDanmaGroups = new Set(nzsWithDanma.map(c => getGroupKey(c))).size;
+        const nzsNoDanmaGroups = new Set(nzsWithoutDanma.map(c => getGroupKey(c))).size;
+
+        for (let minDanmaHits = 5; minDanmaHits >= 3; minDanmaHits--) {
+          const combos = [];
+          for (let zsDan = 0; zsDan <= targetZuSan; zsDan++) {
+            const nzsDan = minDanmaHits - zsDan;
+            const nzsTotal = 5 - targetZuSan;
+            if (nzsDan < 0 || nzsDan > nzsTotal) continue;
+            if (zsDan > zsDanmaGroups) continue;
+            if ((targetZuSan - zsDan) > zsNoDanmaGroups && (targetZuSan - zsDan) > 0) continue;
+            if (nzsDan > nzsDanmaGroups) continue;
+            if ((nzsTotal - nzsDan) > nzsNoDanmaGroups && (nzsTotal - nzsDan) > 0) continue;
+            if (zsDan + nzsDan < minDanmaHits) continue;
+            combos.push({ zsDan, nzsDan });
+          }
+          if (combos.length === 0) continue;
+
+          shuffle(combos);
+          for (const combo of combos) {
+            const { zsDan, nzsDan } = combo;
+            const zsNoDan = targetZuSan - zsDan;
+            const nzsNoDan = (5 - targetZuSan) - nzsDan;
+
+            let retry = retryCount;
+            while (retry > 0) {
+              retry--;
+              const pickedZsDan = pickHumanLike(zsWithDanma, zsDan, [], false);
+              if (pickedZsDan.length < zsDan) continue;
+              const pickedZsNoDan = pickHumanLike(zsWithoutDanma, zsNoDan, pickedZsDan, false);
+              if (pickedZsNoDan.length < zsNoDan) continue;
+              const pickedNzsDan = pickHumanLike(nzsWithDanma, nzsDan, [...pickedZsDan, ...pickedZsNoDan], false);
+              if (pickedNzsDan.length < nzsDan) continue;
+              const pickedNzsNoDan = pickHumanLike(nzsWithoutDanma, nzsNoDan, [...pickedZsDan, ...pickedZsNoDan, ...pickedNzsDan], false);
+              if (pickedNzsNoDan.length < nzsNoDan) continue;
+
+              let allPicked = [...pickedZsDan, ...pickedZsNoDan, ...pickedNzsDan, ...pickedNzsNoDan];
+              if (allPicked.length !== 5) continue;
+              if (allPicked.filter(c => isLeopardCode(c)).length > 1) continue;
+
+              // 强制检查组三数量
+              const actualZsCount = allPicked.filter(c => isZuSanCode(c)).length;
+              if (actualZsCount !== targetZuSan) {
+                // 组三数量不对，撤销并继续尝试
+                continue;
+              }
+
+              // 按人工选号顺序排列：相邻两注渐进变化
+              const orderedCodes = reorderCodesHumanLike(allPicked);
+              for (const c of orderedCodes) {
+                const gk = getGroupKey(c);
+                groupCountMap[gk] = (groupCountMap[gk] || 0) + 1;
+                straightCountMap[c] = (straightCountMap[c] || 0) + 1;
+              }
+              return { codes: orderedCodes, displayDanma: danma };
+            }
+          }
+        }
+      }
+      return null;
+    } else {
+      const allNonZuSan = pool.filter(c => !isZuSanCode(c));
+
+      const attempts = targetZuSan <= 1 ? 50 : 30;
+      let attemptCount = attempts;
+      while (attemptCount > 0) {
+        attemptCount--;
+        const pickedZs = pickHumanLike(allZuSan, targetZuSan, [], true);
+        if (pickedZs.length < targetZuSan) continue;
+        const pickedNzs = pickHumanLike(allNonZuSan, 5 - targetZuSan, pickedZs, true);
+        if (pickedNzs.length < (5 - targetZuSan)) continue;
+
+        let allPicked = [...pickedZs, ...pickedNzs];
+
+        // 强制检查组三数量
+        const actualZsCount = allPicked.filter(c => isZuSanCode(c)).length;
+        if (actualZsCount !== targetZuSan) {
+          continue;
+        }
+
+        // 按人工选号顺序排列：相邻两注渐进变化
+        const orderedCodes = reorderCodesHumanLike(allPicked);
+        for (const c of orderedCodes) {
+          const gk = getGroupKey(c);
+          groupCountMap[gk] = (groupCountMap[gk] || 0) + 1;
+          straightCountMap[c] = (straightCountMap[c] || 0) + 1;
+        }
+        const dDanma = item.dan && item.dan !== '' ? item.dan : item.source[Math.floor(Math.random() * item.source.length)];
+        return { codes: orderedCodes, displayDanma: dDanma };
+      }
+      return null;
+    }
+  };
+
+  const isFeasible = (item, n) => {
+    const zs = item.pool.filter(c => isZuSanCode(c));
+    const nzs = item.pool.filter(c => !isZuSanCode(c));
+    const zsg = new Set(zs.map(c => getGroupKey(c))).size;
+    const nzsg = new Set(nzs.map(c => getGroupKey(c))).size;
+    if (zsg < n || nzsg < (5 - n)) return false;
+
+    if (showDanma && item.isRandom && (!item.dan || item.dan === '')) {
+      const digits = item.source.split('');
+      let anyFeasible = false;
+      for (const danma of digits) {
+        const zsDan = zs.filter(c => c.includes(danma));
+        const zsNoDan = zs.filter(c => !c.includes(danma));
+        const nzsDan = nzs.filter(c => c.includes(danma));
+        const nzsNoDan = nzs.filter(c => !c.includes(danma));
+        const zsDG = new Set(zsDan.map(c => getGroupKey(c))).size;
+        const zsNDG = new Set(zsNoDan.map(c => getGroupKey(c))).size;
+        const nzsDG = new Set(nzsDan.map(c => getGroupKey(c))).size;
+        const nzsNDG = new Set(nzsNoDan.map(c => getGroupKey(c))).size;
+
+        for (let hits = 3; hits <= 5; hits++) {
+          for (let zsD = 0; zsD <= n; zsD++) {
+            const nzsD = hits - zsD;
+            const nzsTotal = 5 - n;
+            if (nzsD < 0 || nzsD > nzsTotal) continue;
+            if (zsD > zsDG) continue;
+            if ((n - zsD) > zsNDG && (n - zsD) > 0) continue;
+            if (nzsD > nzsDG) continue;
+            if ((nzsTotal - nzsD) > nzsNDG && (nzsTotal - nzsD) > 0) continue;
+            anyFeasible = true;
+            break;
+          }
+          if (anyFeasible) break;
+        }
+        if (anyFeasible) break;
+      }
+      return anyFeasible;
+    }
+    return true;
+  };
+
+  const totalItems = allPools.length;
+  const allTargets = filterZuSan ? [0] : [0, 1, 2];
+
+  const itemData = allPools.map((item, idx) => {
+    return { idx, item, done: false, target: -1 };
+  });
+
+  const targetQuotas = {};
+  const actualCounts = { 0: 0, 1: 0, 2: 0 };
+  if (filterZuSan) {
+    targetQuotas[0] = totalItems;
+  } else {
+    let totalW = 0;
+    for (const t of [0,1,2]) totalW += zuSanWeights[t];
+    let assigned = 0;
+    for (const t of [0,1]) {
+      targetQuotas[t] = Math.round(totalItems * zuSanWeights[t] / totalW);
+      assigned += targetQuotas[t];
+    }
+    targetQuotas[2] = totalItems - assigned;
+  }
+
+  const sortedTargets = filterZuSan ? [0] : [0, 1, 2];
+
+  const tryAssignTarget = (d, t) => {
+    if (actualCounts[t] >= targetQuotas[t]) return false;
+    if (!isFeasible(d.item, t)) return false;
+    const res = generateOne(d.item, t);
+    if (res) {
+      result[d.idx] = {
+        source: d.item.source,
+        codes: res.codes,
+        isRandom: d.item.isRandom,
+        dan: d.item.dan || '',
+        displayDanma: res.displayDanma
+      };
+      d.done = true;
+      d.target = t;
+      actualCounts[t]++;
+      return true;
+    }
+    return false;
+  };
+
+  for (const t of sortedTargets) {
+    const pending = itemData.filter(d => !d.done && isFeasible(d.item, t));
+    shuffle(pending);
+
+    for (const d of pending) {
+      if (actualCounts[t] >= targetQuotas[t]) break;
+      tryAssignTarget(d, t);
+    }
+  }
+
+  const stillPending = itemData.filter(d => !d.done);
+  if (stillPending.length > 0) {
+    shuffle(stillPending);
+
+    for (const d of stillPending) {
+      let assigned = false;
+      for (const t of sortedTargets) {
+        if (actualCounts[t] < targetQuotas[t] && isFeasible(d.item, t)) {
+          if (tryAssignTarget(d, t)) {
+            assigned = true;
+            break;
+          }
+        }
+      }
+      if (!assigned) {
+        const fallbackOrder = sortedTargets.slice().sort((a, b) => zuSanWeights[b] - zuSanWeights[a]);
+        for (const t of fallbackOrder) {
+          if (isFeasible(d.item, t)) {
+            const res = generateOne(d.item, t);
+            if (res) {
+              result[d.idx] = {
+                source: d.item.source,
+                codes: res.codes,
+                isRandom: d.item.isRandom,
+                dan: d.item.dan || '',
+                displayDanma: res.displayDanma
+              };
+              d.done = true;
+              d.target = t;
+              actualCounts[t]++;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 对失败的随机数据源自动换新五码重试
+  for (let retryRound = 0; retryRound < 10; retryRound++) {
+    const failedItems = itemData.filter(d => !d.done);
+    if (failedItems.length === 0) break;
+
+    for (const d of failedItems) {
+      if (!d.item.isRandom) continue;
+
+      // 生成新五码和新号码池
+      let newPool = null;
+      let newSource = null;
+      for (let attempt = 0; attempt < 100; attempt++) {
+        const candidate = generateRandom5DigitsRongcuo();
+        const pool = generateNumberPool(candidate, '', true);
+        if (pool.length >= 5) {
+          newSource = candidate;
+          newPool = pool;
+          break;
+        }
+      }
+
+      if (newSource && newPool) {
+        d.item.source = newSource;
+        d.item.pool = newPool;
+        // 尝试重新生成
+        for (const t of sortedTargets) {
+          if (tryAssignTarget(d, t)) break;
+        }
+      }
+    }
+  }
+
+  // 最终兜底：还有失败的就用最宽松条件再试一次
+  for (const d of itemData) {
+    if (!d.done && d.item.isRandom) {
+      // 生成新五码，不做任何组三约束
+      for (let attempt = 0; attempt < 100; attempt++) {
+        const candidate = generateRandom5DigitsRongcuo();
+        const pool = generateNumberPool(candidate, '', true);
+        if (pool.length < 5) continue;
+        d.item.source = candidate;
+        d.item.pool = pool;
+        // 尝试所有目标
+        for (const t of sortedTargets) {
+          if (tryAssignTarget(d, t)) break;
+        }
+        if (d.done) break;
+      }
+    }
+  }
+
+  for (const d of itemData) {
+    if (!d.done) {
+      alert('无法生成满足条件的号码，请放宽条件');
+      return;
+    }
+  }
+
+  // 终极校验：确保每条结果的组三数量在0-2之间
+  const maxFinalRetries = 20;
+  let finalRetry = 0;
+  while (finalRetry < maxFinalRetries) {
+    let hasBad = false;
+    for (let i = 0; i < result.length; i++) {
+      const item = result[i];
+      if (!item) continue;
+      const zsCount = item.codes.filter(c => isZuSanCode(c)).length;
+      if (zsCount > 2) {
+        hasBad = true;
+        // 回滚这条的全局计数
+        for (const c of item.codes) {
+          const gk = getGroupKey(c);
+          if (groupCountMap[gk]) groupCountMap[gk]--;
+          if (straightCountMap[c]) straightCountMap[c]--;
+        }
+        // 尝试重新生成，优先试2个组三，不行就1个，再不行就0个
+        let newRes = null;
+        for (const t of [2, 1, 0]) {
+          newRes = generateOne(allPools[i], t);
+          if (newRes) break;
+        }
+        if (newRes) {
+          result[i] = {
+            source: allPools[i].source,
+            codes: newRes.codes,
+            isRandom: allPools[i].isRandom,
+            dan: allPools[i].dan || '',
+            displayDanma: newRes.displayDanma
+          };
+        }
+      }
+    }
+    if (!hasBad) break;
+    finalRetry++;
+  }
+
+  // 最后再检查一遍，如果还有超过2个的，强制处理
+  for (let i = 0; i < result.length; i++) {
+    const item = result[i];
+    if (!item) continue;
+    const zsCount = item.codes.filter(c => isZuSanCode(c)).length;
+    if (zsCount > 2) {
+      console.error('终极校验失败，仍有超过2个组三的结果:', item);
+    }
+  }
+
+  // 统计组三分布
+  const distribution = { 0: 0, 1: 0, 2: 0 };
+  for (const item of result) {
+    if (item) {
+      let zsCount = 0;
+      for (const code of item.codes) {
+        if (isZuSanCode(code)) zsCount++;
+      }
+      if (zsCount >= 0 && zsCount <= 2) {
+        distribution[zsCount] = (distribution[zsCount] || 0) + 1;
+      }
+    }
+  }
+  
+  // 输出统计到控制台
+  console.log('【组三分布统计】');
+  console.log(`总条数: ${result.length}`);
+  console.log(`0个组三: ${distribution[0]} 条 (${Math.round(distribution[0]/result.length*100)}%)`);
+  console.log(`1个组三: ${distribution[1]} 条 (${Math.round(distribution[1]/result.length*100)}%)`);
+  console.log(`2个组三: ${distribution[2]} 条 (${Math.round(distribution[2]/result.length*100)}%)`);
+  console.log(`目标分布: 0个15% 1个45% 2个40%`);
+  console.log('配额详情:', targetQuotas);
+  console.log('实际分布:', actualCounts);
+
+  // 在页面上显示统计信息
+  window._lastDistribution = distribution;
+  window._showDistribution = true;
+
+  // 格式三五码模式：不渲染，把结果存起来
+  if (window._fmt3WumaMode) {
+    window._fmt3WumaResults = result;
+    return;
+  }
+
+  renderResults(result);
+  updateSimilarity('group');
+  saveConfig();
+}
+
+// === 差异最大化重排 ===
+
+// 人工选号排序：让相邻两注有最多相同位置，形成渐进变化
+function reorderCodesHumanLike(codes) {
+  if (!codes || codes.length <= 2) return codes;
+
+  const reordered = [];
+  const remaining = [...codes];
+
+  // 随机选一个起始注
+  const startIdx = Math.floor(Math.random() * remaining.length);
+  reordered.push(remaining.splice(startIdx, 1)[0]);
+
+  while (remaining.length > 0) {
+    const lastCode = reordered[reordered.length - 1];
+
+    // 计算每注和上一注的相同位置数
+    let maxMatch = -1;
+    for (let i = 0; i < remaining.length; i++) {
+      let match = 0;
+      for (let j = 0; j < 3; j++) {
+        if (lastCode[j] === remaining[i][j]) match++;
+      }
+      if (match > maxMatch) maxMatch = match;
+    }
+
+    // 相同匹配数的随机选一个
+    const candidates = [];
+    for (let i = 0; i < remaining.length; i++) {
+      let match = 0;
+      for (let j = 0; j < 3; j++) {
+        if (lastCode[j] === remaining[i][j]) match++;
+      }
+      if (match === maxMatch) candidates.push(i);
+    }
+    const pickIdx = candidates[Math.floor(Math.random() * candidates.length)];
+    reordered.push(remaining.splice(pickIdx, 1)[0]);
+  }
+
+  return reordered;
+}
+
+// 计算两个五码的相似度（共享数字个数，0-5）
+function calculateSourceSimilarity(s1, s2) {
+  const set1 = new Set(s1.split(''));
+  const set2 = new Set(s2.split(''));
+  let common = 0;
+  for (const d of set1) {
+    if (set2.has(d)) common++;
+  }
+  return common;
+}
+
+// 计算两个3位号码的位置差异（不同位置数，0-3）
+function calculateCodeDifference(c1, c2) {
+  let diff = 0;
+  for (let i = 0; i < 3; i++) {
+    if (c1[i] !== c2[i]) diff++;
+  }
+  return diff;
+}
+
+// 重排结果组顺序，让相邻组的五码差异最大化
+function reorderResultsForDiversity(results) {
+  if (!results || results.length <= 2) return results;
+
+  const reordered = [];
+  const remaining = [...results];
+
+  // 随机选一个起始组
+  const startIdx = Math.floor(Math.random() * remaining.length);
+  reordered.push(remaining.splice(startIdx, 1)[0]);
+
+  while (remaining.length > 0) {
+    const lastSource = reordered[reordered.length - 1].source;
+
+    // 找和上一组相似度最低的
+    let minSim = 6;
+    for (let i = 0; i < remaining.length; i++) {
+      const sim = calculateSourceSimilarity(lastSource, remaining[i].source);
+      if (sim < minSim) minSim = sim;
+    }
+
+    // 相同最低相似度的随机选一个
+    const candidates = [];
+    for (let i = 0; i < remaining.length; i++) {
+      const sim = calculateSourceSimilarity(lastSource, remaining[i].source);
+      if (sim === minSim) candidates.push(i);
+    }
+    const pickIdx = candidates[Math.floor(Math.random() * candidates.length)];
+    reordered.push(remaining.splice(pickIdx, 1)[0]);
+  }
+
+  return reordered;
+}
+
+// 重排5注号码，让相邻注之间位置差异最大化
+function reorderCodesForDiversity(codes) {
+  if (!codes || codes.length <= 2) return codes;
+
+  const reordered = [];
+  const remaining = [...codes];
+
+  // 随机选一个起始注
+  const startIdx = Math.floor(Math.random() * remaining.length);
+  reordered.push(remaining.splice(startIdx, 1)[0]);
+
+  while (remaining.length > 0) {
+    const lastCode = reordered[reordered.length - 1];
+
+    // 找和上一注差异最大的
+    let maxDiff = -1;
+    for (let i = 0; i < remaining.length; i++) {
+      const diff = calculateCodeDifference(lastCode, remaining[i]);
+      if (diff > maxDiff) maxDiff = diff;
+    }
+
+    // 相同差异的随机选
+    const candidates = [];
+    for (let i = 0; i < remaining.length; i++) {
+      const diff = calculateCodeDifference(lastCode, remaining[i]);
+      if (diff === maxDiff) candidates.push(i);
+    }
+    const pickIdx = candidates[Math.floor(Math.random() * candidates.length)];
+    reordered.push(remaining.splice(pickIdx, 1)[0]);
+  }
+
+  return reordered;
+}
+
+function sortSourceAsc(source) {
+  return source.split('').sort().join('');
+}
+
+function renderFormat3Results(results) {
+  const content = document.getElementById('resultContent');
+  const countEl = document.getElementById('resultCount');
+
+  countEl.textContent = '共 ' + results.length + ' 条';
+
+  if (!results || results.length === 0) {
+    content.innerHTML = '<div class="empty-tip">暂无结果</div>';
+    return;
+  }
+
+  // 按类型分组
+  const typeOrder = ['wuma', 'four', 'three', 'two'];
+  const typeNames = { wuma: '五码五注', four: '四注', three: '三注', two: '两注' };
+  const grouped = {};
+  for (const r of results) {
+    if (!grouped[r.type]) grouped[r.type] = [];
+    grouped[r.type].push(r);
+  }
+
+  // 保存到历史
+  const history = getHistory();
+  const outputFormat = document.getElementById('outputFormat') ? document.getElementById('outputFormat').value : '3';
+  const record = {
+    id: Date.now(),
+    timestamp: new Date().toLocaleString(),
+    results: [...results],
+    outputFormat: outputFormat
+  };
+  history.unshift(record);
+  if (history.length > 100) history.pop();
+  saveHistory(history);
+
+  let html = '';
+
+  for (const type of typeOrder) {
+    if (!grouped[type]) continue;
+    const items = grouped[type];
+    html += '<div style="margin-bottom:16px;">';
+    html += '<div style="font-size:14px;font-weight:bold;color:#1890ff;margin-bottom:8px;border-bottom:1px solid #e8e8e8;padding-bottom:4px;">--- ' + typeNames[type] + '（' + items.length + '条）---</div>';
+
+    for (const item of items) {
+      const displayText = item.text.replace(/\n/g, '<br>');
+      html += '<div class="result-line" id="fmt3-line-' + item.serial + '">';
+      html += '<div class="result-line-content">';
+      html += '<span class="result-code">' + displayText + '</span>';
+      html += '</div>';
+      html += '<button class="copy-line-btn" onclick="copySingleLineFmt3(' + item.serial + ', ' + record.id + ')">复制本行</button>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+  }
+
+  // 复制全部按钮
+  html += '<div style="margin-top:16px;text-align:center;">';
+  html += '<button class="btn btn-secondary" onclick="copyAllFmt3()">复制全部</button>';
+  html += '</div>';
+
+  content.innerHTML = html;
+
+  // 存储当前结果供复制使用
+  window.currentFmt3Results = results;
+  window.currentFmt3RecordId = record.id;
+}
+
+function copySingleLineFmt3(serial, recordId) {
+  const results = window.currentFmt3Results;
+  if (!results) return;
+  const item = results.find(r => r.serial === serial);
+  if (!item) return;
+
+  const text = item.text;
+  const onSuccess = () => {
+    const el = document.getElementById('fmt3-line-' + serial);
+    if (el) {
+      el.classList.add('copied');
+      el.style.background = '#e6f7ff';
+      const btn = el.querySelector('.copy-line-btn');
+      if (btn) {
+        const origText = btn.textContent;
+        btn.textContent = '已复制';
+        setTimeout(() => { btn.textContent = origText; }, 1500);
+      }
+      setTimeout(() => { el.style.background = ''; el.classList.remove('copied'); }, 1500);
+    }
+    showToast('已复制本行');
+  };
+
+  const fallbackCopy = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+      onSuccess();
+    } catch (e) {
+      showToast('复制失败，请手动长按选择');
+    }
+    document.body.removeChild(ta);
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(fallbackCopy);
+  } else {
+    fallbackCopy();
+  }
+}
+
+function copyAllFmt3() {
+  const results = window.currentFmt3Results;
+  if (!results || results.length === 0) return;
+
+  const typeOrder = ['wuma', 'four', 'three', 'two'];
+  const typeNames = { wuma: '五码五注', four: '四注', three: '三注', two: '两注' };
+  const grouped = {};
+  for (const r of results) {
+    if (!grouped[r.type]) grouped[r.type] = [];
+    grouped[r.type].push(r);
+  }
+
+  let text = '';
+  for (const type of typeOrder) {
+    if (!grouped[type]) continue;
+    for (const item of grouped[type]) {
+      text += item.text + '\n';
+    }
+  }
+  text = text.trim();
+
+  const onSuccess = () => {
+    const btn = document.querySelector('#resultContent .btn');
+    if (btn) {
+      const origText = btn.textContent;
+      btn.textContent = '已复制全部';
+      setTimeout(() => { btn.textContent = origText; }, 2000);
+    }
+    showToast('已复制全部结果');
+  };
+
+  const fallbackCopy = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+      onSuccess();
+    } catch (e) {
+      showToast('复制失败，请手动长按选择');
+    }
+    document.body.removeChild(ta);
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(fallbackCopy);
+  } else {
+    fallbackCopy();
+  }
+}
+
+function renderResults(results) {
+  const content = document.getElementById('resultContent');
+  const countEl = document.getElementById('resultCount');
+
+  countEl.textContent = '共 ' + results.length + ' 条';
+
+  if (results.length === 0) {
+    content.innerHTML = '<div class="empty-tip">暂无结果</div>';
+    return;
+  }
+  
+  let html = '';
+
+  const manualResults = [];
+  const randomResults = [];
+
+  for (let i = 0; i < results.length; i++) {
+    const item = results[i];
+    if (item.isRandom) {
+      randomResults.push(item);
+    } else {
+      manualResults.push(item);
+    }
+  }
+
+  // 对手动和随机结果分别重排，让相邻组五码差异最大化
+  const orderedManual = reorderResultsForDiversity(manualResults);
+  const orderedRandom = reorderResultsForDiversity(randomResults);
+
+  let globalIndex = 0;
+  window._lastResults = [];
+
+  if (orderedManual.length > 0) {
+    html += '<div class="result-group-title">手动录入结果（' + orderedManual.length + ' 条）</div>';
+    for (let i = 0; i < orderedManual.length; i++) {
+      const item = orderedManual[i];
+      const lineText = buildResultLine(item);
+      const displayText = lineText.replace(/\n/g, '<br>');
+
+      html += '<div class="result-line" id="result-line-' + globalIndex + '">';
+      html += '<div class="result-line-content">';
+      html += '<span class="result-idx">' + (i + 1) + '.</span>';
+      html += '<span class="result-code">' + displayText + '</span>';
+      html += '</div>';
+      html += '<button class="copy-line-btn" onclick="copyLine(' + globalIndex + ')">复制本行</button>';
+      html += '</div>';
+      window._lastResults.push(item);
+      globalIndex++;
+    }
+  }
+
+  if (orderedRandom.length > 0) {
+    html += '<div class="result-group-title">随机生成结果（' + orderedRandom.length + ' 条）</div>';
+    for (let i = 0; i < orderedRandom.length; i++) {
+      const item = orderedRandom[i];
+      const lineText = buildResultLine(item);
+      const displayText = lineText.replace(/\n/g, '<br>');
+
+      html += '<div class="result-line" id="result-line-' + globalIndex + '">';
+      html += '<div class="result-line-content">';
+      html += '<span class="result-idx">' + (i + 1) + '.</span>';
+      html += '<span class="result-code">' + displayText + '</span>';
+      html += '</div>';
+      html += '<button class="copy-line-btn" onclick="copyLine(' + globalIndex + ')">复制本行</button>';
+      html += '</div>';
+      window._lastResults.push(item);
+      globalIndex++;
+    }
+  }
+
+  content.innerHTML = html;
+}
+
+function buildResultLine(item, formatType) {
+  const fmt = formatType || (document.getElementById('outputFormat') ? document.getElementById('outputFormat').value : '1');
+  const qihao = getCurrentQihao();
+
+  // 格式三：直接使用预构建的文本
+  if (fmt === '3') {
+    if (item.text) return item.text;
+    // 兜底：五码五注按格式二输出
+    const sortedSource = sortSourceAsc(item.source);
+    if (item.codes) {
+      return qihao + '期：五码：' + sortedSource + '\n精选五注： ' + item.codes.join(' ');
+    }
+    return qihao + '期';
+  }
+
+  const sortedSource = sortSourceAsc(item.source);
+
+  if (fmt === '2') {
+    return qihao + '期：五码：' + sortedSource + '\n精选五注： ' + item.codes.join(' ');
+  }
+
+  const showDanma = document.getElementById('showDanma').checked;
+  let text = qihao + '期【';
+  if (showDanma && item.displayDanma) {
+    text += item.displayDanma + '胆';
+  }
+  text += sortedSource + ' ' + item.codes.join(' ') + '】';
+  return text;
+}
+
+function copyLine(index) {
+  if (isDmEnabled()) {
+    copyDmLine(index);
+    return;
+  }
+  const results = window._lastResults || [];
+  if (!results[index]) return;
+
+  const text = buildResultLine(results[index]);
+
+  // 清除所有结果行的高亮
+  document.querySelectorAll('#resultContent .result-line.copied').forEach(el => {
+    el.classList.remove('copied');
+  });
+  // 清除所有历史行的高亮
+  document.querySelectorAll('#historyContent .result-line.copied').forEach(el => {
+    el.classList.remove('copied');
+  });
+  // 高亮当前行
+  const line = document.getElementById('result-line-' + index);
+  if (line) line.classList.add('copied');
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('已复制本行');
+  }).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('已复制本行');
+  });
+}
+
+function copyAllResults() {
+  if (isDmEnabled()) {
+    copyAllDmResults();
+    return;
+  }
+  const results = window._lastResults || [];
+  if (results.length === 0) {
+    alert('暂无结果可复制');
+    return;
+  }
+
+  let text = '';
+  for (const item of results) {
+    text += buildResultLine(item) + '\n';
+  }
+  text = text.trim();
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('已复制全部结果');
+  }).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('已复制全部结果');
+  });
+}
+
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.75);color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;z-index:9999;';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.remove();
+  }, 1500);
+}
+
+function clearAll() {
+  if (!confirm('确定要清空所有内容吗？')) return;
+
+  const list = document.getElementById('manualList');
+  list.innerHTML = '';
+  manualItemCount = 0;
+  addManualItem();
+
+  document.getElementById('groupSimilarity').value = 100;
+  document.getElementById('straightSimilarity').value = 100;
+
+  document.getElementById('filterRandom').checked = true;
+  document.getElementById('filterZuSan').checked = false;
+  document.getElementById('filterBaozi').checked = false;
+  document.getElementById('showDanma').checked = true;
+
+  initDigitPicker('danmaPicker', saveConfig);
+  initDigitPicker('hezhiPicker', saveConfig);
+  initDigitPicker('danmaCountPicker', saveConfig, [1, 2, 3], true);
+  initDigitPicker('excludeBaiPicker', saveConfig, null, false, 'exclude1');
+  initDigitPicker('excludeShiPicker', saveConfig, null, false, 'exclude2');
+  initDigitPicker('excludeGePicker', saveConfig, null, false, 'exclude3');
+
+  document.getElementById('duanzuList').innerHTML = '';
+  document.getElementById('rongcuoList').innerHTML = '';
+  duanzuCount = 0;
+  rongcuoCount = 0;
+  addDuanzu();
+  addRongcuo();
+
+  document.getElementById('resultContent').innerHTML = '<div class="empty-tip">暂无结果，请先配置数据源并点击生成</div>';
+  document.getElementById('resultCount').textContent = '共 0 条';
+
+  window._lastResults = [];
+  dmLastResults = [];
+  updateSimilarity('group');
+  updateSimilarity('straight');
+
+  // 重置数据修改胆码
+  dmDanmaSet.clear();
+  dmDanmaOrder = [];
+  initDmDanmaPicker();
+  updateDmDanmaOrder();
+  document.getElementById('dmWumaCount').value = 0;
+  document.getElementById('dmTwoCount').value = 0;
+  document.getElementById('dmThreeCount').value = 0;
+  document.getElementById('dmFourCount').value = 0;
+  document.getElementById('dmFilterZuSan').checked = false;
+  document.getElementById('dmFilterBaozi').checked = false;
+
+  saveConfig();
+}
+
+function saveToHistory() {
+  if (isDmEnabled()) {
+    saveDmToHistory();
+    return;
+  }
+
+  // 格式三：结果已直接保存到历史记录中（renderFormat3Results 自动保存）
+  const outputFormat = document.getElementById('outputFormat') ? document.getElementById('outputFormat').value : '1';
+  if (outputFormat === '3') {
+    if (window.currentFmt3Results && window.currentFmt3Results.length > 0) {
+      showToast('已保存到历史记录');
+    } else {
+      alert('暂无结果可保存');
+    }
+    return;
+  }
+
+  const results = window._lastResults || [];
+  if (results.length === 0) {
+    alert('暂无结果可保存');
+    return;
+  }
+
+  const history = getHistory();
+  const record = {
+    id: Date.now(),
+    timestamp: new Date().toLocaleString(),
+    results: [...results],
+    outputFormat: outputFormat
+  };
+
+  history.unshift(record);
+  localStorage.setItem('mindmap_history', JSON.stringify(history));
+  renderHistory();
+  showToast('已保存到历史记录');
+}
+
+function getHistory() {
+  try {
+    const data = localStorage.getItem('mindmap_history');
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(history) {
+  try {
+    localStorage.setItem('mindmap_history', JSON.stringify(history));
+  } catch (e) {
+    console.error('保存历史记录失败:', e);
+  }
+}
+
+function renderHistory() {
+  if (isDmEnabled()) {
+    renderDmHistory();
+    return;
+  }
+  const content = document.getElementById('historyContent');
+  const history = getHistory();
+
+  if (history.length === 0) {
+    content.innerHTML = '<div class="empty-tip">暂无历史记录</div>';
+    return;
+  }
+
+  if (!window._historyExpanded) {
+    loadHistoryExpandedState();
+  }
+
+  let html = '';
+  for (const record of history) {
+    const isFmt3 = record.outputFormat === '3';
+    const manualCount = record.results.filter(r => !r.isRandom).length;
+    const randomCount = record.results.filter(r => r.isRandom).length;
+    const isExpanded = window._historyExpanded[record.id] === true;
+
+    html += '<div class="history-item">';
+    html += '<div class="history-header" onclick="toggleHistoryItem(' + record.id + ')" style="cursor:pointer;">';
+    const headerInfo = isFmt3
+      ? '（共' + record.results.length + '条）'
+      : '（共' + record.results.length + '条，手动' + manualCount + '条，随机' + randomCount + '条）';
+    html += '<span>' + (isExpanded ? '▼' : '▶') + ' ' + record.timestamp + headerInfo + '</span>';
+    html += '<button class="history-delete-btn" onclick="event.stopPropagation();deleteHistoryItem(' + record.id + ')">删除</button>';
+    html += '</div>';
+    if (isExpanded) {
+      html += '<div class="history-content">';
+
+      if (isFmt3) {
+        // 格式三：按类型分组渲染
+        const typeOrder = ['wuma', 'four', 'three', 'two'];
+        const typeNames = { wuma: '五码五注', four: '四注', three: '三注', two: '两注' };
+        const grouped = {};
+        for (const r of record.results) {
+          if (!grouped[r.type]) grouped[r.type] = [];
+          grouped[r.type].push(r);
+        }
+
+        for (const type of typeOrder) {
+          if (!grouped[type]) continue;
+          const items = grouped[type];
+          html += '<div class="result-group-title">' + typeNames[type] + '（' + items.length + ' 条）</div>';
+          for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            const displayText = (item.text || '').replace(/\n/g, '<br>');
+            html += '<div class="result-line" id="history-line-' + record.id + '-f3-' + item.serial + '">';
+            html += '<div class="result-line-content">';
+            html += '<span class="result-idx">' + (i + 1) + '.</span>';
+            html += '<span class="result-code">' + displayText + '</span>';
+            html += '</div>';
+            html += '<button class="copy-line-btn" onclick="copyFmt3HistoryLine(' + record.id + ', ' + item.serial + ')">复制本行</button>';
+            html += '</div>';
+          }
+        }
+      } else {
+        const manualResults = record.results.filter(r => !r.isRandom);
+        const randomResults = record.results.filter(r => r.isRandom);
+
+        if (manualResults.length > 0) {
+          html += '<div class="result-group-title">手动录入结果（' + manualResults.length + ' 条）</div>';
+          for (let i = 0; i < manualResults.length; i++) {
+            const item = manualResults[i];
+            if (!item.displayDanma) {
+              item.displayDanma = item.dan || '';
+            }
+            const lineText = buildResultLine(item, record.outputFormat || '1');
+            const displayText = lineText.replace(/\n/g, '<br>');
+            html += '<div class="result-line" id="history-line-' + record.id + '-m-' + i + '">';
+            html += '<div class="result-line-content">';
+            html += '<span class="result-idx">' + (i + 1) + '.</span>';
+            html += '<span class="result-code">' + displayText + '</span>';
+            html += '</div>';
+            html += '<button class="copy-line-btn" onclick="copyHistoryLine(' + record.id + ', ' + i + ', false)">复制本行</button>';
+            html += '</div>';
+          }
+        }
+
+        if (randomResults.length > 0) {
+          html += '<div class="result-group-title">随机生成结果（' + randomResults.length + ' 条）</div>';
+          for (let i = 0; i < randomResults.length; i++) {
+            const item = randomResults[i];
+            if (!item.displayDanma) {
+              item.displayDanma = item.source[0];
+            }
+            const lineText = buildResultLine(item, record.outputFormat || '1');
+            const displayText = lineText.replace(/\n/g, '<br>');
+            html += '<div class="result-line" id="history-line-' + record.id + '-r-' + i + '">';
+            html += '<div class="result-line-content">';
+            html += '<span class="result-idx">' + (i + 1) + '.</span>';
+            html += '<span class="result-code">' + displayText + '</span>';
+            html += '</div>';
+            html += '<button class="copy-line-btn" onclick="copyHistoryLine(' + record.id + ', ' + i + ', true)">复制本行</button>';
+            html += '</div>';
+          }
+        }
+      }
+
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  content.innerHTML = html;
+}
+
+function toggleHistoryItem(id) {
+  if (!window._historyExpanded) {
+    window._historyExpanded = {};
+  }
+  window._historyExpanded[id] = !window._historyExpanded[id];
+  saveHistoryExpandedState();
+  renderHistory();
+}
+
+function saveHistoryExpandedState() {
+  if (window._historyExpanded) {
+    localStorage.setItem('historyItemExpanded', JSON.stringify(window._historyExpanded));
+  }
+}
+
+function loadHistoryExpandedState() {
+  try {
+    const data = localStorage.getItem('historyItemExpanded');
+    if (data) {
+      window._historyExpanded = JSON.parse(data);
+    } else {
+      window._historyExpanded = {};
+    }
+  } catch {
+    window._historyExpanded = {};
+  }
+}
+
+function toggleFilterSection() {
+  const content = document.getElementById('filterContent');
+  const arrow = document.getElementById('filterSectionArrow');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    arrow.textContent = '▼';
+    localStorage.setItem('filterSectionExpanded', '1');
+  } else {
+    content.style.display = 'none';
+    arrow.textContent = '▶';
+    localStorage.setItem('filterSectionExpanded', '0');
+  }
+}
+
+function toggleManualSection() {
+  const content = document.getElementById('manualContent');
+  const arrow = document.getElementById('manualSectionArrow');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    arrow.textContent = '▼';
+    localStorage.setItem('manualSectionExpanded', '1');
+  } else {
+    content.style.display = 'none';
+    arrow.textContent = '▶';
+    localStorage.setItem('manualSectionExpanded', '0');
+  }
+}
+
+function toggleSimilaritySection() {
+  const content = document.getElementById('similarityContent');
+  const arrow = document.getElementById('similaritySectionArrow');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    arrow.textContent = '▼';
+    localStorage.setItem('similaritySectionExpanded', '1');
+  } else {
+    content.style.display = 'none';
+    arrow.textContent = '▶';
+    localStorage.setItem('similaritySectionExpanded', '0');
+  }
+}
+
+function toggleCondition(contentId, arrowId) {
+  const content = document.getElementById(contentId);
+  const arrow = document.getElementById(arrowId);
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    arrow.textContent = '▼';
+    localStorage.setItem(contentId + '_expanded', '1');
+  } else {
+    content.style.display = 'none';
+    arrow.textContent = '▶';
+    localStorage.setItem(contentId + '_expanded', '0');
+  }
+}
+
+function toggleDmSection() {
+  const content = document.getElementById('dmContent');
+  const arrow = document.getElementById('dmSectionArrow');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    arrow.textContent = '▼';
+    localStorage.setItem('dmSection_expanded', '1');
+  } else {
+    content.style.display = 'none';
+    arrow.textContent = '▶';
+    localStorage.setItem('dmSection_expanded', '0');
+  }
+}
+
+function toggleHistorySection() {
+  const content = document.getElementById('historyContent');
+  const arrow = document.getElementById('historySectionArrow');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    arrow.textContent = '▼';
+    localStorage.setItem('historySectionExpanded', '1');
+  } else {
+    content.style.display = 'none';
+    arrow.textContent = '▶';
+    localStorage.setItem('historySectionExpanded', '0');
+  }
+}
+
+function openHistoryFullscreen() {
+  const fullscreen = document.getElementById('historyFullscreen');
+  fullscreen.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  if (isDmEnabled()) {
+    renderDmHistoryFullscreen();
+  } else {
+    renderHistoryFullscreen();
+  }
+}
+
+function closeHistoryFullscreen() {
+  document.getElementById('historyFullscreen').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function renderHistoryFullscreen() {
+  const history = getHistory();
+  const container = document.getElementById('historyFullscreenContent');
+
+  if (history.length === 0) {
+    container.innerHTML = '<div class="empty-tip">暂无历史记录</div>';
+    return;
+  }
+
+  let html = '';
+  for (const record of history) {
+    const isFmt3 = record.outputFormat === '3';
+    const manualCount = record.results.filter(r => !r.isRandom).length;
+    const randomCount = record.results.filter(r => r.isRandom).length;
+    const isExpanded = window._historyExpanded && window._historyExpanded[record.id] === true;
+
+    html += '<div class="history-item">';
+    html += '<div class="history-header" onclick="toggleHistoryItem(' + record.id + ');renderHistoryFullscreen();" style="cursor:pointer;">';
+    const headerInfo = isFmt3
+      ? '（共' + record.results.length + '条）'
+      : '（共' + record.results.length + '条，手动' + manualCount + '条，随机' + randomCount + '条）';
+    html += '<span>' + (isExpanded ? '▼' : '▶') + ' ' + record.timestamp + headerInfo + '</span>';
+    html += '<button class="history-delete-btn" onclick="event.stopPropagation();deleteHistoryItem(' + record.id + ');renderHistoryFullscreen();">删除</button>';
+    html += '</div>';
+    if (isExpanded) {
+      html += '<div class="history-content">';
+
+      if (isFmt3) {
+        // 格式三：按类型分组渲染
+        const typeOrder = ['wuma', 'four', 'three', 'two'];
+        const typeNames = { wuma: '五码五注', four: '四注', three: '三注', two: '两注' };
+        const grouped = {};
+        for (const r of record.results) {
+          if (!grouped[r.type]) grouped[r.type] = [];
+          grouped[r.type].push(r);
+        }
+
+        for (const type of typeOrder) {
+          if (!grouped[type]) continue;
+          const items = grouped[type];
+          html += '<div class="result-group-title">' + typeNames[type] + '（' + items.length + ' 条）</div>';
+          for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            const displayText = (item.text || '').replace(/\n/g, '<br>');
+            html += '<div class="result-line">';
+            html += '<div class="result-line-content">';
+            html += '<span class="result-idx">' + (i + 1) + '.</span>';
+            html += '<span class="result-code">' + displayText + '</span>';
+            html += '</div>';
+            html += '<button class="copy-line-btn" onclick="copyFullscreenLine(this)">复制本行</button>';
+            html += '</div>';
+          }
+        }
+      } else {
+        const manualResults = record.results.filter(r => !r.isRandom);
+        const randomResults = record.results.filter(r => r.isRandom);
+
+        if (manualResults.length > 0) {
+          html += '<div class="result-group-title">手动录入结果（' + manualResults.length + ' 条）</div>';
+          for (let i = 0; i < manualResults.length; i++) {
+            const item = manualResults[i];
+            if (!item.displayDanma) item.displayDanma = item.dan || '';
+            const lineText = buildResultLine(item, record.outputFormat || '1');
+            const displayText = lineText.replace(/\n/g, '<br>');
+            html += '<div class="result-line">';
+            html += '<div class="result-line-content">';
+            html += '<span class="result-idx">' + (i + 1) + '.</span>';
+            html += '<span class="result-code">' + displayText + '</span>';
+            html += '</div>';
+            html += '<button class="copy-line-btn" onclick="copyFullscreenLine(this)">复制本行</button>';
+            html += '</div>';
+          }
+        }
+
+        if (randomResults.length > 0) {
+          html += '<div class="result-group-title">随机生成结果（' + randomResults.length + ' 条）</div>';
+          for (let i = 0; i < randomResults.length; i++) {
+            const item = randomResults[i];
+            if (!item.displayDanma) item.displayDanma = item.source[0];
+            const lineText = buildResultLine(item, record.outputFormat || '1');
+            const displayText = lineText.replace(/\n/g, '<br>');
+            html += '<div class="result-line">';
+            html += '<div class="result-line-content">';
+            html += '<span class="result-idx">' + (i + 1) + '.</span>';
+            html += '<span class="result-code">' + displayText + '</span>';
+            html += '</div>';
+            html += '<button class="copy-line-btn" onclick="copyFullscreenLine(this)">复制本行</button>';
+            html += '</div>';
+          }
+        }
+      }
+
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  container.innerHTML = html;
+}
+
+function renderDmHistoryFullscreen() {
+  const history = getDmHistory();
+  const container = document.getElementById('historyFullscreenContent');
+
+  if (history.length === 0) {
+    container.innerHTML = '<div class="empty-tip">暂无历史记录</div>';
+    return;
+  }
+
+  if (!window._dmHistoryExpanded) window._dmHistoryExpanded = {};
+
+  let html = '';
+  for (const record of history) {
+    const isExpanded = window._dmHistoryExpanded[record.id] === true;
+
+    html += '<div class="history-item">';
+    html += '<div class="history-header" onclick="toggleDmHistoryItem(' + record.id + ');renderDmHistoryFullscreen();" style="cursor:pointer;">';
+    html += '<span>' + (isExpanded ? '▼' : '▶') + ' ' + record.timestamp + '（共' + record.results.length + '条）</span>';
+    html += '<button class="history-delete-btn" onclick="event.stopPropagation();deleteDmHistoryItem(' + record.id + ');renderDmHistoryFullscreen();">删除</button>';
+    html += '</div>';
+    if (isExpanded) {
+      html += '<div class="history-content">';
+      for (let i = 0; i < record.results.length; i++) {
+        const item = record.results[i];
+        const displayText = item.text.replace(/\n/g, '<br>');
+        html += '<div class="result-line">';
+        html += '<div class="result-line-content">';
+        html += '<span class="result-idx">' + item.serial + '.</span>';
+        html += '<span class="result-code">' + displayText + '</span>';
+        html += '</div>';
+        html += '<button class="copy-line-btn" onclick="copyDmFullscreenLine(this,' + record.id + ',' + i + ')">复制本行</button>';
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function copyDmFullscreenLine(btn, recordId, index) {
+  const history = getDmHistory();
+  const record = history.find(r => r.id === recordId);
+  if (!record || !record.results[index]) return;
+  const text = record.results[index].text;
+
+  document.querySelectorAll('#historyFullscreen .result-line.copied').forEach(el => el.classList.remove('copied'));
+  btn.closest('.result-line').classList.add('copied');
+
+  navigator.clipboard.writeText(text).then(() => showToast('已复制本行')).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('已复制本行');
+  });
+}
+
+function copyFullscreenLine(btn) {
+  const line = btn.closest('.result-line');
+  const codeEl = line.querySelector('.result-code');
+  if (!codeEl) return;
+  const text = codeEl.innerHTML.replace(/<br\s*\/?>/g, '\n').replace(/<[^>]*>/g, '');
+
+  document.querySelectorAll('#historyFullscreen .result-line.copied').forEach(el => {
+    el.classList.remove('copied');
+  });
+  line.classList.add('copied');
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('已复制本行');
+  }).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('已复制本行');
+  });
+}
+
+
+
+function deleteHistoryItem(id) {
+  if (!confirm('确定要删除这条历史记录吗？')) return;
+
+  const history = getHistory().filter(r => r.id !== id);
+  localStorage.setItem('mindmap_history', JSON.stringify(history));
+  renderHistory();
+  showToast('已删除');
+}
+
+function clearAllHistory() {
+  if (!confirm('确定要清空全部历史记录吗？')) return;
+  if (isDmEnabled()) {
+    localStorage.setItem('dm_history', '[]');
+    renderDmHistory();
+    showToast('已清空全部历史');
+    return;
+  }
+  localStorage.removeItem('mindmap_history');
+  renderHistory();
+  showToast('已清空全部历史');
+}
+
+function copyHistoryLine(recordId, index, isRandom) {
+  const history = getHistory();
+  const record = history.find(r => r.id === recordId);
+  if (!record) return;
+
+  const results = isRandom ? record.results.filter(r => r.isRandom) : record.results.filter(r => !r.isRandom);
+  const item = results[index];
+  if (!item) return;
+
+  const text = buildResultLine(item, record.outputFormat || '1');
+  document.querySelectorAll('#resultContent .result-line.copied').forEach(el => {
+    el.classList.remove('copied');
+  });
+  // 清除所有历史行的高亮
+  document.querySelectorAll('#historyContent .result-line.copied').forEach(el => {
+    el.classList.remove('copied');
+  });
+  // 高亮当前行
+  const typePrefix = isRandom ? 'r' : 'm';
+  const line = document.getElementById('history-line-' + recordId + '-' + typePrefix + '-' + index);
+  if (line) line.classList.add('copied');
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('已复制本行');
+  }).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('已复制本行');
+  });
+}
+
+function copyFmt3HistoryLine(recordId, serial) {
+  const history = getHistory();
+  const record = history.find(r => r.id === recordId);
+  if (!record) return;
+
+  const item = record.results.find(r => r.serial === serial);
+  if (!item) return;
+
+  const text = item.text || '';
+  document.querySelectorAll('#resultContent .result-line.copied').forEach(el => {
+    el.classList.remove('copied');
+  });
+  document.querySelectorAll('#historyContent .result-line.copied').forEach(el => {
+    el.classList.remove('copied');
+  });
+  const line = document.getElementById('history-line-' + recordId + '-f3-' + serial);
+  if (line) line.classList.add('copied');
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('已复制本行');
+  }).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('已复制本行');
+  });
+}
+
+function saveConfig() {
+  const config = {
+    manualItems: [],
+    randomCount: document.getElementById('randomCount').value,
+    groupSimilarity: document.getElementById('groupSimilarity').value,
+    straightSimilarity: document.getElementById('straightSimilarity').value,
+    results: [],
+    filter: {
+      filterRandom: document.getElementById('filterRandom').checked,
+      filterZuSan: document.getElementById('filterZuSan').checked,
+      filterBaozi: document.getElementById('filterBaozi').checked,
+      showDanma: document.getElementById('showDanma').checked,
+      outputFormat: document.getElementById('outputFormat') ? document.getElementById('outputFormat').value : '1',
+      fmt3WumaCount: document.getElementById('fmt3WumaCount') ? document.getElementById('fmt3WumaCount').value : '20',
+      fmt3FourCount: document.getElementById('fmt3FourCount') ? document.getElementById('fmt3FourCount').value : '5',
+      fmt3ThreeCount: document.getElementById('fmt3ThreeCount') ? document.getElementById('fmt3ThreeCount').value : '5',
+      fmt3TwoCount: document.getElementById('fmt3TwoCount') ? document.getElementById('fmt3TwoCount').value : '2',
+      danmaDigits: getSelectedDigits('danmaPicker'),
+      danmaCountDigits: getSelectedDigits('danmaCountPicker'),
+      hezhiDigits: getSelectedDigits('hezhiPicker'),
+      excludeBai: getSelectedDigits('excludeBaiPicker'),
+      excludeShi: getSelectedDigits('excludeShiPicker'),
+      excludeGe: getSelectedDigits('excludeGePicker'),
+      duanzu: [],
+      rongcuo: []
+    },
+    dm: {
+      enable: isDmEnabled(),
+      danmaOrder: [...dmDanmaOrder],
+      wumaCount: document.getElementById('dmWumaCount') ? document.getElementById('dmWumaCount').value : '0',
+      twoCount: document.getElementById('dmTwoCount') ? document.getElementById('dmTwoCount').value : '0',
+      threeCount: document.getElementById('dmThreeCount') ? document.getElementById('dmThreeCount').value : '0',
+      fourCount: document.getElementById('dmFourCount') ? document.getElementById('dmFourCount').value : '0',
+      filterZuSan: document.getElementById('dmFilterZuSan') ? document.getElementById('dmFilterZuSan').checked : false,
+      filterBaozi: document.getElementById('dmFilterBaozi') ? document.getElementById('dmFilterBaozi').checked : false
+    }
+  };
+
+  const manualItems = document.querySelectorAll('.manual-item');
+  for (const item of manualItems) {
+    const source = item.querySelector('.source-input').value.trim();
+    const dan = item.querySelector('.dan-input').value.trim();
+    config.manualItems.push({ source, dan });
+  }
+
+  const duanzuItems = document.querySelectorAll('.duanzu-item');
+  for (const item of duanzuItems) {
+    const p1 = item.querySelector('.duanzu-p1').value;
+    const p2 = item.querySelector('.duanzu-p2').value;
+    const p3 = item.querySelector('.duanzu-p3').value;
+    config.filter.duanzu.push({ p1, p2, p3 });
+  }
+
+  for (let i = 1; i <= rongcuoCount; i++) {
+    const item = document.getElementById('rongcuo-' + i);
+    if (item) {
+      config.filter.rongcuo.push(getRongcuoDigits(i));
+    }
+  }
+
+  if (window._lastResults && window._lastResults.length > 0) {
+    config.results = JSON.parse(JSON.stringify(window._lastResults));
+  }
+
+  localStorage.setItem('mindmap_config', JSON.stringify(config));
+}
+
+function loadConfig() {
+  try {
+    const data = localStorage.getItem('mindmap_config');
+    if (!data) {
+      addManualItem();
+      initDigitPicker('danmaPicker', saveConfig);
+      initDigitPicker('hezhiPicker', saveConfig);
+      initDigitPicker('danmaCountPicker', saveConfig, [1, 2, 3], true);
+      initDigitPicker('excludeBaiPicker', saveConfig, null, false, 'exclude1');
+      initDigitPicker('excludeShiPicker', saveConfig, null, false, 'exclude2');
+      initDigitPicker('excludeGePicker', saveConfig, null, false, 'exclude3');
+      addDuanzu();
+      addRongcuo();
+      return;
+    }
+
+    const config = JSON.parse(data);
+
+    const list = document.getElementById('manualList');
+    list.innerHTML = '';
+    manualItemCount = 0;
+
+    if (config.manualItems && config.manualItems.length > 0) {
+      for (const item of config.manualItems) {
+        manualItemCount++;
+        const id = manualItemCount;
+        const el = document.createElement('div');
+        el.className = 'manual-item';
+        el.id = 'manual-' + id;
+        el.innerHTML = `
+          <div class="input-group">
+            <label>数据源（4-10位不重复数字）</label>
+            <input type="text" class="source-input" placeholder="例如：12345" maxlength="10" inputmode="numeric" pattern="[0-9]*" value="${item.source || ''}" oninput="saveConfig()">
+          </div>
+          <div class="input-group">
+            <label>铁胆（单数字/空）</label>
+            <input type="text" class="dan-input" placeholder="例如：5" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="${item.dan || ''}" oninput="saveConfig()">
+          </div>
+          <button class="delete-btn" onclick="deleteManualItem(${id})" title="删除">×</button>
+        `;
+        list.appendChild(el);
+      }
+    } else {
+      addManualItem();
+    }
+
+    if (config.randomCount !== undefined) {
+      if (config.randomCount === '') {
+        document.getElementById('randomCount').value = '';
+      } else {
+        const val = parseInt(config.randomCount);
+        if (!isNaN(val) && val >= 0 && val <= 100) {
+          document.getElementById('randomCount').value = val;
+        }
+      }
+    }
+    if (config.groupSimilarity !== undefined) {
+      document.getElementById('groupSimilarity').value = config.groupSimilarity;
+      document.getElementById('groupSimilarityValue').textContent = config.groupSimilarity + '%';
+    }
+    if (config.straightSimilarity !== undefined) {
+      document.getElementById('straightSimilarity').value = config.straightSimilarity;
+      document.getElementById('straightSimilarityValue').textContent = config.straightSimilarity + '%';
+    }
+
+    if (config.results && config.results.length > 0) {
+      window._lastResults = JSON.parse(JSON.stringify(config.results));
+      // 根据DM模式状态选择正确的渲染器
+      if (config.dm && config.dm.enable) {
+        // DM模式：结果可能已保存为dmLastResults，不在此渲染非DM结果
+      } else {
+        renderResults(window._lastResults);
+      }
+    }
+
+    initDigitPicker('danmaPicker', saveConfig);
+    initDigitPicker('hezhiPicker', saveConfig);
+    initDigitPicker('danmaCountPicker', saveConfig, [1, 2, 3], true);
+    initDigitPicker('excludeBaiPicker', saveConfig, null, false, 'exclude1');
+    initDigitPicker('excludeShiPicker', saveConfig, null, false, 'exclude2');
+    initDigitPicker('excludeGePicker', saveConfig, null, false, 'exclude3');
+
+    if (config.filter) {
+      document.getElementById('filterRandom').checked = config.filter.filterRandom !== false;
+      document.getElementById('filterZuSan').checked = config.filter.filterZuSan === true;
+      document.getElementById('filterBaozi').checked = config.filter.filterBaozi === true;
+      document.getElementById('showDanma').checked = config.filter.showDanma !== false;
+      if (config.filter.outputFormat) {
+        document.getElementById('outputFormat').value = config.filter.outputFormat;
+      }
+      if (config.filter.fmt3WumaCount !== undefined && config.filter.fmt3WumaCount !== '') {
+        const el = document.getElementById('fmt3WumaCount');
+        if (el) el.value = config.filter.fmt3WumaCount;
+      }
+      if (config.filter.fmt3FourCount !== undefined && config.filter.fmt3FourCount !== '') {
+        const el = document.getElementById('fmt3FourCount');
+        if (el) el.value = config.filter.fmt3FourCount;
+      }
+      if (config.filter.fmt3ThreeCount !== undefined && config.filter.fmt3ThreeCount !== '') {
+        const el = document.getElementById('fmt3ThreeCount');
+        if (el) el.value = config.filter.fmt3ThreeCount;
+      }
+      if (config.filter.fmt3TwoCount !== undefined && config.filter.fmt3TwoCount !== '') {
+        const el = document.getElementById('fmt3TwoCount');
+        if (el) el.value = config.filter.fmt3TwoCount;
+      }
+      onOutputFormatChange();
+
+      if (config.filter.danmaDigits && config.filter.danmaDigits.length > 0) {
+        setSelectedDigits('danmaPicker', config.filter.danmaDigits);
+      }
+      if (config.filter.danmaCountDigits && config.filter.danmaCountDigits.length > 0) {
+        setSelectedDigits('danmaCountPicker', config.filter.danmaCountDigits);
+      } else {
+        setSelectedDigits('danmaCountPicker', ['1']);
+      }
+      if (config.filter.hezhiDigits && config.filter.hezhiDigits.length > 0) {
+        setSelectedDigits('hezhiPicker', config.filter.hezhiDigits);
+      }
+      if (config.filter.excludeBai && config.filter.excludeBai.length > 0) {
+        setSelectedDigits('excludeBaiPicker', config.filter.excludeBai);
+      }
+      if (config.filter.excludeShi && config.filter.excludeShi.length > 0) {
+        setSelectedDigits('excludeShiPicker', config.filter.excludeShi);
+      }
+      if (config.filter.excludeGe && config.filter.excludeGe.length > 0) {
+        setSelectedDigits('excludeGePicker', config.filter.excludeGe);
+      }
+
+      if (config.filter.duanzu && config.filter.duanzu.length > 0) {
+        for (const dz of config.filter.duanzu) {
+          if (typeof dz === 'string') {
+            const parts = dz.split('-');
+            addDuanzu(parts[0] || '', parts[1] || '', parts[2] || '');
+          } else {
+            addDuanzu(dz.p1 || '', dz.p2 || '', dz.p3 || '');
+          }
+        }
+      } else {
+        addDuanzu();
+      }
+      if (config.filter.rongcuo && config.filter.rongcuo.length > 0) {
+        for (const rc of config.filter.rongcuo) {
+          if (Array.isArray(rc)) {
+            addRongcuo(rc);
+          } else {
+            addRongcuo();
+          }
+        }
+      } else {
+        addRongcuo();
+      }
+    } else {
+      addDuanzu();
+      addRongcuo();
+    }
+
+    // 恢复数据修改设置
+    if (config.dm) {
+      if (config.dm.enable) document.getElementById('dmEnable').checked = true;
+      if (config.dm.danmaOrder) {
+        dmDanmaOrder = [...config.dm.danmaOrder];
+        dmDanmaSet = new Set(dmDanmaOrder);
+      }
+      if (config.dm.wumaCount !== undefined) document.getElementById('dmWumaCount').value = config.dm.wumaCount;
+      if (config.dm.twoCount !== undefined) document.getElementById('dmTwoCount').value = config.dm.twoCount;
+      if (config.dm.threeCount !== undefined) document.getElementById('dmThreeCount').value = config.dm.threeCount;
+      if (config.dm.fourCount !== undefined) document.getElementById('dmFourCount').value = config.dm.fourCount;
+      if (config.dm.filterZuSan) document.getElementById('dmFilterZuSan').checked = true;
+      if (config.dm.filterBaozi) document.getElementById('dmFilterBaozi').checked = true;
+    }
+
+    updateSimilarity('group');
+  } catch (e) {
+    console.error('加载配置失败:', e);
+    addManualItem();
+    initDigitPicker('danmaPicker', saveConfig);
+    initDigitPicker('hezhiPicker', saveConfig);
+    initDigitPicker('danmaCountPicker', saveConfig, [1, 2, 3], true);
+    initDigitPicker('excludeBaiPicker', saveConfig, null, false, 'exclude1');
+    initDigitPicker('excludeShiPicker', saveConfig, null, false, 'exclude2');
+    initDigitPicker('excludeGePicker', saveConfig, null, false, 'exclude3');
+    addDuanzu();
+    addRongcuo();
+  }
+}
+
+function getCurrentQihao() {
+  const baseDate = new Date(2026, 5, 25);
+  const baseQihao = 166;
+
+  const holidays = [
+    { start: new Date(2026, 1, 14), end: new Date(2026, 1, 23) },
+    { start: new Date(2026, 9, 1), end: new Date(2026, 9, 4) }
+  ];
+
+  const now = new Date();
+  let today = new Date(now);
+  today.setHours(0, 0, 0, 0);
+
+  if (now.getHours() >= 23) {
+    today.setDate(today.getDate() + 1);
+  }
+
+  let marketDays = 0;
+  let current = new Date(baseDate);
+  current.setHours(0, 0, 0, 0);
+
+  while (current < today) {
+    current.setDate(current.getDate() + 1);
+    let isHoliday = false;
+    for (const h of holidays) {
+      if (current >= h.start && current <= h.end) {
+        isHoliday = true;
+        break;
+      }
+    }
+    if (!isHoliday) {
+      marketDays++;
+    }
+  }
+
+  return baseQihao + marketDays;
+}
+
+function init() {
+  // 版本检查：如果版本不匹配，清除旧缓存配置并重载
+  const CURRENT_VERSION = '20260815_v8';
+  const savedVersion = localStorage.getItem('app_version');
+  if (savedVersion !== CURRENT_VERSION) {
+    localStorage.removeItem('mindmap_config');
+    localStorage.setItem('app_version', CURRENT_VERSION);
+    location.reload();
+    return;
+  }
+
+  loadConfig();
+
+  // 修复旧配置：如果格式三的所有值都是0，重置为默认值
+  const wumaVal = parseInt(document.getElementById('fmt3WumaCount').value) || 0;
+  const fourVal = parseInt(document.getElementById('fmt3FourCount').value) || 0;
+  const threeVal = parseInt(document.getElementById('fmt3ThreeCount').value) || 0;
+  const twoVal = parseInt(document.getElementById('fmt3TwoCount').value) || 0;
+  if (wumaVal === 0 && fourVal === 0 && threeVal === 0 && twoVal === 0) {
+    document.getElementById('fmt3WumaCount').value = 20;
+    document.getElementById('fmt3FourCount').value = 5;
+    document.getElementById('fmt3ThreeCount').value = 5;
+    document.getElementById('fmt3TwoCount').value = 2;
+    saveConfig();
+  }
+
+  initDmDanmaPicker();
+  updateDmDanmaOrder();
+  updateSimilarity('group');
+  updateSimilarity('straight');
+  renderHistory();
+
+  const expanded = localStorage.getItem('historySectionExpanded');
+  if (expanded !== '1') {
+    document.getElementById('historyContent').style.display = 'none';
+    document.getElementById('historySectionArrow').textContent = '▶';
+  }
+
+  const filterExpanded = localStorage.getItem('filterSectionExpanded');
+  if (filterExpanded === '0') {
+    document.getElementById('filterContent').style.display = 'none';
+    document.getElementById('filterSectionArrow').textContent = '▶';
+  }
+
+  // 恢复各条件折叠状态
+  for (const condId of ['cond1', 'cond2', 'cond3', 'cond4', 'cond5']) {
+    const condExpanded = localStorage.getItem(condId + '_expanded');
+    if (condExpanded === '0') {
+      document.getElementById(condId).style.display = 'none';
+      document.getElementById(condId + 'Arrow').textContent = '▶';
+    }
+  }
+
+  // 恢复数据修改区域折叠状态
+  const dmExpanded = localStorage.getItem('dmSection_expanded');
+  if (dmExpanded === '0') {
+    document.getElementById('dmContent').style.display = 'none';
+    document.getElementById('dmSectionArrow').textContent = '▶';
+  }
+
+  // 恢复手动录入区折叠状态
+  const manualExpanded = localStorage.getItem('manualSectionExpanded');
+  if (manualExpanded === '0') {
+    document.getElementById('manualContent').style.display = 'none';
+    document.getElementById('manualSectionArrow').textContent = '▶';
+  }
+
+  // 恢复相似度调控区折叠状态
+  const similarityExpanded = localStorage.getItem('similaritySectionExpanded');
+  if (similarityExpanded === '0') {
+    document.getElementById('similarityContent').style.display = 'none';
+    document.getElementById('similaritySectionArrow').textContent = '▶';
+  }
+}
+
+// === 数据修改模块 ===
+let dmDanmaOrder = [];
+let dmDanmaSet = new Set();
+let dmLastResults = [];
+
+init();
+
+function initDmDanmaPicker() {
+  const container = document.getElementById('dmDanmaPicker');
+  if (!container) return;
+  container.innerHTML = '';
+  for (let i = 0; i <= 9; i++) {
+    const btn = document.createElement('div');
+    btn.className = 'digit-btn';
+    btn.textContent = i;
+    btn.dataset.digit = i;
+    if (dmDanmaSet.has(String(i))) btn.classList.add('active');
+    btn.onclick = function() { toggleDmDanma(i); };
+    container.appendChild(btn);
+  }
+}
+
+function toggleDmDanma(digit) {
+  digit = String(digit);
+  const container = document.getElementById('dmDanmaPicker');
+  if (!container) return;
+  const btn = container.querySelector('.digit-btn[data-digit="' + digit + '"]');
+  if (!btn) return;
+  if (dmDanmaSet.has(digit)) {
+    dmDanmaSet.delete(digit);
+    dmDanmaOrder = dmDanmaOrder.filter(d => d !== digit);
+    btn.classList.remove('active');
+  } else {
+    if (dmDanmaSet.size >= 3) {
+      alert('最多选择3个胆码');
+      return;
+    }
+    dmDanmaSet.add(digit);
+    dmDanmaOrder.push(digit);
+    btn.classList.add('active');
+  }
+  updateDmDanmaOrder();
+  saveConfig();
+}
+
+function updateDmDanmaOrder() {
+  const el = document.getElementById('dmDanmaOrder');
+  if (!el) return;
+  if (dmDanmaOrder.length === 0) {
+    el.textContent = '请选择3个胆码';
+    el.style.color = '#999';
+  } else if (dmDanmaOrder.length < 3) {
+    el.textContent = '已选：' + dmDanmaOrder.join(' ') + '（还需选 ' + (3 - dmDanmaOrder.length) + ' 个）';
+    el.style.color = '#e67e22';
+  } else {
+    el.textContent = '基准直选号：' + dmDanmaOrder.join('');
+    el.style.color = '#27ae60';
+  }
+}
+
+function isDmEnabled() {
+  const el = document.getElementById('dmEnable');
+  return el && el.checked;
+}
+
+// 真人化选号：加权随机，倾向复用已选号码的位置数字
+function pickDmHumanLike(candidates, count, alreadyPicked) {
+  const result = [];
+  const allPicked = [...alreadyPicked];
+  const remaining = [...candidates];
+
+  while (result.length < count && remaining.length > 0) {
+    const weights = remaining.map(code => {
+      let w = 1;
+      for (const picked of allPicked) {
+        if (code[0] === picked[0]) w += 2;
+        if (code[1] === picked[1]) w += 2;
+        if (code[2] === picked[2]) w += 2;
+      }
+      return w;
+    });
+
+    const totalW = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * totalW;
+    let pos = 0;
+    for (let i = 0; i < weights.length; i++) {
+      r -= weights[i];
+      if (r <= 0) { pos = i; break; }
+    }
+    result.push(remaining[pos]);
+    allPicked.push(remaining[pos]);
+    remaining.splice(pos, 1);
+  }
+  return result;
+}
+
+// 生成3位数的所有排列
+function getPermutations(digits) {
+  const result = [];
+  const permute = (arr, current) => {
+    if (current.length === 3) {
+      result.push(current);
+      return;
+    }
+    for (let i = 0; i < arr.length; i++) {
+      const rest = [...arr.slice(0, i), ...arr.slice(i + 1)];
+      permute(rest, current + arr[i]);
+    }
+  };
+  permute(digits, '');
+  return result;
+}
+
+function generateDmWuma(baseline, danmaDigits, count, filterZuSan, filterBaozi) {
+  const results = [];
+  const rongcuoList = getRongcuoList();
+  // 预生成所有可用附加数字对（非胆码的0-9中取2个）
+  const allPairs = [];
+  for (let i = 0; i < 10; i++) {
+    if (danmaDigits.includes(String(i))) continue;
+    for (let j = i + 1; j < 10; j++) {
+      if (danmaDigits.includes(String(j))) continue;
+      allPairs.push([String(i), String(j)]);
+    }
+  }
+  shuffle(allPairs);
+  let pairIdx = 0;
+
+  for (let g = 0; g < count; g++) {
+    // 生成五码：3胆码 + 2随机数字，升序（容错过滤）
+    let fiveCode;
+    let found = false;
+    // 尝试从预生成的pair中找符合容错的
+    while (pairIdx < allPairs.length && !found) {
+      const pair = allPairs[pairIdx++];
+      const candidate = [...danmaDigits, ...pair].sort().join('');
+      let rongcuoHit = false;
+      for (const rc of rongcuoList) {
+        if (hitRongcuoSource(candidate, rc)) { rongcuoHit = true; break; }
+      }
+      if (!rongcuoHit) { fiveCode = candidate; found = true; }
+    }
+    // 预生成pair用完或不符合容错，随机生成
+    if (!found) {
+      for (let attempt = 0; attempt < 200; attempt++) {
+        let extra = [];
+        while (extra.length < 2) {
+          const d = String(Math.floor(Math.random() * 10));
+          if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
+        }
+        const candidate = [...danmaDigits, ...extra].sort().join('');
+        let rongcuoHit = false;
+        for (const rc of rongcuoList) {
+          if (hitRongcuoSource(candidate, rc)) { rongcuoHit = true; break; }
+        }
+        if (!rongcuoHit) { fiveCode = candidate; found = true; break; }
+      }
+      // 兜底：不检查容错
+      if (!found) {
+        let extra = [];
+        while (extra.length < 2) {
+          const d = String(Math.floor(Math.random() * 10));
+          if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
+        }
+        fiveCode = [...danmaDigits, ...extra].sort().join('');
+      }
+    }
+
+    const codeDigits = fiveCode.split('');
+
+    // 生成所有可能的3位数（只用五码内数字）
+    const allNumbers = [];
+    for (const a of codeDigits) {
+      for (const b of codeDigits) {
+        for (const c of codeDigits) {
+          const num = a + b + c;
+          if (filterZuSan && isZuSanCode(num)) continue;
+          if (filterBaozi && isLeopardCode(num)) continue;
+          allNumbers.push(num);
+        }
+      }
+    }
+
+    // 必须包含基准直选号，排除基准号的其他排列（如基准123，则132/213/231/312/321不出现）
+    let notes = [baseline];
+    const baselinePerms = new Set(getPermutations(danmaDigits));
+    // 过滤候选号码：排除基准排列 + 应用容错过滤
+    const candidates = allNumbers.filter(n => {
+      if (baselinePerms.has(n)) return false;
+      for (const rc of rongcuoList) {
+        if (hitRongcuo(n, rc)) return false;
+      }
+      return true;
+    });
+
+    // 用真人化算法选4注
+    const picked = pickDmHumanLike(candidates, 4, notes);
+    notes = [...notes, ...picked];
+
+    // 打乱顺序（基准号不强制放第一位）
+    shuffle(notes);
+
+    results.push({ fiveCode: fiveCode, notes: notes });
+  }
+  return results;
+}
+
+function generateDmNotes(baseline, danmaDigits, count, noteCount, filterZuSan, filterBaozi) {
+  const results = [];
+  const rongcuoList = getRongcuoList();
+  // 生成胆码的所有排列（直选号+组选号）
+  const allPerms = getPermutations(danmaDigits);
+  const validPerms = allPerms.filter(p => {
+    if (filterZuSan && isZuSanCode(p)) return false;
+    if (filterBaozi && isLeopardCode(p)) return false;
+    // 容错过滤
+    for (const rc of rongcuoList) {
+      if (hitRongcuo(p, rc)) return false;
+    }
+    return true;
+  });
+
+  // 胆码数字集合
+  const danmaSet = new Set(danmaDigits);
+
+  // 检查号码是否合法
+  function isValidNote(note, notes, baselinePerms) {
+    if (!danmaSet.has(note[0]) && !danmaSet.has(note[1]) && !danmaSet.has(note[2])) return false;
+    if (filterZuSan && isZuSanCode(note)) return false;
+    if (filterBaozi && isLeopardCode(note)) return false;
+    if (baselinePerms.has(note)) return false;
+    // 检查组内重复（直选和组选都算重复）
+    if (isDuplicateInGroup(note, notes)) return false;
+    // 容错过滤
+    for (const rc of rongcuoList) {
+      if (hitRongcuo(note, rc)) return false;
+    }
+    return true;
+  }
+
+  for (let g = 0; g < count; g++) {
+    const notes = [];
+
+    // 第1注：基准号（优先使用baseline，若baseline被容错过滤则用随机排列）
+    let baselineNote;
+    if (validPerms.length > 0) {
+      // 优先检查baseline本身是否在validPerms中
+      const baselineInValid = validPerms.includes(baseline);
+      if (baselineInValid) {
+        baselineNote = baseline;
+      } else {
+        baselineNote = validPerms[Math.floor(Math.random() * validPerms.length)];
+      }
+    } else {
+      // 所有排列都被过滤，使用baseline兜底
+      baselineNote = baseline;
+    }
+    notes.push(baselineNote);
+
+    const baselinePerms = new Set(allPerms);
+    const remaining = noteCount - 1;
+
+    // 真人选号策略：大部分复用两个位置，少部分复用一个位置
+    // 随机选两个位置固定，只换剩下一位
+    const positions = [0, 1, 2];
+    shuffle(positions);
+    const fixPos1 = positions[0];
+    const fixPos2 = positions[1];
+    const changePos = positions[2];
+    const fixDigit1 = baselineNote[fixPos1];
+    const fixDigit2 = baselineNote[fixPos2];
+
+    // 辅助固定位（少部分使用）
+    const auxFixPos = fixPos1;
+    const auxFixDigit = fixDigit1;
+
+    for (let i = 0; i < remaining; i++) {
+      let note = null;
+      let tries = 200;
+
+      // 策略1（主）：固定两个位置，只换一个位置（大部分走这条）
+      while (tries > 0 && !note) {
+        tries--;
+        // 70%概率用胆码数字，30%概率随机数字
+        let d;
+        if (Math.random() < 0.7) {
+          d = danmaDigits[Math.floor(Math.random() * danmaDigits.length)];
+        } else {
+          d = String(Math.floor(Math.random() * 10));
+        }
+
+        const arr = ['', '', ''];
+        arr[fixPos1] = fixDigit1;
+        arr[fixPos2] = fixDigit2;
+        arr[changePos] = d;
+        const candidate = arr.join('');
+
+        if (isValidNote(candidate, notes, baselinePerms)) {
+          note = candidate;
+        }
+      }
+
+      // 策略2（少部分）：固定一个位置，换其他两位
+      if (!note) {
+        tries = 100;
+        while (tries > 0 && !note) {
+          tries--;
+          const arr = ['', '', ''];
+          arr[auxFixPos] = auxFixDigit;
+          for (let p = 0; p < 3; p++) {
+            if (p !== auxFixPos) {
+              if (Math.random() < 0.5) {
+                arr[p] = danmaDigits[Math.floor(Math.random() * danmaDigits.length)];
+              } else {
+                arr[p] = String(Math.floor(Math.random() * 10));
+              }
+            }
+          }
+          const candidate = arr.join('');
+          if (isValidNote(candidate, notes, baselinePerms)) {
+            note = candidate;
+          }
+        }
+      }
+
+      // 策略3（最终兜底）：纯随机含胆码
+      if (!note) {
+        tries = 100;
+        while (tries > 0 && !note) {
+          tries--;
+          const candidate = String(Math.floor(Math.random() * 10)) + String(Math.floor(Math.random() * 10)) + String(Math.floor(Math.random() * 10));
+          if (isValidNote(candidate, notes, baselinePerms)) {
+            note = candidate;
+          }
+        }
+      }
+
+      if (note) {
+        notes.push(note);
+      } else {
+        // 实在不行用胆码拼
+        note = auxFixDigit + fixDigit1 + danmaDigits[Math.floor(Math.random() * danmaDigits.length)];
+        notes.push(note);
+      }
+    }
+
+    shuffle(notes);
+    results.push(notes);
+  }
+  return results;
+}
+
+function generateDataModification() {
+  if (dmDanmaOrder.length !== 3) {
+    alert('数据修改：请选择3个胆码');
+    return null;
+  }
+
+  const baseline = dmDanmaOrder.join('');
+  const danmaDigits = dmDanmaOrder.slice();
+
+  const filterZuSan = document.getElementById('dmFilterZuSan').checked;
+  const filterBaozi = document.getElementById('dmFilterBaozi').checked;
+
+  const wumaCount = parseInt(document.getElementById('dmWumaCount').value) || 0;
+  const twoCount = parseInt(document.getElementById('dmTwoCount').value) || 0;
+  const threeCount = parseInt(document.getElementById('dmThreeCount').value) || 0;
+  const fourCount = parseInt(document.getElementById('dmFourCount').value) || 0;
+
+  if (wumaCount + twoCount + threeCount + fourCount === 0) {
+    alert('数据修改：请至少设置一个生成组数');
+    return null;
+  }
+
+  const qihao = getCurrentQihao();
+  let results = [];
+  let serial = 1;
+
+  // 五码五注
+  if (wumaCount > 0) {
+    const wumaResults = generateDmWuma(baseline, danmaDigits, wumaCount, filterZuSan, filterBaozi);
+    for (const r of wumaResults) {
+      results.push({
+        serial: serial++,
+        type: 'wuma',
+        typeName: '五码五注',
+        text: qihao + '期：五码：' + r.fiveCode + '\n精选五注： ' + r.notes.join(' ')
+      });
+    }
+  }
+
+  // 两注
+  if (twoCount > 0) {
+    const twoResults = generateDmNotes(baseline, danmaDigits, twoCount, 2, filterZuSan, filterBaozi);
+    for (const r of twoResults) {
+      results.push({
+        serial: serial++,
+        type: 'two',
+        typeName: '两注',
+        text: qihao + '期：' + r.join(' ')
+      });
+    }
+  }
+
+  // 三注
+  if (threeCount > 0) {
+    const threeResults = generateDmNotes(baseline, danmaDigits, threeCount, 3, filterZuSan, filterBaozi);
+    for (const r of threeResults) {
+      results.push({
+        serial: serial++,
+        type: 'three',
+        typeName: '三注',
+        text: qihao + '期：' + r.join(' ')
+      });
+    }
+  }
+
+  // 四注
+  if (fourCount > 0) {
+    const fourResults = generateDmNotes(baseline, danmaDigits, fourCount, 4, filterZuSan, filterBaozi);
+    for (const r of fourResults) {
+      results.push({
+        serial: serial++,
+        type: 'four',
+        typeName: '四注',
+        text: qihao + '期：' + r.join(' ')
+      });
+    }
+  }
+
+  return results;
+}
+
+function renderDmResults(results) {
+  const content = document.getElementById('resultContent');
+  const countEl = document.getElementById('resultCount');
+
+  countEl.textContent = '共 ' + results.length + ' 条';
+  dmLastResults = [...results];
+
+  if (results.length === 0) {
+    content.innerHTML = '<div class="empty-tip">暂无结果</div>';
+    return;
+  }
+
+  let html = '';
+  for (let i = 0; i < results.length; i++) {
+    const item = results[i];
+    const displayText = item.text.replace(/\n/g, '<br>');
+    html += '<div class="result-line" id="dm-result-line-' + i + '">';
+    html += '<div class="result-line-content">';
+    html += '<span class="result-idx">' + item.serial + '.</span>';
+    html += '<span class="result-code">' + displayText + '</span>';
+    html += '</div>';
+    html += '<button class="copy-line-btn" onclick="copyDmLine(' + i + ')">复制本行</button>';
+    html += '</div>';
+  }
+  content.innerHTML = html;
+}
+
+function copyDmLine(index) {
+  if (!dmLastResults[index]) return;
+  const text = dmLastResults[index].text;
+
+  document.querySelectorAll('#resultContent .result-line.copied').forEach(el => el.classList.remove('copied'));
+  document.querySelectorAll('#historyContent .result-line.copied').forEach(el => el.classList.remove('copied'));
+  const line = document.getElementById('dm-result-line-' + index);
+  if (line) line.classList.add('copied');
+
+  navigator.clipboard.writeText(text).then(() => showToast('已复制本行')).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('已复制本行');
+  });
+}
+
+function copyAllDmResults() {
+  if (dmLastResults.length === 0) {
+    alert('暂无结果可复制');
+    return;
+  }
+  let text = '';
+  for (const item of dmLastResults) {
+    text += item.text + '\n';
+  }
+  text = text.trim();
+  navigator.clipboard.writeText(text).then(() => showToast('已复制全部结果')).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('已复制全部结果');
+  });
+}
+
+// 数据修改历史记录（独立存储）
+function getDmHistory() {
+  try {
+    return JSON.parse(localStorage.getItem('dm_history') || '[]');
+  } catch (e) { return []; }
+}
+
+function saveDmToHistory() {
+  if (dmLastResults.length === 0) {
+    alert('暂无结果可保存');
+    return;
+  }
+  const history = getDmHistory();
+  const record = {
+    id: Date.now(),
+    timestamp: new Date().toLocaleString(),
+    results: JSON.parse(JSON.stringify(dmLastResults))
+  };
+  history.unshift(record);
+  localStorage.setItem('dm_history', JSON.stringify(history));
+  renderDmHistory();
+  showToast('已保存到历史记录');
+}
+
+function renderDmHistory() {
+  const content = document.getElementById('historyContent');
+  if (!content) return;
+  if (!isDmEnabled()) return;
+  const history = getDmHistory();
+
+  if (history.length === 0) {
+    content.innerHTML = '<div class="empty-tip">暂无历史记录</div>';
+    return;
+  }
+
+  if (!window._dmHistoryExpanded) window._dmHistoryExpanded = {};
+
+  let html = '';
+  for (const record of history) {
+    const isExpanded = window._dmHistoryExpanded[record.id] === true;
+    html += '<div class="history-item">';
+    html += '<div class="history-header" onclick="toggleDmHistoryItem(' + record.id + ')" style="cursor:pointer;">';
+    html += '<span>' + (isExpanded ? '▼' : '▶') + ' ' + record.timestamp + '（共' + record.results.length + '条）</span>';
+    html += '<button class="history-delete-btn" onclick="event.stopPropagation();deleteDmHistoryItem(' + record.id + ')">删除</button>';
+    html += '</div>';
+    if (isExpanded) {
+      html += '<div class="history-content">';
+      for (let i = 0; i < record.results.length; i++) {
+        const item = record.results[i];
+        const displayText = item.text.replace(/\n/g, '<br>');
+        html += '<div class="result-line" id="dm-history-line-' + record.id + '-' + i + '">';
+        html += '<div class="result-line-content">';
+        html += '<span class="result-idx">' + item.serial + '.</span>';
+        html += '<span class="result-code">' + displayText + '</span>';
+        html += '</div>';
+        html += '<button class="copy-line-btn" onclick="copyDmHistoryLine(' + record.id + ', ' + i + ')">复制本行</button>';
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  content.innerHTML = html;
+}
+
+function toggleDmHistoryItem(id) {
+  if (!window._dmHistoryExpanded) window._dmHistoryExpanded = {};
+  window._dmHistoryExpanded[id] = !window._dmHistoryExpanded[id];
+  renderDmHistory();
+}
+
+function deleteDmHistoryItem(id) {
+  if (!confirm('确定要删除这条历史记录吗？')) return;
+  const history = getDmHistory().filter(r => r.id !== id);
+  localStorage.setItem('dm_history', JSON.stringify(history));
+  renderDmHistory();
+}
+
+function clearAllDmHistory() {
+  if (!confirm('确定要清空全部历史记录吗？')) return;
+  localStorage.setItem('dm_history', '[]');
+  renderDmHistory();
+}
+
+function copyDmHistoryLine(recordId, index) {
+  const history = getDmHistory();
+  const record = history.find(r => r.id === recordId);
+  if (!record || !record.results[index]) return;
+  const text = record.results[index].text;
+
+  document.querySelectorAll('#historyContent .result-line.copied').forEach(el => el.classList.remove('copied'));
+  document.querySelectorAll('#resultContent .result-line.copied').forEach(el => el.classList.remove('copied'));
+  const line = document.getElementById('dm-history-line-' + recordId + '-' + index);
+  if (line) line.classList.add('copied');
+
+  navigator.clipboard.writeText(text).then(() => showToast('已复制本行')).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('已复制本行');
+  });
+}
+
+// 阻止移动端双击缩放
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(e) {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) {
+    e.preventDefault();
+  }
+  lastTouchEnd = now;
+}, { passive: false });
+
+</script>
+
+</body>
+</html>
