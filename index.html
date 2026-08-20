@@ -1203,6 +1203,17 @@ h1 {
         <div class="digit-label" style="margin-top: 12px;">个位杀</div>
         <div class="digit-picker" id="excludeGePicker"></div>
       </div>
+
+      <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond6', 'cond6Arrow')"><span><span id="cond6Arrow">▼</span> 条件6 近期号码</span></div>
+      <div id="cond6">
+        <div style="font-size:12px;color:#999;margin-bottom:8px;">每行5个号码，最多20个。最新输入在最上面。自动排除最近7个号码。</div>
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <input type="text" id="recentNumberInput" placeholder="如：296 373 382 225 058" style="flex:1;padding:8px 10px;border:1px solid #d9d9d9;border-radius:6px;font-size:13px;-webkit-appearance:none;" onkeydown="if(event.key==='Enter'){addRecentNumbers();}">
+          <button class="btn btn-primary btn-sm" onclick="addRecentNumbers()">添加</button>
+          <button class="btn btn-default btn-sm" onclick="clearRecentNumbers()">清空</button>
+        </div>
+        <div id="recentNumbersList" style="max-height:200px;overflow-y:auto;"></div>
+      </div>
     </div>
   </div>
 
@@ -2138,6 +2149,9 @@ function generateFormat3Results() {
         }
         if (rongcuoHit) continue;
 
+        // 近期号码排除：五码不能同时包含近期7天非组三号码的3个数字
+        if (!sourcePassesRecentFilter(combo)) continue;
+
         if (quickFilterCheck(combo) >= 5) {
           // 格式三强制应用筛选：isRandom=false 确保不受 filterRandom 开关影响
           const pool = generateNumberPool(combo, '', false);
@@ -2154,15 +2168,23 @@ function generateFormat3Results() {
         return null;
       }
 
+      // 组间相似度控制：已生成的五码源码列表
+      const generatedSources = [];
+
       for (let i = 0; i < wumaCount; i++) {
         if (validCandidates.length === 0) {
           // 候选不足，用随机生成补充
           let found = false;
-          for (let attempt = 0; attempt < 100; attempt++) {
+          for (let attempt = 0; attempt < 200; attempt++) {
             const candidate = generateRandom5DigitsRongcuo();
+            // 近期号码排除
+            if (!sourcePassesRecentFilter(candidate)) continue;
+            // 组间相似度控制
+            if (sourceTooSimilar(candidate, generatedSources)) continue;
             const pool = generateNumberPool(candidate, '', false);
             if (pool.length >= 5) {
-              allList.push({ source: candidate, dan: '', isRandom: true });
+              allList.push({ source: candidate, dan: '', isRandom: true, _pool: pool });
+              generatedSources.push(candidate);
               found = true;
               break;
             }
@@ -2172,9 +2194,24 @@ function generateFormat3Results() {
             break;
           }
         } else {
-          const idx = Math.floor(Math.random() * validCandidates.length);
-          const picked = validCandidates.splice(idx, 1)[0];
-          allList.push({ source: picked.source, dan: '', isRandom: true, _pool: picked.pool });
+          // 从候选中找一个不与已有组太相似的
+          let picked = null;
+          for (let attempt = 0; attempt < validCandidates.length; attempt++) {
+            const idx = Math.floor(Math.random() * validCandidates.length);
+            const candidate = validCandidates[idx];
+            if (!sourceTooSimilar(candidate.source, generatedSources)) {
+              picked = validCandidates.splice(idx, 1)[0];
+              break;
+            }
+          }
+          // 如果所有候选都太相似，取第一个
+          if (!picked && validCandidates.length > 0) {
+            picked = validCandidates.splice(0, 1)[0];
+          }
+          if (picked) {
+            allList.push({ source: picked.source, dan: '', isRandom: true, _pool: picked.pool });
+            generatedSources.push(picked.source);
+          }
         }
       }
 
@@ -2219,22 +2256,31 @@ function generateFormat3Results() {
   const noteCountNeeded = Math.max(fourCount > 0 ? 4 : 0, threeCount > 0 ? 3 : 0, twoCount > 0 ? 2 : 0);
 
   // 生成合格的5位源码（和五码五注一样的筛选逻辑）
-  function generateQualifiedSource() {
-    for (let attempt = 0; attempt < 200; attempt++) {
+  function generateQualifiedSource(existingSources) {
+    for (let attempt = 0; attempt < 300; attempt++) {
       const candidate = generateRandom5DigitsRongcuo();
+      // 近期号码排除
+      if (!sourcePassesRecentFilter(candidate)) continue;
+      // 组间相似度控制
+      if (existingSources && sourceTooSimilar(candidate, existingSources)) continue;
       if (quickFilterCheck(candidate) >= noteCountNeeded) {
         const pool = generateNumberPool(candidate, '', false);
-        if (pool.length >= 4) { // 至少要有4注可选
-          return { source: candidate, pool: pool };
+        // 过滤掉近期号码组选的池
+        const filteredPool = pool.filter(c => codePassesRecentFilter(c));
+        if (filteredPool.length >= noteCountNeeded) {
+          return { source: candidate, pool: filteredPool };
         }
       }
     }
     // 兜底：不检查quickFilter，直接生成
     for (let attempt = 0; attempt < 100; attempt++) {
       const candidate = generateRandom5DigitsRongcuo();
+      if (!sourcePassesRecentFilter(candidate)) continue;
+      if (existingSources && sourceTooSimilar(candidate, existingSources)) continue;
       const pool = generateNumberPool(candidate, '', false);
-      if (pool.length >= 2) {
-        return { source: candidate, pool: pool };
+      const filteredPool = pool.filter(c => codePassesRecentFilter(c));
+      if (filteredPool.length >= 2) {
+        return { source: candidate, pool: filteredPool };
       }
     }
     return null;
@@ -2249,44 +2295,103 @@ function generateFormat3Results() {
     }
   }
 
+  // 四注组间相似度控制
   if (fourCount > 0) {
+    const generatedSources = [];
+    const generatedGroups = [];
     for (let i = 0; i < fourCount; i++) {
-      const sourceData = generateQualifiedSource();
+      let sourceData = null;
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const candidate = generateQualifiedSource(generatedSources);
+        if (!candidate) continue;
+        const notes = generateNotesFromPool(candidate.pool, 4);
+        // 组间号码相似度检查：和最近3组比较，重叠≥2算太相似
+        if (!notesTooSimilar(notes, generatedGroups, 2)) {
+          sourceData = { ...candidate, notes };
+          break;
+        }
+      }
+      // 兜底：直接生成
+      if (!sourceData) {
+        const candidate = generateQualifiedSource(generatedSources);
+        if (candidate) {
+          sourceData = { ...candidate, notes: generateNotesFromPool(candidate.pool, 4) };
+        }
+      }
       if (!sourceData) continue;
-      const notes = generateNotesFromPool(sourceData.pool, 4);
+      generatedSources.push(sourceData.source);
+      generatedGroups.push(sourceData.notes);
       results.push({
         serial: serial++,
         type: 'four',
         typeName: '四注',
-        text: qihao + '期：' + notes.join(' ')
+        text: qihao + '期：' + sourceData.notes.join(' ')
       });
     }
   }
 
+  // 三注组间相似度控制
   if (threeCount > 0) {
+    const generatedSources = [];
+    const generatedGroups = [];
     for (let i = 0; i < threeCount; i++) {
-      const sourceData = generateQualifiedSource();
+      let sourceData = null;
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const candidate = generateQualifiedSource(generatedSources);
+        if (!candidate) continue;
+        const notes = generateNotesFromPool(candidate.pool, 3);
+        if (!notesTooSimilar(notes, generatedGroups, 2)) {
+          sourceData = { ...candidate, notes };
+          break;
+        }
+      }
+      if (!sourceData) {
+        const candidate = generateQualifiedSource(generatedSources);
+        if (candidate) {
+          sourceData = { ...candidate, notes: generateNotesFromPool(candidate.pool, 3) };
+        }
+      }
       if (!sourceData) continue;
-      const notes = generateNotesFromPool(sourceData.pool, 3);
+      generatedSources.push(sourceData.source);
+      generatedGroups.push(sourceData.notes);
       results.push({
         serial: serial++,
         type: 'three',
         typeName: '三注',
-        text: qihao + '期：' + notes.join(' ')
+        text: qihao + '期：' + sourceData.notes.join(' ')
       });
     }
   }
 
+  // 两注组间相似度控制
   if (twoCount > 0) {
+    const generatedSources = [];
+    const generatedGroups = [];
     for (let i = 0; i < twoCount; i++) {
-      const sourceData = generateQualifiedSource();
+      let sourceData = null;
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const candidate = generateQualifiedSource(generatedSources);
+        if (!candidate) continue;
+        const notes = generateNotesFromPool(candidate.pool, 2);
+        if (!notesTooSimilar(notes, generatedGroups, 1)) {
+          sourceData = { ...candidate, notes };
+          break;
+        }
+      }
+      if (!sourceData) {
+        const candidate = generateQualifiedSource(generatedSources);
+        if (candidate) {
+          sourceData = { ...candidate, notes: generateNotesFromPool(candidate.pool, 2) };
+        }
+      }
       if (!sourceData) continue;
-      const notes = generateNotesFromPool(sourceData.pool, 2);
+      generatedSources.push(sourceData.source);
+      generatedGroups.push(sourceData.notes);
       results.push({
         serial: serial++,
         type: 'two',
         typeName: '两注',
-        text: qihao + '期：' + notes.join(' ')
+        text: qihao + '期：' + sourceData.notes.join(' ')
       });
     }
   }
@@ -2394,10 +2499,15 @@ function generateAllResults() {
       }
       if (rongcuoHit) continue;
 
+      // 近期号码排除：五码不能同时包含近期7天非组三号码的3个数字
+      if (!sourcePassesRecentFilter(combo)) continue;
+
       if (quickFilterCheck(combo) >= 5) {
         const pool = generateNumberPool(combo, '', true);
-        if (pool.length >= 5) {
-          validCandidates.push({ source: combo, pool: pool });
+        // 过滤近期号码组选
+        const filteredPool = pool.filter(c => codePassesRecentFilter(c));
+        if (filteredPool.length >= 5) {
+          validCandidates.push({ source: combo, pool: filteredPool });
         }
       }
     }
@@ -2410,24 +2520,47 @@ function generateAllResults() {
     }
   }
 
-  // 从候选五码中随机挑选，不限制相似度
+  // 组间相似度控制：已生成的五码源码列表
+  const generatedSourcesFmt12 = [];
+
+  // 从候选五码中随机挑选，检查组间相似度
   for (let i = 0; i < randomCount; i++) {
     let picked = null;
 
     if (filterRandom) {
       if (validCandidates.length > 0) {
-        const idx = Math.floor(Math.random() * validCandidates.length);
-        picked = validCandidates.splice(idx, 1)[0];
+        // 尝试找一个不与已有组太相似的
+        for (let attempt = 0; attempt < validCandidates.length; attempt++) {
+          const idx = Math.floor(Math.random() * validCandidates.length);
+          const candidate = validCandidates[idx];
+          if (!sourceTooSimilar(candidate.source, generatedSourcesFmt12)) {
+            picked = validCandidates.splice(idx, 1)[0];
+            break;
+          }
+        }
+        // 全部太相似时取第一个
+        if (!picked) {
+          picked = validCandidates.splice(0, 1)[0];
+        }
       } else {
         alert('候选五码数量不足，无法生成 ' + randomCount + ' 组随机数据源，请减少数量或放宽筛选条件');
         return;
       }
 
+      generatedSourcesFmt12.push(picked.source);
       allList.push({ source: picked.source, dan: '', isRandom: true, _pool: picked.pool });
     } else {
-      // 不启用筛选，直接随机生成（但仍应用容错条件过滤五码）
-      const source = generateRandom5DigitsRongcuo();
-      allList.push({ source, dan: '', isRandom: true });
+      // 不启用筛选，直接随机生成（仍应用容错和近期号码过滤五码）
+      for (let attempt = 0; attempt < 200; attempt++) {
+        const source = generateRandom5DigitsRongcuo();
+        // 近期号码排除
+        if (!sourcePassesRecentFilter(source)) continue;
+        // 组间相似度控制
+        if (sourceTooSimilar(source, generatedSourcesFmt12)) continue;
+        generatedSourcesFmt12.push(source);
+        allList.push({ source, dan: '', isRandom: true });
+        break;
+      }
     }
   }
 
@@ -3692,6 +3825,184 @@ function toggleCondition(contentId, arrowId) {
   }
 }
 
+// ========== 近期号码管理 ==========
+let recentNumbers = []; // 全局数组，最新的在最前面
+
+function loadRecentNumbers() {
+  try {
+    const data = localStorage.getItem('recent_lottery_numbers');
+    if (data) {
+      recentNumbers = JSON.parse(data);
+    }
+  } catch(e) {
+    recentNumbers = [];
+  }
+  renderRecentNumbers();
+}
+
+function saveRecentNumbers() {
+  localStorage.setItem('recent_lottery_numbers', JSON.stringify(recentNumbers));
+}
+
+// 判断是否为组三（有重复数字）
+function isZuSanCode(code) {
+  return code[0] === code[1] || code[1] === code[2] || code[0] === code[2];
+}
+
+// 添加近期号码
+function addRecentNumbers() {
+  const input = document.getElementById('recentNumberInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  // 解析号码：支持空格、逗号分隔
+  const parts = text.split(/[\s,，]+/).map(s => s.trim()).filter(s => s.length === 3 && /^\d{3}$/.test(s));
+
+  if (parts.length === 0) {
+    alert('请输入有效的3位号码，如：296 373 382 225 058');
+    return;
+  }
+
+  // 新号码插入到最前面（最新在前）
+  for (let i = parts.length - 1; i >= 0; i--) {
+    // 避免连续重复
+    if (recentNumbers[0] !== parts[i]) {
+      recentNumbers.unshift(parts[i]);
+    }
+  }
+
+  // 最多保留20个
+  if (recentNumbers.length > 20) {
+    recentNumbers = recentNumbers.slice(0, 20);
+  }
+
+  input.value = '';
+  saveRecentNumbers();
+  renderRecentNumbers();
+}
+
+// 删除单个近期号码
+function deleteRecentNumber(index) {
+  recentNumbers.splice(index, 1);
+  saveRecentNumbers();
+  renderRecentNumbers();
+}
+
+// 清空近期号码
+function clearRecentNumbers() {
+  if (recentNumbers.length === 0) return;
+  if (!confirm('确认清空所有近期号码？')) return;
+  recentNumbers = [];
+  saveRecentNumbers();
+  renderRecentNumbers();
+}
+
+// 渲染近期号码列表
+function renderRecentNumbers() {
+  const container = document.getElementById('recentNumbersList');
+  if (!container) return;
+
+  if (recentNumbers.length === 0) {
+    container.innerHTML = '<div style="font-size:12px;color:#ccc;text-align:center;padding:12px;">暂无近期号码</div>';
+    return;
+  }
+
+  let html = '';
+  // 每5个一行
+  for (let i = 0; i < recentNumbers.length; i += 5) {
+    const row = recentNumbers.slice(i, i + 5);
+    const rowNum = Math.floor(i / 5) + 1;
+    const isRecent7 = i < 7; // 前7个用于排除
+    html += `<div style="display:flex;align-items:center;gap:4px;padding:4px 0;border-bottom:1px solid #f5f5f5;">`;
+    html += `<span style="font-size:11px;color:${isRecent7 ? '#faad14' : '#ccc'};min-width:30px;">${isRecent7 ? '★' : ''}${rowNum}</span>`;
+    for (let j = 0; j < row.length; j++) {
+      const idx = i + j;
+      const code = row[j];
+      const isZusan = isZuSanCode(code);
+      html += `<span style="font-size:13px;padding:2px 6px;border-radius:4px;background:${isZusan ? '#f0f0f0' : '#e6f7ff'};color:${isZusan ? '#999' : '#1890ff'};cursor:pointer;" onclick="deleteRecentNumber(${idx})" title="点击删除">${code}</span>`;
+    }
+    html += `</div>`;
+  }
+  html += `<div style="font-size:11px;color:#999;margin-top:4px;">★标注的7个号码参与排除 | 组三标灰</div>`;
+  container.innerHTML = html;
+}
+
+// 获取用于排除的近期7个号码
+function getRecent7ForExclusion() {
+  return recentNumbers.slice(0, 7);
+}
+
+// 判断五码源码是否包含近期号码的3个数字组合（非组三才排除）
+function sourceContainsRecentCode(source, recentCode) {
+  // 组三豁免
+  if (isZuSanCode(recentCode)) return false;
+  const digits = recentCode.split('');
+  // 五码源码是否同时包含这3个数字
+  return digits.every(d => source.includes(d));
+}
+
+// 检查五码源码是否通过近期号码排除
+function sourcePassesRecentFilter(source) {
+  const recent7 = getRecent7ForExclusion();
+  for (const code of recent7) {
+    if (sourceContainsRecentCode(source, code)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// 获取近期7天号码的组选键集合（用于四注/三注/两注排除）
+function getRecent7GroupKeys() {
+  const keys = new Set();
+  const recent7 = getRecent7ForExclusion();
+  for (const code of recent7) {
+    keys.add(getGroupKey(code));
+  }
+  return keys;
+}
+
+// 检查号码是否被近期号码排除（组选级别）
+function codePassesRecentFilter(code) {
+  const recent7Keys = getRecent7GroupKeys();
+  return !recent7Keys.has(getGroupKey(code));
+}
+
+// ========== 组间相似度控制 ==========
+// 检查新五码与已生成五码组的相似度
+// 共享数字≤3合格，≥4不合格
+function sourceTooSimilar(newSource, existingSources) {
+  const newDigits = new Set(newSource.split(''));
+  for (const existing of existingSources) {
+    const existingDigits = new Set(existing.split(''));
+    let shared = 0;
+    for (const d of newDigits) {
+      if (existingDigits.has(d)) shared++;
+    }
+    if (shared >= 4) return true;
+  }
+  return false;
+}
+
+// 检查新注数组与已生成注数组的相似度
+// 如果新组中有超过一半的号码组选键已存在于最近几组中，则认为太相似
+function notesTooSimilar(newNotes, existingNotesGroups, threshold) {
+  if (existingNotesGroups.length === 0) return false;
+  const newKeys = new Set(newNotes.map(n => getGroupKey(n)));
+  const recentGroups = existingNotesGroups.slice(-3); // 只和最近3组比较
+
+  for (const group of recentGroups) {
+    const existingKeys = new Set(group.map(n => getGroupKey(n)));
+    let overlap = 0;
+    for (const key of newKeys) {
+      if (existingKeys.has(key)) overlap++;
+    }
+    // 如果重叠号码数 >= 阈值，认为太相似
+    if (overlap >= threshold) return true;
+  }
+  return false;
+}
+
 function toggleDmSection() {
   const content = document.getElementById('dmContent');
   const arrow = document.getElementById('dmSectionArrow');
@@ -4347,13 +4658,16 @@ function init() {
   }
 
   // 恢复各条件折叠状态
-  for (const condId of ['cond1', 'cond2', 'cond3', 'cond4', 'cond5']) {
+  for (const condId of ['cond1', 'cond2', 'cond3', 'cond4', 'cond5', 'cond6']) {
     const condExpanded = localStorage.getItem(condId + '_expanded');
     if (condExpanded === '0') {
       document.getElementById(condId).style.display = 'none';
       document.getElementById(condId + 'Arrow').textContent = '▶';
     }
   }
+
+  // 加载近期号码
+  loadRecentNumbers();
 
   // 恢复数据修改区域折叠状态
   const dmExpanded = localStorage.getItem('dmSection_expanded');
@@ -4505,6 +4819,9 @@ function generateDmWuma(baseline, danmaDigits, count, filterZuSan, filterBaozi) 
   shuffle(allPairs);
   let pairIdx = 0;
 
+  // 组间相似度控制
+  const generatedSources = [];
+
   for (let g = 0; g < count; g++) {
     // 生成五码：3胆码 + 2随机数字，升序（容错过滤）
     let fiveCode;
@@ -4517,11 +4834,16 @@ function generateDmWuma(baseline, danmaDigits, count, filterZuSan, filterBaozi) 
       for (const rc of rongcuoList) {
         if (hitRongcuoSource(candidate, rc)) { rongcuoHit = true; break; }
       }
-      if (!rongcuoHit) { fiveCode = candidate; found = true; }
+      if (rongcuoHit) continue;
+      // 近期号码排除
+      if (!sourcePassesRecentFilter(candidate)) continue;
+      // 组间相似度控制
+      if (sourceTooSimilar(candidate, generatedSources)) continue;
+      fiveCode = candidate; found = true;
     }
     // 预生成pair用完或不符合容错，随机生成
     if (!found) {
-      for (let attempt = 0; attempt < 200; attempt++) {
+      for (let attempt = 0; attempt < 300; attempt++) {
         let extra = [];
         while (extra.length < 2) {
           const d = String(Math.floor(Math.random() * 10));
@@ -4532,18 +4854,36 @@ function generateDmWuma(baseline, danmaDigits, count, filterZuSan, filterBaozi) 
         for (const rc of rongcuoList) {
           if (hitRongcuoSource(candidate, rc)) { rongcuoHit = true; break; }
         }
-        if (!rongcuoHit) { fiveCode = candidate; found = true; break; }
+        if (rongcuoHit) continue;
+        // 近期号码排除
+        if (!sourcePassesRecentFilter(candidate)) continue;
+        // 组间相似度控制
+        if (sourceTooSimilar(candidate, generatedSources)) continue;
+        fiveCode = candidate; found = true; break;
       }
-      // 兜底：不检查容错
+      // 兜底：不检查容错和近期号码
       if (!found) {
-        let extra = [];
-        while (extra.length < 2) {
-          const d = String(Math.floor(Math.random() * 10));
-          if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
+        for (let attempt = 0; attempt < 100; attempt++) {
+          let extra = [];
+          while (extra.length < 2) {
+            const d = String(Math.floor(Math.random() * 10));
+            if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
+          }
+          const candidate = [...danmaDigits, ...extra].sort().join('');
+          if (sourceTooSimilar(candidate, generatedSources)) continue;
+          fiveCode = candidate; found = true; break;
         }
-        fiveCode = [...danmaDigits, ...extra].sort().join('');
+        if (!found) {
+          let extra = [];
+          while (extra.length < 2) {
+            const d = String(Math.floor(Math.random() * 10));
+            if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
+          }
+          fiveCode = [...danmaDigits, ...extra].sort().join('');
+        }
       }
     }
+    generatedSources.push(fiveCode);
 
     const codeDigits = fiveCode.split('');
 
@@ -4563,12 +4903,14 @@ function generateDmWuma(baseline, danmaDigits, count, filterZuSan, filterBaozi) 
     // 必须包含基准直选号，排除基准号的其他排列（如基准123，则132/213/231/312/321不出现）
     let notes = [baseline];
     const baselinePerms = new Set(getPermutations(danmaDigits));
-    // 过滤候选号码：排除基准排列 + 应用容错过滤
+    // 过滤候选号码：排除基准排列 + 应用容错过滤 + 近期号码排除
     const candidates = allNumbers.filter(n => {
       if (baselinePerms.has(n)) return false;
       for (const rc of rongcuoList) {
         if (hitRongcuo(n, rc)) return false;
       }
+      // 近期号码组选排除
+      if (!codePassesRecentFilter(n)) return false;
       return true;
     });
 
@@ -4596,6 +4938,8 @@ function generateDmNotes(baseline, danmaDigits, count, noteCount, filterZuSan, f
     for (const rc of rongcuoList) {
       if (hitRongcuo(p, rc)) return false;
     }
+    // 近期号码组选排除
+    if (!codePassesRecentFilter(p)) return false;
     return true;
   });
 
@@ -4614,6 +4958,8 @@ function generateDmNotes(baseline, danmaDigits, count, noteCount, filterZuSan, f
     for (const rc of rongcuoList) {
       if (hitRongcuo(note, rc)) return false;
     }
+    // 近期号码组选排除
+    if (!codePassesRecentFilter(note)) return false;
     return true;
   }
 
