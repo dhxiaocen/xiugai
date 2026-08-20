@@ -665,20 +665,22 @@ h1 {
 .result-idx {
   color: #999;
   margin-right: 4px;
-  min-width: 22px;
+  min-width: 18px;
   display: inline-block;
   text-align: right;
+  font-size: 12px;
 }
 
 .result-code {
-  margin-right: 8px;
+  margin-right: 6px;
   color: #333;
+  font-size: 12px;
 }
 
 .copy-line-btn {
   flex-shrink: 0;
-  padding: 4px 10px;
-  font-size: 12px;
+  padding: 2px 6px;
+  font-size: 11px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
@@ -686,6 +688,7 @@ h1 {
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
+  line-height: 1.4;
 }
 
 .copy-line-btn:hover {
@@ -928,18 +931,19 @@ h1 {
 
   .result-line {
     flex-wrap: wrap;
-    padding: 8px 6px;
+    padding: 6px 4px;
+    gap: 4px;
   }
 
   .result-line-content {
     width: 100%;
-    margin-bottom: 6px;
+    margin-bottom: 2px;
   }
 
   .copy-line-btn {
-    padding: 6px 14px;
-    font-size: 13px;
-    min-height: 36px;
+    padding: 3px 8px;
+    font-size: 11px;
+    min-height: 28px;
     align-self: flex-end;
   }
 
@@ -4042,6 +4046,13 @@ function getRecent7ForExclusion() {
   return arr.slice(0, 7);
 }
 
+// 数据修改专用：检查号码是否在近期20个号码中（直选精确匹配），基准号除外
+function dmIsInRecent20(code, baseline) {
+  if (code === baseline) return false; // 基准号除外
+  const recent20 = getRecentNumbers(activeRecentScheme);
+  return recent20.includes(code);
+}
+
 // 判断五码源码是否包含近期号码的3个数字组合（非组三才排除）
 function sourceContainsRecentCode(source, recentCode) {
   // 组三豁免
@@ -4279,12 +4290,21 @@ function renderDmHistoryFullscreen() {
     html += '</div>';
     if (isExpanded) {
       html += '<div class="history-content">';
+      const hitTypeColors = {'zhixuan': '#fff1f0', 'zuxuan': '#e6f7ff', 'wumaonly': '#f6ffed'};
+      const hitTypeBorders = {'zhixuan': '#ffa39e', 'zuxuan': '#91d5ff', 'wumaonly': '#b7eb8f'};
+      const hitTypeLabels = {'zhixuan': '直', 'zuxuan': '组', 'wumaonly': '复'};
       for (let i = 0; i < record.results.length; i++) {
         const item = record.results[i];
         const displayText = item.text.replace(/\n/g, '<br>');
-        html += '<div class="result-line">';
+        const bgColor = hitTypeColors[item.hitType] || '#fff';
+        const borderColor = hitTypeBorders[item.hitType] || '#d9d9d9';
+        const label = hitTypeLabels[item.hitType] || '';
+        html += '<div class="result-line" style="background:' + bgColor + ';border-left:3px solid ' + borderColor + ';">';
         html += '<div class="result-line-content">';
         html += '<span class="result-idx">' + item.serial + '.</span>';
+        if (label) {
+          html += '<span style="font-size:10px;color:' + borderColor + ';margin-right:4px;padding:1px 4px;border:1px solid ' + borderColor + ';border-radius:3px;">' + label + '</span>';
+        }
         html += '<span class="result-code">' + displayText + '</span>';
         html += '</div>';
         html += '<button class="copy-line-btn" onclick="copyDmFullscreenLine(this,' + record.id + ',' + i + ')">复制本行</button>';
@@ -4867,6 +4887,58 @@ function isDmEnabled() {
 }
 
 // 真人化选号：加权随机，倾向复用已选号码的位置数字
+// 人工模拟排列：按相似度链式排列，使相邻号码更接近（真人选号规律）
+function arrangeByHumanLogic(arr) {
+  if (arr.length <= 1) return arr;
+
+  const arranged = [];
+  const remaining = [...arr];
+
+  // 随机选择起始号码（确保中奖号不总是第一个）
+  const startIdx = Math.floor(Math.random() * remaining.length);
+  arranged.push(remaining[startIdx]);
+  remaining.splice(startIdx, 1);
+
+  while (remaining.length > 0) {
+    const last = arranged[arranged.length - 1];
+
+    // 计算每个候选与当前最后一个号码的相似度权重
+    const weights = remaining.map(note => {
+      let w = 1;
+      // 相同位置相同数字：权重高
+      for (let p = 0; p < note.length; p++) {
+        if (note[p] === last[p]) w += 3;
+      }
+      // 共享数字（不论位置）：额外加分
+      const lastSet = new Set(last.split(''));
+      const noteSet = new Set(note.split(''));
+      for (const d of noteSet) {
+        if (lastSet.has(d)) w += 1;
+      }
+      return w;
+    });
+
+    // 加权随机选择（既有相似性倾向，又有随机性）
+    const totalW = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * totalW;
+    let pos = 0;
+    for (let i = 0; i < weights.length; i++) {
+      r -= weights[i];
+      if (r <= 0) { pos = i; break; }
+    }
+
+    arranged.push(remaining[pos]);
+    remaining.splice(pos, 1);
+  }
+
+  // 原地替换
+  arr.length = 0;
+  for (const item of arranged) {
+    arr.push(item);
+  }
+  return arr;
+}
+
 function pickDmHumanLike(candidates, count, alreadyPicked) {
   const result = [];
   const allPicked = [...alreadyPicked];
@@ -4894,6 +4966,16 @@ function pickDmHumanLike(candidates, count, alreadyPicked) {
     allPicked.push(remaining[pos]);
     remaining.splice(pos, 1);
   }
+
+  // 候选不足时，从全量候选中随机补充（允许重复组选键但不同排列）
+  while (result.length < count) {
+    if (candidates.length > 0) {
+      result.push(candidates[Math.floor(Math.random() * candidates.length)]);
+    } else {
+      // 完全没有候选，生成随机3位数
+      result.push(String(Math.floor(Math.random() * 10)) + String(Math.floor(Math.random() * 10)) + String(Math.floor(Math.random() * 10)));
+    }
+  }
   return result;
 }
 
@@ -4916,7 +4998,6 @@ function getPermutations(digits) {
 
 function generateDmWuma(baseline, danmaDigits, count, filterZuSan, filterBaozi) {
   const results = [];
-  const rongcuoList = getRongcuoList();
   // 预生成所有可用附加数字对（非胆码的0-9中取2个）
   const allPairs = [];
   for (let i = 0; i < 10; i++) {
@@ -4932,67 +5013,63 @@ function generateDmWuma(baseline, danmaDigits, count, filterZuSan, filterBaozi) 
   // 组间相似度控制
   const generatedSources = [];
 
-  for (let g = 0; g < count; g++) {
-    // 生成五码：3胆码 + 2随机数字，升序（容错过滤）
-    let fiveCode;
-    let found = false;
-    // 尝试从预生成的pair中找符合容错的
-    while (pairIdx < allPairs.length && !found) {
+  // 基准号的所有排列
+  const baselinePermsSet = new Set(getPermutations(danmaDigits));
+
+  // 按比例分配: 20%直选, 60%组选, 20%五码only
+  const zhiXuanCount = Math.round(count * 0.2);
+  const zuXuanCount = Math.round(count * 0.6);
+  const wumaOnlyCount = count - zhiXuanCount - zuXuanCount;
+
+  // 生成任务列表: 'zhixuan' / 'zuxuan' / 'wumaonly'
+  const taskTypes = [];
+  for (let i = 0; i < zhiXuanCount; i++) taskTypes.push('zhixuan');
+  for (let i = 0; i < zuXuanCount; i++) taskTypes.push('zuxuan');
+  for (let i = 0; i < wumaOnlyCount; i++) taskTypes.push('wumaonly');
+  shuffle(taskTypes);
+
+  function generateFiveCode() {
+    // 从预生成的pair中找（只控制组间相似度，不经过条件筛选）
+    while (pairIdx < allPairs.length) {
       const pair = allPairs[pairIdx++];
       const candidate = [...danmaDigits, ...pair].sort().join('');
-      let rongcuoHit = false;
-      for (const rc of rongcuoList) {
-        if (hitRongcuoSource(candidate, rc)) { rongcuoHit = true; break; }
-      }
-      if (rongcuoHit) continue;
-      // 近期号码排除
-      if (!sourcePassesRecentFilter(candidate)) continue;
-      // 组间相似度控制
       if (sourceTooSimilar(candidate, generatedSources)) continue;
-      fiveCode = candidate; found = true;
+      return candidate;
     }
-    // 预生成pair用完或不符合容错，随机生成
-    if (!found) {
-      for (let attempt = 0; attempt < 300; attempt++) {
-        let extra = [];
-        while (extra.length < 2) {
-          const d = String(Math.floor(Math.random() * 10));
-          if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
-        }
-        const candidate = [...danmaDigits, ...extra].sort().join('');
-        let rongcuoHit = false;
-        for (const rc of rongcuoList) {
-          if (hitRongcuoSource(candidate, rc)) { rongcuoHit = true; break; }
-        }
-        if (rongcuoHit) continue;
-        // 近期号码排除
-        if (!sourcePassesRecentFilter(candidate)) continue;
-        // 组间相似度控制
-        if (sourceTooSimilar(candidate, generatedSources)) continue;
-        fiveCode = candidate; found = true; break;
+    // 随机生成
+    for (let attempt = 0; attempt < 300; attempt++) {
+      let extra = [];
+      while (extra.length < 2) {
+        const d = String(Math.floor(Math.random() * 10));
+        if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
       }
-      // 兜底：不检查容错和近期号码
-      if (!found) {
-        for (let attempt = 0; attempt < 100; attempt++) {
-          let extra = [];
-          while (extra.length < 2) {
-            const d = String(Math.floor(Math.random() * 10));
-            if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
-          }
-          const candidate = [...danmaDigits, ...extra].sort().join('');
-          if (sourceTooSimilar(candidate, generatedSources)) continue;
-          fiveCode = candidate; found = true; break;
-        }
-        if (!found) {
-          let extra = [];
-          while (extra.length < 2) {
-            const d = String(Math.floor(Math.random() * 10));
-            if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
-          }
-          fiveCode = [...danmaDigits, ...extra].sort().join('');
-        }
-      }
+      const candidate = [...danmaDigits, ...extra].sort().join('');
+      if (sourceTooSimilar(candidate, generatedSources)) continue;
+      return candidate;
     }
+    // 兜底
+    for (let attempt = 0; attempt < 100; attempt++) {
+      let extra = [];
+      while (extra.length < 2) {
+        const d = String(Math.floor(Math.random() * 10));
+        if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
+      }
+      const candidate = [...danmaDigits, ...extra].sort().join('');
+      if (sourceTooSimilar(candidate, generatedSources)) continue;
+      return candidate;
+    }
+    // 最终兜底
+    let extra = [];
+    while (extra.length < 2) {
+      const d = String(Math.floor(Math.random() * 10));
+      if (!danmaDigits.includes(d) && !extra.includes(d)) extra.push(d);
+    }
+    return [...danmaDigits, ...extra].sort().join('');
+  }
+
+  for (let g = 0; g < count; g++) {
+    const taskType = taskTypes[g];
+    const fiveCode = generateFiveCode();
     generatedSources.push(fiveCode);
 
     const codeDigits = fiveCode.split('');
@@ -5010,102 +5087,118 @@ function generateDmWuma(baseline, danmaDigits, count, filterZuSan, filterBaozi) 
       }
     }
 
-    // 必须包含基准直选号，排除基准号的其他排列（如基准123，则132/213/231/312/321不出现）
-    let notes = [baseline];
-    const baselinePerms = new Set(getPermutations(danmaDigits));
-    // 过滤候选号码：排除基准排列 + 应用容错过滤 + 近期号码排除
+    // 过滤候选号码：排除基准排列 + 近期20个号码（基准号除外）
     const candidates = allNumbers.filter(n => {
-      if (baselinePerms.has(n)) return false;
-      for (const rc of rongcuoList) {
-        if (hitRongcuo(n, rc)) return false;
-      }
-      // 近期号码组选排除
-      if (!codePassesRecentFilter(n)) return false;
+      if (baselinePermsSet.has(n)) return false;
+      if (dmIsInRecent20(n, baseline)) return false;
       return true;
     });
 
-    // 用真人化算法选4注
-    const picked = pickDmHumanLike(candidates, 4, notes);
-    notes = [...notes, ...picked];
+    let notes = [];
 
-    // 打乱顺序（基准号不强制放第一位）
-    shuffle(notes);
-
-    results.push({ fiveCode: fiveCode, notes: notes });
+    if (taskType === 'zhixuan') {
+      // 直选类：五注中必须包含基准号本身（精确匹配）
+      notes = [baseline];
+      const picked = pickDmHumanLike(candidates, 4, notes);
+      notes = [...notes, ...picked];
+      arrangeByHumanLogic(notes);
+      results.push({ fiveCode: fiveCode, notes: notes, hitType: 'zhixuan' });
+    } else if (taskType === 'zuxuan') {
+      // 组选类：五注中必须包含基准号的某个排列（不是baseline本身）
+      const zuxuanPerms = getPermutations(danmaDigits).filter(p => p !== baseline);
+      // 中奖号不过滤，随机选一个排列
+      let zuxuanNote;
+      if (zuxuanPerms.length > 0) {
+        zuxuanNote = zuxuanPerms[Math.floor(Math.random() * zuxuanPerms.length)];
+      } else {
+        zuxuanNote = baseline;
+      }
+      notes = [zuxuanNote];
+      // 候选不含任何基准排列
+      const candidatesNoPerms = candidates.filter(n => !baselinePermsSet.has(n));
+      const picked = pickDmHumanLike(candidatesNoPerms, 4, notes);
+      notes = [...notes, ...picked];
+      arrangeByHumanLogic(notes);
+      results.push({ fiveCode: fiveCode, notes: notes, hitType: 'zuxuan' });
+    } else {
+      // 五码only：五注中不含任何基准排列，只保证五码含基准的3个数字
+      const candidatesNoPerms = candidates.filter(n => !baselinePermsSet.has(n));
+      const picked = pickDmHumanLike(candidatesNoPerms, 5, []);
+      notes = picked;
+      arrangeByHumanLogic(notes);
+      results.push({ fiveCode: fiveCode, notes: notes, hitType: 'wumaonly' });
+    }
   }
   return results;
 }
 
 function generateDmNotes(baseline, danmaDigits, count, noteCount, filterZuSan, filterBaozi) {
   const results = [];
-  const rongcuoList = getRongcuoList();
   // 生成胆码的所有排列（直选号+组选号）
   const allPerms = getPermutations(danmaDigits);
-  const validPerms = allPerms.filter(p => {
-    if (filterZuSan && isZuSanCode(p)) return false;
-    if (filterBaozi && isLeopardCode(p)) return false;
-    // 容错过滤
-    for (const rc of rongcuoList) {
-      if (hitRongcuo(p, rc)) return false;
-    }
-    // 近期号码组选排除
-    if (!codePassesRecentFilter(p)) return false;
-    return true;
-  });
+  const baselinePermsSet = new Set(allPerms);
+
+  // 中奖号候选：不过滤（基准号除外，所有排列都可用作中奖号）
+  const winningPerms = allPerms;
+
+  // 组选排列：不含baseline本身的排列
+  const zuxuanPerms = winningPerms.filter(p => p !== baseline);
 
   // 胆码数字集合
   const danmaSet = new Set(danmaDigits);
 
-  // 检查号码是否合法
-  function isValidNote(note, notes, baselinePerms) {
+  // 检查号码是否合法：排除基准排列 + 组内重复 + 近期20个号码（基准号除外）
+  // 保留组三/豹子开关过滤
+  function isValidNote(note, notes) {
     if (!danmaSet.has(note[0]) && !danmaSet.has(note[1]) && !danmaSet.has(note[2])) return false;
     if (filterZuSan && isZuSanCode(note)) return false;
     if (filterBaozi && isLeopardCode(note)) return false;
-    if (baselinePerms.has(note)) return false;
-    // 检查组内重复（直选和组选都算重复）
+    if (baselinePermsSet.has(note)) return false;
     if (isDuplicateInGroup(note, notes)) return false;
-    // 容错过滤
-    for (const rc of rongcuoList) {
-      if (hitRongcuo(note, rc)) return false;
-    }
-    // 近期号码组选排除
-    if (!codePassesRecentFilter(note)) return false;
+    if (dmIsInRecent20(note, baseline)) return false;
     return true;
   }
 
+  // 按比例分配: 20%直选, 80%组选
+  const zhiXuanCount = Math.round(count * 0.2);
+  const zuXuanCount = count - zhiXuanCount;
+  const taskTypes = [];
+  for (let i = 0; i < zhiXuanCount; i++) taskTypes.push('zhixuan');
+  for (let i = 0; i < zuXuanCount; i++) taskTypes.push('zuxuan');
+  shuffle(taskTypes);
+
   for (let g = 0; g < count; g++) {
+    const taskType = taskTypes[g];
     const notes = [];
+    let firstNote;
+    let hitType;
 
-    // 第1注：基准号（优先使用baseline，若baseline被容错过滤则用随机排列）
-    let baselineNote;
-    if (validPerms.length > 0) {
-      // 优先检查baseline本身是否在validPerms中
-      const baselineInValid = validPerms.includes(baseline);
-      if (baselineInValid) {
-        baselineNote = baseline;
-      } else {
-        baselineNote = validPerms[Math.floor(Math.random() * validPerms.length)];
-      }
+    if (taskType === 'zhixuan') {
+      // 直选类：中奖号是基准号本身
+      hitType = 'zhixuan';
+      firstNote = baseline;
     } else {
-      // 所有排列都被过滤，使用baseline兜底
-      baselineNote = baseline;
+      // 组选类：中奖号是基准号的排列（不含baseline本身）
+      hitType = 'zuxuan';
+      if (zuxuanPerms.length > 0) {
+        firstNote = zuxuanPerms[Math.floor(Math.random() * zuxuanPerms.length)];
+      } else {
+        firstNote = baseline;
+        hitType = 'zhixuan';
+      }
     }
-    notes.push(baselineNote);
+    notes.push(firstNote);
 
-    const baselinePerms = new Set(allPerms);
     const remaining = noteCount - 1;
 
-    // 真人选号策略：大部分复用两个位置，少部分复用一个位置
-    // 随机选两个位置固定，只换剩下一位
+    // 真人选号策略：固定两个位置，换剩下一位
     const positions = [0, 1, 2];
     shuffle(positions);
     const fixPos1 = positions[0];
     const fixPos2 = positions[1];
     const changePos = positions[2];
-    const fixDigit1 = baselineNote[fixPos1];
-    const fixDigit2 = baselineNote[fixPos2];
-
-    // 辅助固定位（少部分使用）
+    const fixDigit1 = firstNote[fixPos1];
+    const fixDigit2 = firstNote[fixPos2];
     const auxFixPos = fixPos1;
     const auxFixDigit = fixDigit1;
 
@@ -5113,29 +5206,24 @@ function generateDmNotes(baseline, danmaDigits, count, noteCount, filterZuSan, f
       let note = null;
       let tries = 200;
 
-      // 策略1（主）：固定两个位置，只换一个位置（大部分走这条）
       while (tries > 0 && !note) {
         tries--;
-        // 70%概率用胆码数字，30%概率随机数字
         let d;
         if (Math.random() < 0.7) {
           d = danmaDigits[Math.floor(Math.random() * danmaDigits.length)];
         } else {
           d = String(Math.floor(Math.random() * 10));
         }
-
         const arr = ['', '', ''];
         arr[fixPos1] = fixDigit1;
         arr[fixPos2] = fixDigit2;
         arr[changePos] = d;
         const candidate = arr.join('');
-
-        if (isValidNote(candidate, notes, baselinePerms)) {
+        if (isValidNote(candidate, notes)) {
           note = candidate;
         }
       }
 
-      // 策略2（少部分）：固定一个位置，换其他两位
       if (!note) {
         tries = 100;
         while (tries > 0 && !note) {
@@ -5152,19 +5240,18 @@ function generateDmNotes(baseline, danmaDigits, count, noteCount, filterZuSan, f
             }
           }
           const candidate = arr.join('');
-          if (isValidNote(candidate, notes, baselinePerms)) {
+          if (isValidNote(candidate, notes)) {
             note = candidate;
           }
         }
       }
 
-      // 策略3（最终兜底）：纯随机含胆码
       if (!note) {
         tries = 100;
         while (tries > 0 && !note) {
           tries--;
           const candidate = String(Math.floor(Math.random() * 10)) + String(Math.floor(Math.random() * 10)) + String(Math.floor(Math.random() * 10));
-          if (isValidNote(candidate, notes, baselinePerms)) {
+          if (isValidNote(candidate, notes)) {
             note = candidate;
           }
         }
@@ -5173,14 +5260,13 @@ function generateDmNotes(baseline, danmaDigits, count, noteCount, filterZuSan, f
       if (note) {
         notes.push(note);
       } else {
-        // 实在不行用胆码拼
         note = auxFixDigit + fixDigit1 + danmaDigits[Math.floor(Math.random() * danmaDigits.length)];
         notes.push(note);
       }
     }
 
-    shuffle(notes);
-    results.push(notes);
+    arrangeByHumanLogic(notes);
+    results.push({ notes: notes, hitType: hitType });
   }
   return results;
 }
@@ -5202,6 +5288,8 @@ function generateDataModification() {
   const threeCount = parseInt(document.getElementById('dmThreeCount').value) || 0;
   const fourCount = parseInt(document.getElementById('dmFourCount').value) || 0;
 
+  console.log('数据修改: wuma=' + wumaCount + ' two=' + twoCount + ' three=' + threeCount + ' four=' + fourCount);
+
   if (wumaCount + twoCount + threeCount + fourCount === 0) {
     alert('数据修改：请至少设置一个生成组数');
     return null;
@@ -5213,53 +5301,73 @@ function generateDataModification() {
 
   // 五码五注
   if (wumaCount > 0) {
-    const wumaResults = generateDmWuma(baseline, danmaDigits, wumaCount, filterZuSan, filterBaozi);
-    for (const r of wumaResults) {
-      results.push({
-        serial: serial++,
-        type: 'wuma',
-        typeName: '五码五注',
-        text: qihao + '期：五码：' + r.fiveCode + '\n精选五注： ' + r.notes.join(' ')
-      });
+    try {
+      const wumaResults = generateDmWuma(baseline, danmaDigits, wumaCount, filterZuSan, filterBaozi);
+      for (const r of wumaResults) {
+        results.push({
+          serial: serial++,
+          type: 'wuma',
+          typeName: '五码五注',
+          hitType: r.hitType,
+          text: qihao + '期：五码：' + r.fiveCode + '\n精选五注： ' + r.notes.join(' ')
+        });
+      }
+    } catch (e) {
+      console.error('五码五注生成失败:', e);
     }
   }
 
   // 两注
   if (twoCount > 0) {
-    const twoResults = generateDmNotes(baseline, danmaDigits, twoCount, 2, filterZuSan, filterBaozi);
-    for (const r of twoResults) {
-      results.push({
-        serial: serial++,
-        type: 'two',
-        typeName: '两注',
-        text: qihao + '期：' + r.join(' ')
-      });
+    try {
+      const twoResults = generateDmNotes(baseline, danmaDigits, twoCount, 2, filterZuSan, filterBaozi);
+      for (const r of twoResults) {
+        results.push({
+          serial: serial++,
+          type: 'two',
+          typeName: '两注',
+          hitType: r.hitType,
+          text: qihao + '期：' + r.notes.join(' ')
+        });
+      }
+    } catch (e) {
+      console.error('两注生成失败:', e);
     }
   }
 
   // 三注
   if (threeCount > 0) {
-    const threeResults = generateDmNotes(baseline, danmaDigits, threeCount, 3, filterZuSan, filterBaozi);
-    for (const r of threeResults) {
-      results.push({
-        serial: serial++,
-        type: 'three',
-        typeName: '三注',
-        text: qihao + '期：' + r.join(' ')
-      });
+    try {
+      const threeResults = generateDmNotes(baseline, danmaDigits, threeCount, 3, filterZuSan, filterBaozi);
+      for (const r of threeResults) {
+        results.push({
+          serial: serial++,
+          type: 'three',
+          typeName: '三注',
+          hitType: r.hitType,
+          text: qihao + '期：' + r.notes.join(' ')
+        });
+      }
+    } catch (e) {
+      console.error('三注生成失败:', e);
     }
   }
 
   // 四注
   if (fourCount > 0) {
-    const fourResults = generateDmNotes(baseline, danmaDigits, fourCount, 4, filterZuSan, filterBaozi);
-    for (const r of fourResults) {
-      results.push({
-        serial: serial++,
-        type: 'four',
-        typeName: '四注',
-        text: qihao + '期：' + r.join(' ')
-      });
+    try {
+      const fourResults = generateDmNotes(baseline, danmaDigits, fourCount, 4, filterZuSan, filterBaozi);
+      for (const r of fourResults) {
+        results.push({
+          serial: serial++,
+          type: 'four',
+          typeName: '四注',
+          hitType: r.hitType,
+          text: qihao + '期：' + r.notes.join(' ')
+        });
+      }
+    } catch (e) {
+      console.error('四注生成失败:', e);
     }
   }
 
@@ -5271,6 +5379,17 @@ function renderDmResults(results) {
   const countEl = document.getElementById('resultCount');
 
   countEl.textContent = '共 ' + results.length + ' 条';
+
+  // 按类型分组，每组内按 hitType 排序：直→组→复
+  const hitTypeOrder = { 'zhixuan': 0, 'zuxuan': 1, 'wumaonly': 2 };
+  const typeOrder = { 'wuma': 0, 'four': 1, 'three': 2, 'two': 3 };
+  results.sort((a, b) => {
+    if (typeOrder[a.type] !== typeOrder[b.type]) return typeOrder[a.type] - typeOrder[b.type];
+    return (hitTypeOrder[a.hitType] ?? 9) - (hitTypeOrder[b.hitType] ?? 9);
+  });
+  // 重新编号
+  results.forEach((r, i) => { r.serial = i + 1; });
+
   dmLastResults = [...results];
 
   if (results.length === 0) {
@@ -5278,16 +5397,40 @@ function renderDmResults(results) {
     return;
   }
 
+  // hitType颜色映射
+  const hitTypeColors = {
+    'zhixuan': '#fff1f0',   // 浅红色 - 中直选
+    'zuxuan': '#e6f7ff',    // 浅蓝色 - 中组选
+    'wumaonly': '#f6ffed'   // 浅绿色 - 只中五码
+  };
+  const hitTypeBorders = {
+    'zhixuan': '#ffa39e',
+    'zuxuan': '#91d5ff',
+    'wumaonly': '#b7eb8f'
+  };
+  const hitTypeLabels = {
+    'zhixuan': '直',
+    'zuxuan': '组',
+    'wumaonly': '复'
+  };
+
   let html = '';
   for (let i = 0; i < results.length; i++) {
     const item = results[i];
     const displayText = item.text.replace(/\n/g, '<br>');
-    html += '<div class="result-line" id="dm-result-line-' + i + '">';
+    const bgColor = hitTypeColors[item.hitType] || '#fff';
+    const borderColor = hitTypeBorders[item.hitType] || '#d9d9d9';
+    const label = hitTypeLabels[item.hitType] || '';
+
+    html += '<div class="result-line" id="dm-result-line-' + i + '" style="background:' + bgColor + ';border-left:3px solid ' + borderColor + ';">';
     html += '<div class="result-line-content">';
     html += '<span class="result-idx">' + item.serial + '.</span>';
+    if (label) {
+      html += '<span style="font-size:9px;color:' + borderColor + ';margin-right:3px;padding:0 3px;border:1px solid ' + borderColor + ';border-radius:2px;">' + label + '</span>';
+    }
     html += '<span class="result-code">' + displayText + '</span>';
     html += '</div>';
-    html += '<button class="copy-line-btn" onclick="copyDmLine(' + i + ')">复制本行</button>';
+    html += '<button class="copy-line-btn" onclick="copyDmLine(' + i + ')">复制</button>';
     html += '</div>';
   }
   content.innerHTML = html;
@@ -5381,12 +5524,33 @@ function renderDmHistory() {
     html += '</div>';
     if (isExpanded) {
       html += '<div class="history-content">';
+      const hitTypeColors = {
+        'zhixuan': '#fff1f0',
+        'zuxuan': '#e6f7ff',
+        'wumaonly': '#f6ffed'
+      };
+      const hitTypeBorders = {
+        'zhixuan': '#ffa39e',
+        'zuxuan': '#91d5ff',
+        'wumaonly': '#b7eb8f'
+      };
+      const hitTypeLabels = {
+        'zhixuan': '直',
+        'zuxuan': '组',
+        'wumaonly': '复'
+      };
       for (let i = 0; i < record.results.length; i++) {
         const item = record.results[i];
         const displayText = item.text.replace(/\n/g, '<br>');
-        html += '<div class="result-line" id="dm-history-line-' + record.id + '-' + i + '">';
+        const bgColor = hitTypeColors[item.hitType] || '#fff';
+        const borderColor = hitTypeBorders[item.hitType] || '#d9d9d9';
+        const label = hitTypeLabels[item.hitType] || '';
+        html += '<div class="result-line" id="dm-history-line-' + record.id + '-' + i + '" style="background:' + bgColor + ';border-left:3px solid ' + borderColor + ';">';
         html += '<div class="result-line-content">';
         html += '<span class="result-idx">' + item.serial + '.</span>';
+        if (label) {
+          html += '<span style="font-size:10px;color:' + borderColor + ';margin-right:4px;padding:1px 4px;border:1px solid ' + borderColor + ';border-radius:3px;">' + label + '</span>';
+        }
         html += '<span class="result-code">' + displayText + '</span>';
         html += '</div>';
         html += '<button class="copy-line-btn" onclick="copyDmHistoryLine(' + record.id + ', ' + i + ')">复制本行</button>';
