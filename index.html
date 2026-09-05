@@ -1,4 +1,6 @@
-<html lang="zh-CN" data-trae-theme="light"><head>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
 <meta charset="UTF-8">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -200,6 +202,16 @@ h1 {
 
 .btn-danger:hover {
   background: #c0392b;
+}
+
+.btn-info {
+  background: #1890ff;
+  color: #fff;
+}
+
+.btn-warning {
+  background: #fa8c16;
+  color: #fff;
 }
 
 .btn-block {
@@ -1052,1011 +1064,7 @@ h1 {
   }
 }
 </style>
-<style data-trae-edit-ui="true" id="trae-previewer-tools-styles">:root {
-  --trae-layer-image-download: 89990;
-  --trae-layer-browser-inspect-overlay: 90000;
-  --trae-layer-browser-inspect-highlight: 90010;
-  --trae-layer-browser-inspect-action: 90020;
-  --trae-layer-text-selection-action: 90030;
-  --trae-layer-edit-tooltip: 100095;
-}
-:root,
-[data-trae-theme='dark'] {
-  --trae-bg-base-default: #171717;
-  --trae-bg-menu: #222427;
-  --trae-bg-overlay-l1: rgba(255, 255, 255, 0.04);
-  --trae-bg-overlay-l2: rgba(255, 255, 255, 0.08);
-  --trae-bg-overlay-l3: rgba(255, 255, 255, 0.12);
-  --trae-bg-overlay-l4: rgba(255, 255, 255, 0.16);
-  --trae-bg-invert: #f5f9fe;
-  --trae-bg-invert-hover: #e8ecf0;
-  --trae-bg-invert-active: #dce0e4;
-  --trae-bg-invert-disabled: rgba(224, 226, 242, 0.12);
-  --bg-bg-brand-disabled: rgba(75, 63, 227, 0.35);
-  --bg-bg-brand-popup: rgba(106, 111, 255, 0.15);
-  --trae-border-l1: #e0e2f217;
-  --trae-border-l2: rgba(255, 255, 255, 0.12);
-  --trae-border-l3: rgba(255, 255, 255, 0.08);
-  --trae-border-neutral-l3: rgba(229, 229, 229, 0.20);
-  --trae-border-brand: #6a6fff;
-  --trae-text-default: #f5f9fe;
-  --trae-text-default-hover: #f5f9fe;
-  --trae-text-default-active: #f5f9fe;
-  --trae-text-secondary: rgba(245, 249, 254, 0.5);
-  --trae-text-tertiary: rgba(245, 249, 254, 0.4);
-  --trae-text-disabled: #666b75;
-  --trae-text-onaccent: #222427;
-  --trae-icon-default: #f5f9fe;
-  --trae-icon-secondary: rgba(245, 249, 254, 0.5);
-  --trae-icon-brand: #6a6fff;
-  --icon-icon-brand: var(--trae-icon-brand);
-  --trae-icon-onaccent: #222427;
-  --trae-status-success: #22c55e;
-  --trae-status-primary: #3b82f6;
-  --trae-status-primary-default: #387bff;
-  --trae-status-primary-surface-l1: rgba(53, 121, 255, 0.18);
-  --trae-status-success-default: #33c192;
-  --trae-status-success-surface-l1: rgba(0, 165, 110, 0.18);
-  --trae-status-error-default: #f65a5a;
-  --trae-status-error-surface-l1: rgba(246, 70, 70, 0.18);
-  --trae-annotation-marker-bg: #4b3fe3;
-  --trae-annotation-marker-text: #ffffff;
-  --trae-annotation-region-border: var(--trae-status-primary-default);
-  --trae-region-outside-mask-bg: rgba(0, 0, 0, 0.32);
-  --trae-panel-shadow: 0px 6px 24px -1px rgba(0, 0, 0, 0.16);
-  --trae-floating-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
-  --trae-shadow-elevation-50: 0 1px 2px -1px rgba(0, 0, 0, 0.45);
-  --text-text-default: var(--trae-text-default);
-  --text-text-onaccent: var(--trae-text-onaccent);
-  --bg-bg-menu: var(--trae-bg-menu);
-  --bg-bg-white: var(--trae-bg-menu);
-  --bg-bg-invert: var(--trae-bg-invert);
-  --bg-bg-invert-disabled: var(--trae-bg-invert-disabled);
-  --bg-bg-overlay-l1: var(--trae-bg-overlay-l1);
-  --bg-bg-overlay-l2: var(--trae-bg-overlay-l2);
-  --bg-bg-overlay-l3: var(--trae-bg-overlay-l3);
-  --border-border-neutral-l1: var(--trae-border-l1);
-  --border-border-brand: var(--trae-border-brand);
-  --border-border-brand-half: rgba(106, 111, 255, 0.4);
-  --status-error-default: var(--trae-status-error-default);
-  --status-error-surface-l1: var(--trae-status-error-surface-l1);
-  --radius-radius-md-12: 12px;
-  --spacers-spacer-0: 0;
-  --spacers-spacer-6: 6px;
-}
-
-[data-trae-theme='light'] {
-  --trae-bg-base-default: #fafafa;
-  --trae-bg-menu: #ffffff;
-  --trae-bg-overlay-l1: rgba(0, 0, 0, 0.04);
-  --trae-bg-overlay-l2: rgba(0, 0, 0, 0.06);
-  --trae-bg-overlay-l3: rgba(0, 0, 0, 0.08);
-  --trae-bg-overlay-l4: rgba(0, 0, 0, 0.12);
-  --trae-bg-invert: #1f2328;
-  --trae-bg-invert-hover: #32383f;
-  --trae-bg-invert-active: #444d56;
-  --trae-bg-invert-disabled: rgba(115, 115, 115, 0.20);
-  --bg-bg-brand-disabled: rgba(75, 63, 227, 0.22);
-  --bg-bg-brand-popup: rgba(170, 183, 255, 0.36);
-  --trae-border-l1: rgba(0, 0, 0, 0.1);
-  --trae-border-l2: rgba(0, 0, 0, 0.12);
-  --trae-border-l3: rgba(0, 0, 0, 0.08);
-  --trae-border-neutral-l3: rgba(115, 115, 115, 0.36);
-  --trae-border-brand: #4b3fe3;
-  --trae-text-default: #1f2328;
-  --trae-text-default-hover: #111214;
-  --trae-text-default-active: #111214;
-  --trae-text-secondary: rgba(31, 35, 40, 0.5);
-  --trae-text-tertiary: rgba(31, 35, 40, 0.4);
-  --trae-text-disabled: #a1a1a1;
-  --trae-text-onaccent: #ffffff;
-  --trae-icon-default: #1f2328;
-  --trae-icon-secondary: rgba(31, 35, 40, 0.5);
-  --trae-icon-brand: #4b3fe3;
-  --icon-icon-brand: var(--trae-icon-brand);
-  --trae-icon-onaccent: #ffffff;
-  --trae-status-success: #22c55e;
-  --trae-status-primary: #3b82f6;
-  --trae-status-primary-default: #2f74ff;
-  --trae-status-primary-surface-l1: rgba(47, 116, 255, 0.12);
-  --trae-status-success-default: #15a877;
-  --trae-status-success-surface-l1: rgba(64, 176, 139, 0.12);
-  --trae-status-error-default: #e8463a;
-  --trae-status-error-surface-l1: rgba(232, 70, 58, 0.12);
-  --trae-annotation-marker-bg: #4b3fe3;
-  --trae-annotation-marker-text: #ffffff;
-  --trae-annotation-region-border: var(--trae-status-primary-default);
-  --trae-region-outside-mask-bg: rgba(0, 0, 0, 0.18);
-  --trae-panel-shadow: 0px 6px 24px -1px rgba(24, 24, 24, 0.06);
-  --trae-floating-shadow: 0px 2px 8px 0px rgba(24, 24, 24, 0.2);
-  --trae-shadow-elevation-50: 0 1px 2px -1px rgba(24, 24, 24, 0.08);
-  --text-text-default: var(--trae-text-default);
-  --text-text-onaccent: var(--trae-text-onaccent);
-  --bg-bg-menu: var(--trae-bg-menu);
-  --bg-bg-white: var(--trae-bg-menu);
-  --bg-bg-invert: var(--trae-bg-invert);
-  --bg-bg-invert-disabled: var(--trae-bg-invert-disabled);
-  --bg-bg-overlay-l1: var(--trae-bg-overlay-l1);
-  --bg-bg-overlay-l2: var(--trae-bg-overlay-l2);
-  --bg-bg-overlay-l3: var(--trae-bg-overlay-l3);
-  --border-border-neutral-l1: var(--trae-border-l1);
-  --border-border-brand: var(--trae-border-brand);
-  --border-border-brand-half: rgba(75, 63, 227, 0.4);
-  --status-error-default: var(--trae-status-error-default);
-  --status-error-surface-l1: var(--trae-status-error-surface-l1);
-  --radius-radius-md-12: 12px;
-  --spacers-spacer-0: 0;
-  --spacers-spacer-6: 6px;
-}
-
-@keyframes trae-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes trae-edit-bar-enter {
-  from {
-    opacity: 0;
-    transform: translateY(-4px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes trae-edit-bar-leave {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateY(-4px) scale(0.98);
-  }
-}
-
-@keyframes trae-edit-panel-leave {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateY(-4px) scale(0.98);
-  }
-}
-
-.trae-edit-mode-active:not(.trae-edit-mode-dragging) body *:not([data-trae-edit-ui]):not([data-trae-edit-ui] *) {
-  transition: none !important;
-  animation-play-state: paused !important;
-}
-
-.trae-edit-mode-reorder-hit-test [data-trae-edit-ui]:not(.trae-edit-pointer-shield):not(.trae-edit-panel),
-.trae-edit-mode-reorder-hit-test [data-trae-edit-ui]:not(.trae-edit-pointer-shield):not(.trae-edit-panel) * {
-  pointer-events: none !important;
-}
-
-.trae-browser-inspect-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: var(--trae-layer-browser-inspect-overlay);
-  pointer-events: auto;
-  background: transparent;
-}
-
-.trae-browser-inspect-highlight-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: var(--trae-layer-browser-inspect-highlight);
-  display: none;
-}
-
-.trae-browser-inspect-highlight-tag {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  height: 18px;
-  padding: 0 6px;
-  box-sizing: border-box;
-  border-radius: 4px;
-  background-color: var(--trae-status-success-default);
-  color: var(--trae-text-onaccent);
-  font-size: 12px;
-  font-weight: 400;
-  display: none;
-  align-items: center;
-  z-index: var(--trae-layer-browser-inspect-action);
-}
-
-.trae-browser-inspect-highlight-box-show {
-  display: flex;
-}
-
-.trae-browser-inspect-highlight-tag.trae-browser-inspect-highlight-box-show {
-  display: none;
-}
-
-.trae-browser-inspect-select-button.trae-browser-inspect-highlight-box-show {
-  display: block !important;
-}
-
-.trae-browser-inspect-select-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: none;
-  z-index: var(--trae-layer-browser-inspect-action);
-}
-
-.trae-browser-inspect-select-highlight-box {
-  background: transparent !important;
-}
-
-.trae-browser-inspect-select-highlight-box .trae-browser-inspect-highlight-tag {
-  background-color: var(--trae-status-success-default);
-}
-
-.trae-add-to-chat-card {
-  display: block;
-  overflow: hidden;
-  background: var(--trae-bg-menu);
-  border: 1px solid var(--trae-border-l1);
-  border-radius: 8px;
-  box-shadow: var(--trae-floating-shadow);
-  transition:
-    width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.trae-add-to-chat-content {
-  position: relative;
-  width: max-content;
-}
-
-.trae-fade-exit {
-  opacity: 0;
-  transition: opacity 0.15s ease-out;
-}
-
-.trae-fade-enter {
-  opacity: 1;
-  transition: opacity 0.2s ease-in;
-}
-
-.trae-buttons-view {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px;
-  background: transparent;
-}
-
-.trae-action-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transform: none !important;
-  transition: none !important;
-  animation: none !important;
-}
-
-.trae-action-button:hover {
-  background: var(--trae-bg-overlay-l2);
-}
-
-.trae-action-button:active {
-  background: var(--trae-bg-overlay-l3);
-}
-
-.trae-action-button:focus-visible {
-  outline: 2px solid var(--trae-status-primary);
-  outline-offset: 1px;
-}
-
-.trae-action-button-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  color: var(--trae-icon-default);
-  flex-shrink: 0;
-}
-
-.trae-action-button-title {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  color: var(--trae-text-default);
-  white-space: nowrap;
-}
-
-.trae-edit-toolbar-button-active {
-  background: var(--bg-bg-brand-disabled, rgba(75, 63, 227, 0.22)) !important;
-  color: var(--icon-icon-brand, #4b3fe3) !important;
-  font-weight: bold !important;
-}
-
-.trae-edit-toolbar-button-active:hover {
-  background: var(--bg-bg-brand-popup, rgba(170, 183, 255, 0.36)) !important;
-}
-
-.trae-edit-toolbar button[data-action='alignment-dropdown']:hover,
-.trae-edit-toolbar button[data-action='text-align-dropdown']:hover,
-.trae-edit-toolbar button[data-action='font-decrease']:hover,
-.trae-edit-toolbar button[data-action='font-increase']:hover,
-.trae-edit-toolbar button[data-action^='align-']:hover {
-  border-radius: 8px;
-  background: var(--bg-bg-overlay-l1, rgba(115, 115, 115, 0.08)) !important;
-}
-
-.trae-edit-toolbar button[data-action='alignment-dropdown']:active,
-.trae-edit-toolbar button[data-action='text-align-dropdown']:active,
-.trae-edit-toolbar button[data-action='font-decrease']:active,
-.trae-edit-toolbar button[data-action='font-increase']:active,
-.trae-edit-toolbar button[data-action^='align-']:active {
-  border-radius: 8px;
-  background: var(--bg-bg-overlay-l2, rgba(115, 115, 115, 0.12)) !important;
-}
-
-.trae-comment-input {
-  background: transparent;
-  color: var(--trae-text-default);
-  caret-color: var(--trae-text-default);
-}
-
-.trae-comment-input::placeholder {
-  color: var(--trae-text-tertiary);
-}
-
-.trae-point-edit-bar,
-.trae-point-comment-input-bar,
-.trae-comment-only-panel {
-  transform-origin: top center;
-  will-change: opacity, transform;
-}
-
-.trae-edit-panel:not(.trae-edit-panel-leave) {
-  pointer-events: auto !important;
-}
-
-.trae-edit-bar-enter {
-  animation: trae-edit-bar-enter var(--transition-normal, 0.18s cubic-bezier(0.2, 0, 0, 1)) both;
-}
-
-.trae-edit-bar-leave {
-  pointer-events: none;
-  animation: trae-edit-bar-leave var(--transition-fast, 0.14s ease) both;
-}
-
-.trae-edit-panel-leave {
-  pointer-events: none;
-  animation: trae-edit-panel-leave var(--transition-fast, 0.14s ease) both;
-}
-
-.trae-edit-panel [data-trae-tooltip] {
-  position: relative;
-}
-
-.trae-edit-panel [data-trae-tooltip]::after {
-  content: attr(data-trae-tooltip);
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 8px);
-  z-index: var(--trae-layer-edit-tooltip);
-  padding: 6px 10px;
-  border-radius: 6px;
-  background: var(--trae-bg-invert, var(--bg-bg-invert));
-  color: var(--trae-text-onaccent, var(--text-text-onaccent));
-  box-shadow: var(--trae-floating-shadow);
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  letter-spacing: 0.039px;
-  white-space: nowrap;
-  pointer-events: none;
-  box-sizing: border-box;
-  opacity: 0;
-  transform: translateX(-50%);
-  visibility: hidden;
-}
-
-.trae-edit-panel [data-trae-tooltip]::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 5px);
-  z-index: var(--trae-layer-edit-tooltip);
-  width: 8px;
-  height: 4px;
-  background: var(--trae-bg-invert, var(--bg-bg-invert));
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  transform: translateX(-50%);
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-}
-
-.trae-edit-panel [data-trae-tooltip]:hover::after,
-.trae-edit-panel [data-trae-tooltip]:focus-visible::after,
-.trae-edit-panel [data-trae-tooltip]:hover::before,
-.trae-edit-panel [data-trae-tooltip]:focus-visible::before {
-  opacity: 1;
-  visibility: visible;
-}
-
-.trae-comment-btn {
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.trae-comment-btn:disabled {
-  cursor: not-allowed;
-}
-
-.trae-comment-btn:focus-visible {
-  outline: 2px solid var(--trae-status-primary);
-  outline-offset: 1px;
-}
-
-.trae-comment-btn-primary {
-  background: var(--trae-bg-invert);
-  color: var(--trae-text-onaccent);
-}
-
-.trae-comment-btn-primary:hover:not(:disabled) {
-  background: var(--trae-bg-invert-hover);
-}
-
-.trae-comment-btn-primary:active:not(:disabled) {
-  background: var(--trae-bg-invert-active);
-}
-
-.trae-comment-btn-primary:disabled {
-  background: var(--trae-bg-invert-disabled);
-  color: var(--trae-text-disabled);
-}
-
-.trae-comment-btn-secondary {
-  background: var(--trae-bg-overlay-l2);
-  color: var(--trae-text-default);
-}
-
-.trae-comment-btn-secondary:hover:not(:disabled) {
-  background: var(--trae-bg-overlay-l3);
-}
-
-.trae-comment-btn-secondary:active:not(:disabled) {
-  background: var(--trae-bg-overlay-l4);
-}
-
-.trae-comment-btn-secondary:disabled {
-  background: var(--trae-bg-overlay-l2);
-  color: var(--trae-text-disabled);
-}
-
-.trae-comment-btn-text {
-  background: transparent;
-  color: var(--trae-text-default);
-}
-
-.trae-comment-btn-text:hover:not(:disabled) {
-  border-radius: 8px;
-  background: var(--bg-bg-overlay-l1, var(--trae-bg-overlay-l1));
-  color: var(--trae-text-default-hover);
-}
-
-.trae-comment-btn-text:active:not(:disabled) {
-  border-radius: 8px;
-  background: var(--trae-bg-overlay-l2);
-  color: var(--trae-text-default-active);
-}
-
-.trae-comment-btn-text:disabled {
-  background: transparent;
-  color: var(--trae-text-disabled);
-}
-
-.trae-marking-btn {
-  justify-content: center;
-}
-
-.trae-marking-btn:hover:not(:disabled) {
-  background: var(--trae-bg-overlay-l1) !important;
-}
-
-.trae-marking-btn-active {
-  background: var(--bg-bg-brand-disabled, rgba(75, 63, 227, 0.22)) !important;
-  color: var(--icon-icon-brand, var(--trae-icon-brand)) !important;
-}
-
-.trae-marking-btn-active:hover {
-  background: var(--bg-bg-brand-popup, rgba(170, 183, 255, 0.36)) !important;
-  color: var(--icon-icon-brand, var(--trae-icon-brand)) !important;
-}
-
-.trae-marking-btn:active:not(:disabled) {
-  background: var(--trae-bg-overlay-l2) !important;
-}
-
-.trae-marking-btn:disabled {
-  color: var(--trae-text-disabled) !important;
-  cursor: not-allowed !important;
-}
-
-.trae-action-button-shortcut {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  color: var(--trae-icon-secondary);
-  flex-shrink: 0;
-}
-
-.trae-shortcut-container {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.trae-shortcut-key {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 12px;
-  color: var(--trae-icon-secondary);
-}
-
-.trae-add-to-chat-divider {
-  width: 2px;
-  height: 12px;
-  padding: 0 6px;
-  box-sizing: content-box;
-  background-clip: content-box;
-  background-color: var(--trae-border-l2);
-  flex-shrink: 0;
-}
-
-.trae-editor-view {
-  display: flex;
-  flex-direction: column;
-  width: 320px;
-  padding: 8px;
-  background: transparent;
-}
-
-.trae-editor-text-container {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-  background: var(--trae-bg-overlay-l1);
-  border: 1px solid var(--trae-border-l3);
-  border-radius: 4px;
-  gap: 8px;
-}
-
-.trae-editor-textarea {
-  flex: 1;
-  padding: 0 2px;
-  border: none;
-  background: transparent;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 20px;
-  color: var(--trae-text-default);
-  resize: none;
-  outline: none;
-  overflow-y: auto;
-  max-height: 140px;
-}
-
-.trae-editor-textarea::placeholder {
-  color: var(--trae-text-tertiary);
-}
-
-.trae-editor-action-bar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition:
-    max-height 0.2s ease-out,
-    opacity 0.2s ease-out,
-    margin-top 0.2s ease-out;
-}
-
-.trae-editor-action-bar-visible {
-  max-height: 32px;
-  opacity: 1;
-  margin-top: 8px;
-}
-
-.trae-editor-cancel-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  padding: 0 4px;
-  background: var(--trae-bg-overlay-l2);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.trae-editor-cancel-button:hover {
-  background: var(--trae-bg-overlay-l3);
-}
-
-.trae-editor-cancel-button:active {
-  background: var(--trae-bg-overlay-l3);
-}
-
-.trae-editor-cancel-button:focus-visible {
-  outline: 2px solid var(--trae-status-primary);
-  outline-offset: 1px;
-}
-
-.trae-editor-cancel-text {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  color: var(--trae-text-default);
-  white-space: nowrap;
-  padding: 0 4px;
-}
-
-.trae-editor-submit-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  padding: 0 8px;
-  background: var(--trae-bg-invert);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.trae-editor-submit-button:hover {
-  background: var(--trae-bg-invert-hover);
-}
-
-.trae-editor-submit-button:active {
-  background: var(--trae-bg-invert-active);
-}
-
-.trae-editor-submit-button:focus-visible {
-  outline: 2px solid var(--trae-status-primary);
-  outline-offset: 1px;
-}
-
-.trae-editor-submit-text {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  color: var(--trae-text-onaccent);
-  white-space: nowrap;
-  padding: 0 4px;
-}
-
-.trae-editor-submit-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 12px;
-  height: 12px;
-  color: var(--trae-icon-onaccent);
-  flex-shrink: 0;
-}
-
-.trae-success-view {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 0 12px;
-  height: 32px;
-  white-space: nowrap;
-}
-
-.trae-success-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  color: var(--trae-status-success);
-  flex-shrink: 0;
-}
-
-.trae-success-text {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 18px;
-  color: var(--trae-text-default);
-  user-select: none;
-}
-</style><style data-trae-pptx-captured-css="true">* { box-sizing: border-box; margin: 0px; padding: 0px; -webkit-tap-highlight-color: transparent; }
-html { text-size-adjust: 100%; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: rgb(245, 246, 248); color: rgb(51, 51, 51); line-height: 1.6; padding-top: calc(20px + env(safe-area-inset-top)); padding-bottom: calc(20px + env(safe-area-inset-bottom)); padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); overflow-x: hidden; }
-input, select, textarea, button { font-family: inherit; font-size: 16px; }
-.container { max-width: 960px; margin: 0px auto; }
-button, .btn { user-select: none; }
-h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px; color: rgb(26, 26, 26); }
-.section { background: rgb(255, 255, 255); border-radius: 10px; padding: 20px; margin-bottom: 16px; box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 3px; }
-.section-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: rgb(26, 26, 26); display: flex; align-items: center; gap: 8px; }
-.section-title::before { content: ""; width: 4px; height: 16px; background: rgb(74, 108, 247); border-radius: 2px; }
-.input-group { margin-bottom: 12px; }
-.input-group label { display: block; font-size: 14px; color: rgb(102, 102, 102); margin-bottom: 6px; }
-.input-group input[type="text"], .input-group input[type="number"] { width: 100%; padding: 10px 12px; border: 1px solid rgb(224, 224, 224); border-radius: 6px; font-size: 14px; outline: none; transition: border-color 0.2s; }
-.input-group input[type="text"]:focus, .input-group input[type="number"]:focus { border-color: rgb(74, 108, 247); }
-.manual-item { display: grid; grid-template-columns: 1fr 120px auto; gap: 10px; align-items: end; padding: 12px; background: rgb(248, 249, 251); border-radius: 8px; margin-bottom: 10px; }
-.manual-item .input-group { margin-bottom: 0px; }
-.delete-btn { width: 36px; height: 36px; border: 1px solid rgb(224, 224, 224); background: rgb(255, 255, 255); border-radius: 6px; cursor: pointer; font-size: 18px; color: rgb(153, 153, 153); display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.delete-btn:hover { color: rgb(231, 76, 60); border-color: rgb(231, 76, 60); }
-.btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.2s; gap: 6px; }
-.btn-primary { background: rgb(74, 108, 247); color: rgb(255, 255, 255); }
-.btn-primary:hover { background: rgb(58, 90, 230); }
-.btn-secondary { background: rgb(240, 242, 245); color: rgb(51, 51, 51); border: 1px solid rgb(224, 224, 224); }
-.btn-secondary:hover { background: rgb(232, 234, 237); }
-.btn-success { background: rgb(39, 174, 96); color: rgb(255, 255, 255); }
-.btn-success:hover { background: rgb(33, 154, 82); }
-.btn-warning { background: rgb(243, 156, 18); color: rgb(255, 255, 255); }
-.btn-warning:hover { background: rgb(230, 126, 34); }
-.btn-danger { background: rgb(231, 76, 60); color: rgb(255, 255, 255); }
-.btn-danger:hover { background: rgb(192, 57, 43); }
-.btn-block { width: 100%; }
-.add-btn-wrap { margin-top: 12px; }
-.similarity-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.slider-group { display: flex; align-items: center; gap: 12px; }
-.slider-group input[type="range"] { flex: 1 1 0%; height: 6px; appearance: none; background: rgb(224, 224, 224); border-radius: 3px; outline: none; }
-.slider-group input[type="range"]::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; background: rgb(74, 108, 247); border-radius: 50%; cursor: pointer; }
-.slider-value { min-width: 60px; text-align: right; font-size: 14px; font-weight: 600; color: rgb(74, 108, 247); }
-.similarity-tip { font-size: 12px; color: rgb(153, 153, 153); margin-top: 4px; }
-.filter-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
-.filter-subtitle { font-size: 13px; font-weight: 600; color: rgb(102, 102, 102); margin: 12px 0px 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-bottom: 6px; border-bottom: 1px solid rgb(238, 238, 238); }
-.switch-label { display: flex; align-items: center; gap: 6px; font-size: 14px; color: rgb(51, 51, 51); cursor: pointer; }
-.switch-label input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
-.btn-add { font-size: 12px; padding: 2px 8px; background: rgb(74, 108, 247); color: rgb(255, 255, 255); border: none; border-radius: 4px; cursor: pointer; font-weight: normal; }
-.btn-add:hover { background: rgb(58, 92, 231); }
-.toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
-.toggle-switch input { opacity: 0; width: 0px; height: 0px; }
-.toggle-slider { position: absolute; cursor: pointer; inset: 0px; background-color: rgb(204, 204, 204); transition: 0.3s; border-radius: 24px; }
-.toggle-slider::before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
-.toggle-switch input:checked + .toggle-slider { background-color: rgb(231, 76, 60); }
-.toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
-.switch-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0px; border-bottom: 1px solid rgb(240, 240, 240); }
-.switch-row:last-child { border-bottom: none; }
-.switch-row .switch-label-text { font-size: 14px; color: rgb(51, 51, 51); }
-.digit-picker { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; margin-bottom: 12px; }
-.digit-btn { width: 40px; height: 40px; border: 1px solid rgb(221, 221, 221); border-radius: 50%; background: rgb(255, 255, 255); font-size: 14px; font-weight: 500; color: rgb(102, 102, 102); cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; user-select: none; }
-.digit-btn:hover { border-color: rgb(231, 76, 60); color: rgb(231, 76, 60); }
-.digit-btn.active { background: rgb(231, 76, 60); border-color: rgb(231, 76, 60); color: rgb(255, 255, 255); }
-.digit-label { font-size: 13px; color: rgb(102, 102, 102); margin-bottom: 4px; }
-.duanzu-item { background: rgb(248, 249, 251); border-radius: 8px; padding: 12px; margin-bottom: 10px; }
-.duanzu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.duanzu-title { font-size: 13px; font-weight: 600; color: rgb(102, 102, 102); }
-.duanzu-delete-btn { width: 28px; height: 28px; border: 1px solid rgb(221, 221, 221); background: rgb(255, 255, 255); border-radius: 50%; cursor: pointer; color: rgb(153, 153, 153); font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.duanzu-delete-btn:hover { background: rgb(255, 240, 240); color: rgb(255, 77, 79); border-color: rgb(255, 77, 79); }
-.duanzu-inputs { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 8px; align-items: center; }
-.duanzu-inputs input { width: 100%; padding: 8px 10px; border: 1px solid rgb(221, 221, 221); border-radius: 6px; font-size: 13px; outline: none; transition: border-color 0.2s; }
-.duanzu-inputs input:focus { border-color: rgb(231, 76, 60); }
-.duanzu-sep { color: rgb(153, 153, 153); font-size: 14px; text-align: center; }
-.rongcuo-item { background: rgb(248, 249, 251); border-radius: 8px; padding: 12px; margin-bottom: 10px; }
-.rongcuo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.rongcuo-title { font-size: 13px; font-weight: 600; color: rgb(102, 102, 102); }
-.rongcuo-delete-btn { width: 28px; height: 28px; border: 1px solid rgb(221, 221, 221); background: rgb(255, 255, 255); border-radius: 50%; cursor: pointer; color: rgb(153, 153, 153); font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.rongcuo-delete-btn:hover { background: rgb(255, 240, 240); color: rgb(255, 77, 79); border-color: rgb(255, 77, 79); }
-.filter-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-.filter-item input { flex: 1 1 0%; padding: 6px 10px; border: 1px solid rgb(221, 221, 221); border-radius: 4px; font-size: 13px; }
-.filter-item .delete-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: rgb(255, 255, 255); border: 1px solid rgb(221, 221, 221); border-radius: 4px; cursor: pointer; color: rgb(153, 153, 153); font-size: 16px; line-height: 1; }
-.filter-item .delete-btn:hover { background: rgb(255, 240, 240); color: rgb(255, 77, 79); border-color: rgb(255, 77, 79); }
-.action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.result-count { font-size: 14px; color: rgb(102, 102, 102); }
-.result-content { background: rgb(248, 249, 251); border-radius: 8px; padding: 16px; max-height: 400px; overflow-y: auto; font-family: "SF Mono", Consolas, Monaco, monospace; font-size: 13px; line-height: 2; color: rgb(51, 51, 51); }
-.result-line { padding: 6px 8px; border-radius: 4px; transition: background 0.2s; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.result-line.copied { background: rgb(215, 227, 255); }
-.result-line:hover { background: rgb(238, 240, 243); }
-.result-line-content { flex: 1 1 0%; min-width: 0px; }
-.modal { position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-.modal-content { background: rgb(255, 255, 255); border-radius: 12px; box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 40px; display: flex; flex-direction: column; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid rgb(238, 238, 238); }
-.modal-body { padding: 20px; max-height: 70vh; overflow-y: auto; }
-.result-source { color: rgb(74, 108, 247); font-weight: 600; margin-right: 12px; }
-.result-idx { color: rgb(153, 153, 153); margin-right: 4px; min-width: 18px; display: inline-block; text-align: right; font-size: 12px; }
-.result-code { margin-right: 6px; color: rgb(51, 51, 51); font-size: 12px; }
-.copy-line-btn { flex-shrink: 0; padding: 2px 6px; font-size: 11px; background: rgb(255, 255, 255); border: 1px solid rgb(224, 224, 224); border-radius: 4px; color: rgb(102, 102, 102); cursor: pointer; transition: 0.2s; font-family: inherit; line-height: 1.4; }
-.copy-line-btn:hover { background: rgb(74, 108, 247); color: rgb(255, 255, 255); border-color: rgb(74, 108, 247); }
-.result-divider { text-align: center; color: rgb(153, 153, 153); font-size: 12px; padding: 8px 0px; margin: 4px 0px; border-top: 1px dashed rgb(224, 224, 224); }
-.result-group-title { font-size: 13px; font-weight: 600; color: rgb(102, 102, 102); padding: 8px 4px 8px 10px; margin-top: 4px; margin-bottom: 4px; background: rgb(238, 241, 246); border-radius: 4px; }
-.history-item { border: 1px solid rgb(224, 224, 224); border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
-.history-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgb(245, 247, 250); font-size: 12px; color: rgb(136, 136, 136); }
-.history-delete-btn { font-size: 12px; padding: 2px 6px; background: rgb(255, 255, 255); border: 1px solid rgb(221, 221, 221); border-radius: 3px; color: rgb(102, 102, 102); cursor: pointer; }
-.history-delete-btn:hover { background: rgb(255, 77, 79); color: rgb(255, 255, 255); border-color: rgb(255, 77, 79); }
-.history-content { padding: 8px; }
-.copy-btn-wrap { margin-top: 12px; display: flex; justify-content: flex-end; }
-.empty-tip { text-align: center; color: rgb(153, 153, 153); padding: 40px 0px; font-size: 14px; }
-@media (max-width: 640px) {
-  body { padding-top: calc(12px + env(safe-area-inset-top)); padding-bottom: calc(12px + env(safe-area-inset-bottom)); padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); }
-  h1 { font-size: 20px; margin-bottom: 16px; }
-  .section { padding: 14px; margin-bottom: 12px; }
-  .section-title { font-size: 15px; }
-  .manual-item { grid-template-columns: 1fr; gap: 8px; position: relative; padding: 12px 48px 12px 12px; }
-  .delete-btn { position: absolute; right: 12px; top: 12px; width: 32px; height: 32px; }
-  .input-group input[type="text"], .input-group input[type="number"] { padding: 12px 14px; font-size: 16px; }
-  .input-group label { font-size: 13px; }
-  .btn { padding: 12px 16px; min-height: 44px; font-size: 15px; }
-  .similarity-row { grid-template-columns: 1fr; gap: 12px; }
-  .slider-group input[type="range"] { height: 8px; }
-  .slider-group input[type="range"]::-webkit-slider-thumb { width: 24px; height: 24px; }
-  .filter-subtitle { font-size: 14px; min-height: 44px; padding: 10px 0px; }
-  .switch-row { min-height: 44px; padding: 12px 0px; }
-  .switch-label-text { font-size: 14px; }
-  #outputFormat { min-height: 36px; padding: 8px 12px !important; font-size: 14px !important; }
-  .toggle-switch { width: 48px; height: 28px; }
-  .toggle-slider::before { height: 22px; width: 22px; }
-  .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
-  .digit-picker { gap: 6px; justify-content: center; }
-  .digit-btn { width: 38px; height: 38px; font-size: 15px; }
-  .duanzu-inputs { grid-template-columns: 1fr auto 1fr; gap: 6px; }
-  .duanzu-inputs input { padding: 10px 8px; font-size: 14px; }
-  .rongcuo-picker .digit-btn { width: 34px; height: 34px; font-size: 13px; }
-  .action-row { grid-template-columns: 1fr; gap: 10px; }
-  .result-content { font-size: 13px; padding: 12px; max-height: 350px; }
-  .result-line { flex-wrap: wrap; padding: 6px 4px; gap: 4px; }
-  .result-line-content { width: 100%; margin-bottom: 2px; }
-  .copy-line-btn { padding: 3px 8px; font-size: 11px; min-height: 28px; align-self: flex-end; }
-  .result-group-title { font-size: 12px; }
-  .history-header { min-height: 44px; padding: 10px 12px; }
-  #historyFullscreen > div { padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); }
-  #historyFullscreen > div > div:first-child { padding-top: calc(12px + env(safe-area-inset-top)) !important; padding-bottom: 12px !important; }
-  #historyFullscreenContent { padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important; }
-  #dmContent { padding: 12px 0px; }
-  #dmDanmaPicker .digit-btn { width: 36px; height: 36px; }
-  .dm-inputs-row .input-group { min-width: calc(50% - 4px) !important; }
-  .modal-content { width: calc(100% - 24px); max-width: 100%; }
-  .modal-body { padding: 16px; max-height: 60vh; }
-}
-@media (max-width: 380px) {
-  .digit-btn { width: 32px; height: 32px; font-size: 14px; }
-  .rongcuo-picker .digit-btn { width: 30px; height: 30px; font-size: 12px; }
-  #dmDanmaPicker .digit-btn { width: 32px; height: 32px; font-size: 13px; }
-  .section { padding: 12px; }
-  .result-content { font-size: 12px; padding: 10px; }
-  .duanzu-inputs { grid-template-columns: 1fr; text-align: center; }
-  .duanzu-sep { display: none; }
-}
-@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
-  .result-content { max-height: 200px; }
-  h1 { font-size: 18px; margin-bottom: 10px; }
-  .section { padding: 10px; margin-bottom: 8px; }
-}
-:root { --trae-layer-image-download: 89990; --trae-layer-browser-inspect-overlay: 90000; --trae-layer-browser-inspect-highlight: 90010; --trae-layer-browser-inspect-action: 90020; --trae-layer-text-selection-action: 90030; --trae-layer-edit-tooltip: 100095; }
-:root, [data-trae-theme="dark"] { --trae-bg-base-default: #171717; --trae-bg-menu: #222427; --trae-bg-overlay-l1: rgba(255, 255, 255, 0.04); --trae-bg-overlay-l2: rgba(255, 255, 255, 0.08); --trae-bg-overlay-l3: rgba(255, 255, 255, 0.12); --trae-bg-overlay-l4: rgba(255, 255, 255, 0.16); --trae-bg-invert: #f5f9fe; --trae-bg-invert-hover: #e8ecf0; --trae-bg-invert-active: #dce0e4; --trae-bg-invert-disabled: rgba(224, 226, 242, 0.12); --bg-bg-brand-disabled: rgba(75, 63, 227, 0.35); --bg-bg-brand-popup: rgba(106, 111, 255, 0.15); --trae-border-l1: #e0e2f217; --trae-border-l2: rgba(255, 255, 255, 0.12); --trae-border-l3: rgba(255, 255, 255, 0.08); --trae-border-neutral-l3: rgba(229, 229, 229, 0.20); --trae-border-brand: #6a6fff; --trae-text-default: #f5f9fe; --trae-text-default-hover: #f5f9fe; --trae-text-default-active: #f5f9fe; --trae-text-secondary: rgba(245, 249, 254, 0.5); --trae-text-tertiary: rgba(245, 249, 254, 0.4); --trae-text-disabled: #666b75; --trae-text-onaccent: #222427; --trae-icon-default: #f5f9fe; --trae-icon-secondary: rgba(245, 249, 254, 0.5); --trae-icon-brand: #6a6fff; --icon-icon-brand: var(--trae-icon-brand); --trae-icon-onaccent: #222427; --trae-status-success: #22c55e; --trae-status-primary: #3b82f6; --trae-status-primary-default: #387bff; --trae-status-primary-surface-l1: rgba(53, 121, 255, 0.18); --trae-status-success-default: #33c192; --trae-status-success-surface-l1: rgba(0, 165, 110, 0.18); --trae-status-error-default: #f65a5a; --trae-status-error-surface-l1: rgba(246, 70, 70, 0.18); --trae-annotation-marker-bg: #4b3fe3; --trae-annotation-marker-text: #ffffff; --trae-annotation-region-border: var(--trae-status-primary-default); --trae-region-outside-mask-bg: rgba(0, 0, 0, 0.32); --trae-panel-shadow: 0px 6px 24px -1px rgba(0, 0, 0, 0.16); --trae-floating-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.2); --trae-shadow-elevation-50: 0 1px 2px -1px rgba(0, 0, 0, 0.45); --text-text-default: var(--trae-text-default); --text-text-onaccent: var(--trae-text-onaccent); --bg-bg-menu: var(--trae-bg-menu); --bg-bg-white: var(--trae-bg-menu); --bg-bg-invert: var(--trae-bg-invert); --bg-bg-invert-disabled: var(--trae-bg-invert-disabled); --bg-bg-overlay-l1: var(--trae-bg-overlay-l1); --bg-bg-overlay-l2: var(--trae-bg-overlay-l2); --bg-bg-overlay-l3: var(--trae-bg-overlay-l3); --border-border-neutral-l1: var(--trae-border-l1); --border-border-brand: var(--trae-border-brand); --border-border-brand-half: rgba(106, 111, 255, 0.4); --status-error-default: var(--trae-status-error-default); --status-error-surface-l1: var(--trae-status-error-surface-l1); --radius-radius-md-12: 12px; --spacers-spacer-0: 0; --spacers-spacer-6: 6px; }
-[data-trae-theme="light"] { --trae-bg-base-default: #fafafa; --trae-bg-menu: #ffffff; --trae-bg-overlay-l1: rgba(0, 0, 0, 0.04); --trae-bg-overlay-l2: rgba(0, 0, 0, 0.06); --trae-bg-overlay-l3: rgba(0, 0, 0, 0.08); --trae-bg-overlay-l4: rgba(0, 0, 0, 0.12); --trae-bg-invert: #1f2328; --trae-bg-invert-hover: #32383f; --trae-bg-invert-active: #444d56; --trae-bg-invert-disabled: rgba(115, 115, 115, 0.20); --bg-bg-brand-disabled: rgba(75, 63, 227, 0.22); --bg-bg-brand-popup: rgba(170, 183, 255, 0.36); --trae-border-l1: rgba(0, 0, 0, 0.1); --trae-border-l2: rgba(0, 0, 0, 0.12); --trae-border-l3: rgba(0, 0, 0, 0.08); --trae-border-neutral-l3: rgba(115, 115, 115, 0.36); --trae-border-brand: #4b3fe3; --trae-text-default: #1f2328; --trae-text-default-hover: #111214; --trae-text-default-active: #111214; --trae-text-secondary: rgba(31, 35, 40, 0.5); --trae-text-tertiary: rgba(31, 35, 40, 0.4); --trae-text-disabled: #a1a1a1; --trae-text-onaccent: #ffffff; --trae-icon-default: #1f2328; --trae-icon-secondary: rgba(31, 35, 40, 0.5); --trae-icon-brand: #4b3fe3; --icon-icon-brand: var(--trae-icon-brand); --trae-icon-onaccent: #ffffff; --trae-status-success: #22c55e; --trae-status-primary: #3b82f6; --trae-status-primary-default: #2f74ff; --trae-status-primary-surface-l1: rgba(47, 116, 255, 0.12); --trae-status-success-default: #15a877; --trae-status-success-surface-l1: rgba(64, 176, 139, 0.12); --trae-status-error-default: #e8463a; --trae-status-error-surface-l1: rgba(232, 70, 58, 0.12); --trae-annotation-marker-bg: #4b3fe3; --trae-annotation-marker-text: #ffffff; --trae-annotation-region-border: var(--trae-status-primary-default); --trae-region-outside-mask-bg: rgba(0, 0, 0, 0.18); --trae-panel-shadow: 0px 6px 24px -1px rgba(24, 24, 24, 0.06); --trae-floating-shadow: 0px 2px 8px 0px rgba(24, 24, 24, 0.2); --trae-shadow-elevation-50: 0 1px 2px -1px rgba(24, 24, 24, 0.08); --text-text-default: var(--trae-text-default); --text-text-onaccent: var(--trae-text-onaccent); --bg-bg-menu: var(--trae-bg-menu); --bg-bg-white: var(--trae-bg-menu); --bg-bg-invert: var(--trae-bg-invert); --bg-bg-invert-disabled: var(--trae-bg-invert-disabled); --bg-bg-overlay-l1: var(--trae-bg-overlay-l1); --bg-bg-overlay-l2: var(--trae-bg-overlay-l2); --bg-bg-overlay-l3: var(--trae-bg-overlay-l3); --border-border-neutral-l1: var(--trae-border-l1); --border-border-brand: var(--trae-border-brand); --border-border-brand-half: rgba(75, 63, 227, 0.4); --status-error-default: var(--trae-status-error-default); --status-error-surface-l1: var(--trae-status-error-surface-l1); --radius-radius-md-12: 12px; --spacers-spacer-0: 0; --spacers-spacer-6: 6px; }
-@keyframes trae-spin { 
-  100% { transform: rotate(360deg); }
-}
-@keyframes trae-edit-bar-enter { 
-  0% { opacity: 0; transform: translateY(-4px) scale(0.98); }
-  100% { opacity: 1; transform: translateY(0px) scale(1); }
-}
-@keyframes trae-edit-bar-leave { 
-  0% { opacity: 1; transform: translateY(0px) scale(1); }
-  100% { opacity: 0; transform: translateY(-4px) scale(0.98); }
-}
-@keyframes trae-edit-panel-leave { 
-  0% { opacity: 1; transform: translateY(0px) scale(1); }
-  100% { opacity: 0; transform: translateY(-4px) scale(0.98); }
-}
-.trae-edit-mode-active:not(.trae-edit-mode-dragging) body :not([data-trae-edit-ui]):not([data-trae-edit-ui] *) { transition: none !important; animation-play-state: paused !important; }
-.trae-edit-mode-reorder-hit-test [data-trae-edit-ui]:not(.trae-edit-pointer-shield):not(.trae-edit-panel), .trae-edit-mode-reorder-hit-test [data-trae-edit-ui]:not(.trae-edit-pointer-shield):not(.trae-edit-panel) * { pointer-events: none !important; }
-.trae-browser-inspect-overlay { position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; z-index: var(--trae-layer-browser-inspect-overlay); pointer-events: auto; background: transparent; }
-.trae-browser-inspect-highlight-box { position: absolute; top: 0px; left: 0px; z-index: var(--trae-layer-browser-inspect-highlight); display: none; }
-.trae-browser-inspect-highlight-tag { position: absolute; left: 0px; top: 0px; height: 18px; padding: 0px 6px; box-sizing: border-box; border-radius: 4px; background-color: var(--trae-status-success-default); color: var(--trae-text-onaccent); font-size: 12px; font-weight: 400; display: none; align-items: center; z-index: var(--trae-layer-browser-inspect-action); }
-.trae-browser-inspect-highlight-box-show { display: flex; }
-.trae-browser-inspect-highlight-tag.trae-browser-inspect-highlight-box-show { display: none; }
-.trae-browser-inspect-select-button.trae-browser-inspect-highlight-box-show { display: block !important; }
-.trae-browser-inspect-select-button { position: absolute; top: 0px; left: 0px; display: none; z-index: var(--trae-layer-browser-inspect-action); }
-.trae-browser-inspect-select-highlight-box { background: transparent !important; }
-.trae-browser-inspect-select-highlight-box .trae-browser-inspect-highlight-tag { background-color: var(--trae-status-success-default); }
-.trae-add-to-chat-card { display: block; overflow: hidden; background: var(--trae-bg-menu); border: 1px solid var(--trae-border-l1); border-radius: 8px; box-shadow: var(--trae-floating-shadow); transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), height 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
-.trae-add-to-chat-content { position: relative; width: max-content; }
-.trae-fade-exit { opacity: 0; transition: opacity 0.15s ease-out; }
-.trae-fade-enter { opacity: 1; transition: opacity 0.2s ease-in; }
-.trae-buttons-view { display: flex; align-items: center; gap: 6px; padding: 4px; background: transparent; }
-.trae-action-button { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: transparent; border: none; border-radius: 4px; cursor: pointer; transform: none !important; transition: none !important; animation: auto ease 0s 1 normal none running none !important; }
-.trae-action-button:hover { background: var(--trae-bg-overlay-l2); }
-.trae-action-button:active { background: var(--trae-bg-overlay-l3); }
-.trae-action-button:focus-visible { outline: 2px solid var(--trae-status-primary); outline-offset: 1px; }
-.trae-action-button-icon { display: flex; align-items: center; justify-content: center; width: 16px; height: 16px; color: var(--trae-icon-default); flex-shrink: 0; }
-.trae-action-button-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; font-weight: 500; line-height: 16px; color: var(--trae-text-default); white-space: nowrap; }
-.trae-edit-toolbar-button-active { background: var(--bg-bg-brand-disabled, rgba(75, 63, 227, 0.22)) !important; color: var(--icon-icon-brand, #4b3fe3) !important; font-weight: bold !important; }
-.trae-edit-toolbar-button-active:hover { background: var(--bg-bg-brand-popup, rgba(170, 183, 255, 0.36)) !important; }
-.trae-edit-toolbar button[data-action="alignment-dropdown"]:hover, .trae-edit-toolbar button[data-action="text-align-dropdown"]:hover, .trae-edit-toolbar button[data-action="font-decrease"]:hover, .trae-edit-toolbar button[data-action="font-increase"]:hover, .trae-edit-toolbar button[data-action^="align-"]:hover { border-radius: 8px; background: var(--bg-bg-overlay-l1, rgba(115, 115, 115, 0.08)) !important; }
-.trae-edit-toolbar button[data-action="alignment-dropdown"]:active, .trae-edit-toolbar button[data-action="text-align-dropdown"]:active, .trae-edit-toolbar button[data-action="font-decrease"]:active, .trae-edit-toolbar button[data-action="font-increase"]:active, .trae-edit-toolbar button[data-action^="align-"]:active { border-radius: 8px; background: var(--bg-bg-overlay-l2, rgba(115, 115, 115, 0.12)) !important; }
-.trae-comment-input { background: transparent; color: var(--trae-text-default); caret-color: var(--trae-text-default); }
-.trae-comment-input::placeholder { color: var(--trae-text-tertiary); }
-.trae-point-edit-bar, .trae-point-comment-input-bar, .trae-comment-only-panel { transform-origin: center top; will-change: opacity, transform; }
-.trae-edit-panel:not(.trae-edit-panel-leave) { pointer-events: auto !important; }
-.trae-edit-bar-enter { animation: trae-edit-bar-enter var(--transition-normal, 0.18s cubic-bezier(0.2, 0, 0, 1)) both; }
-.trae-edit-bar-leave { pointer-events: none; animation: trae-edit-bar-leave var(--transition-fast, 0.14s ease) both; }
-.trae-edit-panel-leave { pointer-events: none; animation: trae-edit-panel-leave var(--transition-fast, 0.14s ease) both; }
-.trae-edit-panel [data-trae-tooltip] { position: relative; }
-.trae-edit-panel [data-trae-tooltip]::after { content: attr(data-trae-tooltip); position: absolute; left: 50%; bottom: calc(100% + 8px); z-index: var(--trae-layer-edit-tooltip); padding: 6px 10px; border-radius: 6px; background: var(--trae-bg-invert, var(--bg-bg-invert)); color: var(--trae-text-onaccent, var(--text-text-onaccent)); box-shadow: var(--trae-floating-shadow); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif; font-size: 11px; font-weight: 500; line-height: 16px; letter-spacing: 0.039px; white-space: nowrap; pointer-events: none; box-sizing: border-box; opacity: 0; transform: translateX(-50%); visibility: hidden; }
-.trae-edit-panel [data-trae-tooltip]::before { content: ""; position: absolute; left: 50%; bottom: calc(100% + 5px); z-index: var(--trae-layer-edit-tooltip); width: 8px; height: 4px; background: var(--trae-bg-invert, var(--bg-bg-invert)); clip-path: polygon(0px 0px, 100% 0px, 50% 100%); transform: translateX(-50%); pointer-events: none; opacity: 0; visibility: hidden; }
-.trae-edit-panel [data-trae-tooltip]:hover::after, .trae-edit-panel [data-trae-tooltip]:focus-visible::after, .trae-edit-panel [data-trae-tooltip]:hover::before, .trae-edit-panel [data-trae-tooltip]:focus-visible::before { opacity: 1; visibility: visible; }
-.trae-comment-btn { justify-content: center; cursor: pointer; transition: background-color 0.15s; }
-.trae-comment-btn:disabled { cursor: not-allowed; }
-.trae-comment-btn:focus-visible { outline: 2px solid var(--trae-status-primary); outline-offset: 1px; }
-.trae-comment-btn-primary { background: var(--trae-bg-invert); color: var(--trae-text-onaccent); }
-.trae-comment-btn-primary:hover:not(:disabled) { background: var(--trae-bg-invert-hover); }
-.trae-comment-btn-primary:active:not(:disabled) { background: var(--trae-bg-invert-active); }
-.trae-comment-btn-primary:disabled { background: var(--trae-bg-invert-disabled); color: var(--trae-text-disabled); }
-.trae-comment-btn-secondary { background: var(--trae-bg-overlay-l2); color: var(--trae-text-default); }
-.trae-comment-btn-secondary:hover:not(:disabled) { background: var(--trae-bg-overlay-l3); }
-.trae-comment-btn-secondary:active:not(:disabled) { background: var(--trae-bg-overlay-l4); }
-.trae-comment-btn-secondary:disabled { background: var(--trae-bg-overlay-l2); color: var(--trae-text-disabled); }
-.trae-comment-btn-text { background: transparent; color: var(--trae-text-default); }
-.trae-comment-btn-text:hover:not(:disabled) { border-radius: 8px; background: var(--bg-bg-overlay-l1, var(--trae-bg-overlay-l1)); color: var(--trae-text-default-hover); }
-.trae-comment-btn-text:active:not(:disabled) { border-radius: 8px; background: var(--trae-bg-overlay-l2); color: var(--trae-text-default-active); }
-.trae-comment-btn-text:disabled { background: transparent; color: var(--trae-text-disabled); }
-.trae-marking-btn { justify-content: center; }
-.trae-marking-btn:hover:not(:disabled) { background: var(--trae-bg-overlay-l1) !important; }
-.trae-marking-btn-active { background: var(--bg-bg-brand-disabled, rgba(75, 63, 227, 0.22)) !important; color: var(--icon-icon-brand, var(--trae-icon-brand)) !important; }
-.trae-marking-btn-active:hover { background: var(--bg-bg-brand-popup, rgba(170, 183, 255, 0.36)) !important; color: var(--icon-icon-brand, var(--trae-icon-brand)) !important; }
-.trae-marking-btn:active:not(:disabled) { background: var(--trae-bg-overlay-l2) !important; }
-.trae-marking-btn:disabled { color: var(--trae-text-disabled) !important; cursor: not-allowed !important; }
-.trae-action-button-shortcut { display: flex; align-items: center; gap: 2px; color: var(--trae-icon-secondary); flex-shrink: 0; }
-.trae-shortcut-container { display: flex; align-items: center; gap: 2px; }
-.trae-shortcut-key { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; font-weight: 500; line-height: 12px; color: var(--trae-icon-secondary); }
-.trae-add-to-chat-divider { width: 2px; height: 12px; padding: 0px 6px; box-sizing: content-box; background-clip: content-box; background-color: var(--trae-border-l2); flex-shrink: 0; }
-.trae-editor-view { display: flex; flex-direction: column; width: 320px; padding: 8px; background: transparent; }
-.trae-editor-text-container { display: flex; align-items: center; padding: 8px; background: var(--trae-bg-overlay-l1); border: 1px solid var(--trae-border-l3); border-radius: 4px; gap: 8px; }
-.trae-editor-textarea { flex: 1 1 0%; padding: 0px 2px; border: none; background: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 400; line-height: 20px; color: var(--trae-text-default); resize: none; outline: none; overflow-y: auto; max-height: 140px; }
-.trae-editor-textarea::placeholder { color: var(--trae-text-tertiary); }
-.trae-editor-action-bar { display: flex; align-items: center; justify-content: flex-end; gap: 4px; max-height: 0px; opacity: 0; overflow: hidden; transition: max-height 0.2s ease-out, opacity 0.2s ease-out, margin-top 0.2s ease-out; }
-.trae-editor-action-bar-visible { max-height: 32px; opacity: 1; margin-top: 8px; }
-.trae-editor-cancel-button { display: flex; align-items: center; justify-content: center; height: 24px; padding: 0px 4px; background: var(--trae-bg-overlay-l2); border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.15s; }
-.trae-editor-cancel-button:hover { background: var(--trae-bg-overlay-l3); }
-.trae-editor-cancel-button:active { background: var(--trae-bg-overlay-l3); }
-.trae-editor-cancel-button:focus-visible { outline: 2px solid var(--trae-status-primary); outline-offset: 1px; }
-.trae-editor-cancel-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; font-weight: 500; line-height: 16px; color: var(--trae-text-default); white-space: nowrap; padding: 0px 4px; }
-.trae-editor-submit-button { display: flex; align-items: center; justify-content: center; height: 24px; padding: 0px 8px; background: var(--trae-bg-invert); border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.15s; }
-.trae-editor-submit-button:hover { background: var(--trae-bg-invert-hover); }
-.trae-editor-submit-button:active { background: var(--trae-bg-invert-active); }
-.trae-editor-submit-button:focus-visible { outline: 2px solid var(--trae-status-primary); outline-offset: 1px; }
-.trae-editor-submit-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; font-weight: 500; line-height: 16px; color: var(--trae-text-onaccent); white-space: nowrap; padding: 0px 4px; }
-.trae-editor-submit-icon { display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; color: var(--trae-icon-onaccent); flex-shrink: 0; }
-.trae-success-view { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0px 12px; height: 32px; white-space: nowrap; }
-.trae-success-icon { display: flex; align-items: center; justify-content: center; width: 16px; height: 16px; color: var(--trae-status-success); flex-shrink: 0; }
-.trae-success-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 400; line-height: 18px; color: var(--trae-text-default); user-select: none; }</style></head>
+</head>
 <body>
 <div class="container">
   <h1>批量自动工具</h1>
@@ -2067,24 +1075,14 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
       <div class="section-title" style="margin-bottom: 0;"><span id="manualSectionArrow">▼</span> 手动录入区</div>
     </div>
     <div id="manualContent">
-      <div id="manualList"><div class="manual-item" id="manual-1">
-          <div class="input-group">
-            <label>数据源（4-10位不重复数字）</label>
-            <input type="text" class="source-input" placeholder="例如：12345" maxlength="10" inputmode="numeric" pattern="[0-9]*" value="" oninput="saveConfig()">
-          </div>
-          <div class="input-group">
-            <label>铁胆（单数字/空）</label>
-            <input type="text" class="dan-input" placeholder="例如：5" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="" oninput="saveConfig()">
-          </div>
-          <button class="delete-btn" onclick="deleteManualItem(1)" title="删除">×</button>
-        </div></div>
+      <div id="manualList"></div>
       <div class="add-btn-wrap">
         <button class="btn btn-secondary btn-block" onclick="addManualItem()">＋ 新增一组</button>
       </div>
     </div>
   </div>
 
-  <div class="section" id="randomSection" style="display: block;">
+  <div class="section" id="randomSection">
     <div class="section-title">批量随机生成五码</div>
     <div class="input-group">
       <label>随机生成五码数量组（自动随机五注号码）</label>
@@ -2104,7 +1102,7 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
             <input type="range" id="groupSimilarity" min="0" max="100" value="100" oninput="updateSimilarity('group');saveConfig()">
             <span class="slider-value" id="groupSimilarityValue">100%</span>
           </div>
-          <div class="similarity-tip" id="groupSimilarityTip">目前共50注，组选最多重复 50 注</div>
+          <div class="similarity-tip" id="groupSimilarityTip">组选最多允许重复 0 注</div>
         </div>
         <div class="input-group">
           <label>直选重复相似度上限（%）</label>
@@ -2112,7 +1110,7 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
             <input type="range" id="straightSimilarity" min="0" max="100" value="100" oninput="updateSimilarity('straight');saveConfig()">
             <span class="slider-value" id="straightSimilarityValue">100%</span>
           </div>
-          <div class="similarity-tip" id="straightSimilarityTip">目前共50注，直选最多重复 50 注</div>
+          <div class="similarity-tip" id="straightSimilarityTip">直选最多允许重复 0 注</div>
         </div>
       </div>
     </div>
@@ -2127,7 +1125,7 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
       <div class="switch-row">
         <span class="switch-label-text">随机五码 适用筛选条件</span>
         <label class="toggle-switch">
-          <input type="checkbox" id="filterRandom" checked="" onchange="saveConfig()">
+          <input type="checkbox" id="filterRandom" checked onchange="saveConfig()">
           <span class="toggle-slider"></span>
         </label>
       </div>
@@ -2148,7 +1146,7 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
       <div class="switch-row">
         <span class="switch-label-text">显示胆码</span>
         <label class="toggle-switch">
-          <input type="checkbox" id="showDanma" checked="" onchange="saveConfig()">
+          <input type="checkbox" id="showDanma" checked onchange="saveConfig()">
           <span class="toggle-slider"></span>
         </label>
       </div>
@@ -2185,57 +1183,39 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
       <div class="filter-subtitle" style="cursor:pointer;user-select:none;" onclick="toggleCondition('cond1', 'cond1Arrow')"><span><span id="cond1Arrow">▼</span> 条件1 胆码</span></div>
       <div id="cond1">
         <div class="digit-label">选择胆</div>
-        <div class="digit-picker" id="danmaPicker"><div class="digit-btn" data-digit="0">0</div><div class="digit-btn" data-digit="1">1</div><div class="digit-btn" data-digit="2">2</div><div class="digit-btn" data-digit="3">3</div><div class="digit-btn" data-digit="4">4</div><div class="digit-btn" data-digit="5">5</div><div class="digit-btn" data-digit="6">6</div><div class="digit-btn" data-digit="7">7</div><div class="digit-btn" data-digit="8">8</div><div class="digit-btn" data-digit="9">9</div></div>
+        <div class="digit-picker" id="danmaPicker"></div>
         <div class="digit-label" style="margin-top: 12px;">至少包含几个胆</div>
-        <div class="digit-picker" id="danmaCountPicker"><div class="digit-btn active" data-digit="1">1</div><div class="digit-btn" data-digit="2">2</div><div class="digit-btn" data-digit="3">3</div></div>
+        <div class="digit-picker" id="danmaCountPicker"></div>
       </div>
 
       <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond2', 'cond2Arrow')"><span><span id="cond2Arrow">▼</span> 条件2 排除和尾</span></div>
       <div id="cond2">
         <div class="digit-label">和值尾数</div>
-        <div class="digit-picker" id="hezhiPicker"><div class="digit-btn" data-digit="0">0</div><div class="digit-btn" data-digit="1">1</div><div class="digit-btn" data-digit="2">2</div><div class="digit-btn" data-digit="3">3</div><div class="digit-btn" data-digit="4">4</div><div class="digit-btn" data-digit="5">5</div><div class="digit-btn" data-digit="6">6</div><div class="digit-btn" data-digit="7">7</div><div class="digit-btn" data-digit="8">8</div><div class="digit-btn" data-digit="9">9</div></div>
+        <div class="digit-picker" id="hezhiPicker"></div>
       </div>
 
       <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond3', 'cond3Arrow')"><span><span id="cond3Arrow">▼</span> 条件3 断组</span>
         <button class="btn-add" onclick="addDuanzu();event.stopPropagation();">+ 添加断组</button>
       </div>
       <div id="cond3">
-        <div id="duanzuList"><div class="duanzu-item" id="duanzu-1">
-    <div class="duanzu-header">
-      <span class="duanzu-title">断组1</span>
-      <button class="duanzu-delete-btn" onclick="deleteDuanzu(1)">−</button>
-    </div>
-    <div class="duanzu-inputs">
-      <input type="text" class="duanzu-p1" placeholder="例：19" inputmode="numeric" value="" oninput="saveConfig()">
-      <span class="duanzu-sep">-</span>
-      <input type="text" class="duanzu-p2" placeholder="例：678" inputmode="numeric" value="" oninput="saveConfig()">
-      <span class="duanzu-sep">-</span>
-      <input type="text" class="duanzu-p3" placeholder="例：0235" inputmode="numeric" value="" oninput="saveConfig()">
-    </div>
-  </div></div>
+        <div id="duanzuList"></div>
       </div>
 
       <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond4', 'cond4Arrow')"><span><span id="cond4Arrow">▼</span> 条件4 容错=01</span>
         <button class="btn-add" onclick="addRongcuo();event.stopPropagation();">+ 添加容错</button>
       </div>
       <div id="cond4">
-        <div id="rongcuoList"><div class="rongcuo-item" id="rongcuo-1">
-    <div class="rongcuo-header">
-      <span class="rongcuo-title">容错1</span>
-      <button class="rongcuo-delete-btn" onclick="deleteRongcuo(1)">−</button>
-    </div>
-    <div class="digit-picker rongcuo-picker" id="rongcuo-picker-1"><div class="digit-btn" data-digit="0">0</div><div class="digit-btn" data-digit="1">1</div><div class="digit-btn" data-digit="2">2</div><div class="digit-btn" data-digit="3">3</div><div class="digit-btn" data-digit="4">4</div><div class="digit-btn" data-digit="5">5</div><div class="digit-btn" data-digit="6">6</div><div class="digit-btn" data-digit="7">7</div><div class="digit-btn" data-digit="8">8</div><div class="digit-btn" data-digit="9">9</div></div>
-  </div></div>
+        <div id="rongcuoList"></div>
       </div>
 
-      <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond5', 'cond5Arrow')"><span><span id="cond5Arrow">▶</span> 条件5 百十个杀号</span></div>
-      <div id="cond5" style="display: none;">
+      <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond5', 'cond5Arrow')"><span><span id="cond5Arrow">▼</span> 条件5 百十个杀号</span></div>
+      <div id="cond5">
         <div class="digit-label">百位杀</div>
-        <div class="digit-picker" id="excludeBaiPicker"><div class="digit-btn" data-digit="0" data-group="exclude1">0</div><div class="digit-btn" data-digit="1" data-group="exclude1">1</div><div class="digit-btn" data-digit="2" data-group="exclude1">2</div><div class="digit-btn" data-digit="3" data-group="exclude1">3</div><div class="digit-btn" data-digit="4" data-group="exclude1">4</div><div class="digit-btn" data-digit="5" data-group="exclude1">5</div><div class="digit-btn" data-digit="6" data-group="exclude1">6</div><div class="digit-btn" data-digit="7" data-group="exclude1">7</div><div class="digit-btn" data-digit="8" data-group="exclude1">8</div><div class="digit-btn" data-digit="9" data-group="exclude1">9</div></div>
+        <div class="digit-picker" id="excludeBaiPicker"></div>
         <div class="digit-label" style="margin-top: 12px;">十位杀</div>
-        <div class="digit-picker" id="excludeShiPicker"><div class="digit-btn" data-digit="0" data-group="exclude2">0</div><div class="digit-btn" data-digit="1" data-group="exclude2">1</div><div class="digit-btn" data-digit="2" data-group="exclude2">2</div><div class="digit-btn" data-digit="3" data-group="exclude2">3</div><div class="digit-btn" data-digit="4" data-group="exclude2">4</div><div class="digit-btn" data-digit="5" data-group="exclude2">5</div><div class="digit-btn" data-digit="6" data-group="exclude2">6</div><div class="digit-btn" data-digit="7" data-group="exclude2">7</div><div class="digit-btn" data-digit="8" data-group="exclude2">8</div><div class="digit-btn" data-digit="9" data-group="exclude2">9</div></div>
+        <div class="digit-picker" id="excludeShiPicker"></div>
         <div class="digit-label" style="margin-top: 12px;">个位杀</div>
-        <div class="digit-picker" id="excludeGePicker"><div class="digit-btn" data-digit="0" data-group="exclude3">0</div><div class="digit-btn" data-digit="1" data-group="exclude3">1</div><div class="digit-btn" data-digit="2" data-group="exclude3">2</div><div class="digit-btn" data-digit="3" data-group="exclude3">3</div><div class="digit-btn" data-digit="4" data-group="exclude3">4</div><div class="digit-btn" data-digit="5" data-group="exclude3">5</div><div class="digit-btn" data-digit="6" data-group="exclude3">6</div><div class="digit-btn" data-digit="7" data-group="exclude3">7</div><div class="digit-btn" data-digit="8" data-group="exclude3">8</div><div class="digit-btn" data-digit="9" data-group="exclude3">9</div></div>
+        <div class="digit-picker" id="excludeGePicker"></div>
       </div>
 
       <div class="filter-subtitle" style="margin-top: 16px;cursor:pointer;user-select:none;" onclick="toggleCondition('cond6', 'cond6Arrow')"><span><span id="cond6Arrow">▼</span> 条件6 近期号码</span></div>
@@ -2243,32 +1223,32 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
         <div style="font-size:12px;color:#999;margin-bottom:8px;">两组方案互斥，选择当前生效的方案。每行5个号码，最多20个。自动排除选中方案最近15个号码。</div>
         <!-- 方案切换 -->
         <div style="display:flex;gap:0;margin-bottom:10px;border-radius:6px;overflow:hidden;border:1px solid #d9d9d9;">
-          <label style="flex: 1 1 0%; cursor: pointer; text-align: center; padding: 8px; font-size: 13px; background: rgb(255, 255, 255); color: rgb(102, 102, 102);" id="recentTabA" onclick="switchRecentScheme('A')">
+          <label style="flex:1;cursor:pointer;text-align:center;padding:8px;font-size:13px;" id="recentTabA" onclick="switchRecentScheme('A')">
             <input type="radio" name="recentScheme" value="A" id="recentSchemeRadioA" style="margin-right:4px;" onchange="switchRecentScheme('A')">福
           </label>
-          <label style="flex: 1 1 0%; cursor: pointer; text-align: center; padding: 8px; font-size: 13px; border-left: 1px solid rgb(217, 217, 217); background: rgb(82, 196, 26); color: rgb(255, 255, 255);" id="recentTabB" onclick="switchRecentScheme('B')">
+          <label style="flex:1;cursor:pointer;text-align:center;padding:8px;font-size:13px;border-left:1px solid #d9d9d9;" id="recentTabB" onclick="switchRecentScheme('B')">
             <input type="radio" name="recentScheme" value="B" id="recentSchemeRadioB" style="margin-right:4px;" onchange="switchRecentScheme('B')">体
           </label>
         </div>
         <!-- 方案A -->
-        <div id="recentSchemeA" style="display: block; opacity: 0.4;">
+        <div id="recentSchemeA" style="display:block;">
           <div style="font-size:12px;color:#1890ff;margin-bottom:6px;font-weight:600;">福</div>
           <div style="display:flex;gap:6px;margin-bottom:8px;">
             <input type="text" id="recentNumberInputA" placeholder="如：296 373 382 225 058" style="flex:1;padding:8px 10px;border:1px solid #d9d9d9;border-radius:6px;font-size:13px;-webkit-appearance:none;" onkeydown="if(event.key==='Enter'){addRecentNumbers('A');}">
             <button class="btn btn-primary btn-sm" onclick="addRecentNumbers('A')">添加</button>
             <button class="btn btn-default btn-sm" onclick="clearRecentNumbers('A')">清空</button>
           </div>
-          <div id="recentNumbersListA" style="max-height:160px;overflow-y:auto;"><div style="font-size:12px;color:#ccc;text-align:center;padding:12px;">暂无近期号码</div></div>
+          <div id="recentNumbersListA" style="max-height:160px;overflow-y:auto;"></div>
         </div>
         <!-- 方案B -->
-        <div id="recentSchemeB" style="display: block; opacity: 1;">
+        <div id="recentSchemeB" style="display:block;">
           <div style="font-size:12px;color:#52c41a;margin-bottom:6px;font-weight:600;">体</div>
           <div style="display:flex;gap:6px;margin-bottom:8px;">
             <input type="text" id="recentNumberInputB" placeholder="如：296 373 382 225 058" style="flex:1;padding:8px 10px;border:1px solid #d9d9d9;border-radius:6px;font-size:13px;-webkit-appearance:none;" onkeydown="if(event.key==='Enter'){addRecentNumbers('B');}">
             <button class="btn btn-primary btn-sm" onclick="addRecentNumbers('B')">添加</button>
             <button class="btn btn-default btn-sm" onclick="clearRecentNumbers('B')">清空</button>
           </div>
-          <div id="recentNumbersListB" style="max-height:160px;overflow-y:auto;"><div style="font-size:12px;color:#ccc;text-align:center;padding:12px;">暂无近期号码</div></div>
+          <div id="recentNumbersListB" style="max-height:160px;overflow-y:auto;"></div>
         </div>
       </div>
     </div>
@@ -2285,8 +1265,8 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
     </div>
     <div id="dmContent" style="padding:16px 0;">
       <div class="digit-label">选择胆码（按点击顺序，选3个）</div>
-      <div class="digit-picker" id="dmDanmaPicker"><div class="digit-btn" data-digit="0">0</div><div class="digit-btn" data-digit="1">1</div><div class="digit-btn" data-digit="2">2</div><div class="digit-btn" data-digit="3">3</div><div class="digit-btn" data-digit="4">4</div><div class="digit-btn" data-digit="5">5</div><div class="digit-btn" data-digit="6">6</div><div class="digit-btn" data-digit="7">7</div><div class="digit-btn" data-digit="8">8</div><div class="digit-btn" data-digit="9">9</div></div>
-      <div id="dmDanmaOrder" style="margin-top: 8px; font-size: 13px; color: rgb(153, 153, 153);">请选择3个胆码</div>
+      <div class="digit-picker" id="dmDanmaPicker"></div>
+      <div id="dmDanmaOrder" style="margin-top:8px;font-size:13px;color:#666;">请选择3个胆码</div>
       <div class="dm-inputs-row" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
         <div class="input-group" style="flex:1;min-width:120px;">
           <label>五码五注组数</label>
@@ -2325,7 +1305,8 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
   <div class="section">
     <div class="action-row">
       <button class="btn btn-primary btn-block" onclick="generateAllResults()">生成全部结果</button>
-      <button class="btn btn-danger btn-block" onclick="clearAll()">清空所有内容</button>
+      <button class="btn btn-info btn-block" id="schemeDisplayBtn" style="font-size:18px;font-weight:bold;">福</button>
+      <button class="btn btn-warning btn-block" onclick="showAllDataModal()" style="font-size:14px;font-weight:bold;">所有数据</button>
     </div>
   </div>
 
@@ -2344,10 +1325,12 @@ h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 24px;
 
   <div class="section">
     <div class="result-header" onclick="toggleHistorySection()" style="cursor:pointer;">
-      <div class="section-title" style="margin-bottom: 0;"><span id="historySectionArrow">▶</span> 历史记录</div>
+      <div class="section-title" style="margin-bottom: 0;"><span id="historySectionArrow">▼</span> 历史记录</div>
       <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();openHistoryFullscreen()" style="font-size: 12px; padding: 4px 8px;">全屏查看</button>
     </div>
-    <div class="result-content" id="historyContent" style="display: none;"><div class="empty-tip">暂无历史记录</div></div>
+    <div class="result-content" id="historyContent">
+      <div class="empty-tip">暂无历史记录</div>
+    </div>
     <div class="copy-btn-wrap">
       <button class="btn btn-danger btn-sm" onclick="clearAllHistory()" style="font-size: 12px; padding: 4px 8px;">清空全部历史</button>
     </div>
@@ -3153,14 +2136,71 @@ function generateFormat3Results() {
   const threeCount = parseInt(document.getElementById('fmt3ThreeCount').value) || 0;
   const twoCount = parseInt(document.getElementById('fmt3TwoCount').value) || 0;
 
-  if (wumaCount + fourCount + threeCount + twoCount === 0) {
-    alert('请至少设置一个大于0的组数');
+  // 收集手动录入项
+  const manualList = [];
+  const manualItems = document.querySelectorAll('.manual-item');
+  for (const item of manualItems) {
+    const source = item.querySelector('.source-input').value.trim();
+    const dan = item.querySelector('.dan-input').value.trim();
+    if (source === '') continue;
+    const srcValid = validateSource(source);
+    if (!srcValid.valid) {
+      alert('数据源 "' + source + '" 无效：' + srcValid.msg);
+      return null;
+    }
+    const danValid = validateDan(dan);
+    if (!danValid.valid) {
+      alert('铁胆无效：' + danValid.msg);
+      return null;
+    }
+    manualList.push({ source, dan });
+  }
+
+  if (wumaCount + fourCount + threeCount + twoCount === 0 && manualList.length === 0) {
+    alert('请至少设置一个大于0的组数或输入手动数据源');
     return null;
   }
 
   const qihao = getCurrentQihao();
   const results = [];
   let serial = 1;
+
+  // 0. 手动录入项：按五码五注格式处理
+  if (manualList.length > 0) {
+    const origRandomCount2 = document.getElementById('randomCount').value;
+    const origFormat2 = document.getElementById('outputFormat').value;
+
+    try {
+      document.getElementById('outputFormat').value = '2';
+      window._fmt3WumaMode = true;
+      window._fmt3WumaResults = null;
+
+      const manualAllList = manualList.map(m => ({ ...m, isRandom: false }));
+      generateResultsFromList(manualAllList);
+
+      const manualResults = window._fmt3WumaResults;
+      if (manualResults && manualResults.length > 0) {
+        for (const item of manualResults) {
+          const sortedSource = sortSourceAsc(item.source);
+          results.push({
+            serial: serial++,
+            type: 'wuma',
+            typeName: '五码五注',
+            source: item.source,
+            codes: item.codes,
+            displayDanma: item.displayDanma || '',
+            isRandom: false,
+            text: qihao + '期：五码：' + sortedSource + '\n精选五注： ' + item.codes.join(' ')
+          });
+        }
+      }
+    } finally {
+      document.getElementById('randomCount').value = origRandomCount2;
+      document.getElementById('outputFormat').value = origFormat2;
+      window._fmt3WumaMode = false;
+      window._fmt3WumaResults = null;
+    }
+  }
 
   // 1. 五码五注：复用现有完整生成逻辑
   if (wumaCount > 0) {
@@ -4244,15 +3284,6 @@ function renderFormat3Results(results) {
     return;
   }
 
-  // 按类型分组
-  const typeOrder = ['wuma', 'four', 'three', 'two'];
-  const typeNames = { wuma: '五码五注', four: '四注', three: '三注', two: '两注' };
-  const grouped = {};
-  for (const r of results) {
-    if (!grouped[r.type]) grouped[r.type] = [];
-    grouped[r.type].push(r);
-  }
-
   // 保存到历史
   const history = getHistory();
   const outputFormat = document.getElementById('outputFormat') ? document.getElementById('outputFormat').value : '3';
@@ -4267,6 +3298,34 @@ function renderFormat3Results(results) {
   saveHistory(history);
 
   let html = '';
+
+  // 手动录入结果优先显示
+  const manualItemsFmt3 = results.filter(r => !r.isRandom);
+  const randomItemsFmt3 = results.filter(r => r.isRandom);
+
+  if (manualItemsFmt3.length > 0) {
+    html += '<div style="margin-bottom:16px;">';
+    html += '<div style="font-size:14px;font-weight:bold;color:#1890ff;margin-bottom:8px;border-bottom:1px solid #e8e8e8;padding-bottom:4px;">--- 手动录入结果（' + manualItemsFmt3.length + '条）---</div>';
+    for (const item of manualItemsFmt3) {
+      const displayText = item.text.replace(/\n/g, '<br>');
+      html += '<div class="result-line" id="fmt3-line-' + item.serial + '">';
+      html += '<div class="result-line-content">';
+      html += '<span class="result-code">' + displayText + '</span>';
+      html += '</div>';
+      html += '<button class="copy-line-btn" onclick="copySingleLineFmt3(' + item.serial + ', ' + record.id + ')">复制本行</button>';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  // 按类型分组（仅随机结果）
+  const typeOrder = ['wuma', 'four', 'three', 'two'];
+  const typeNames = { wuma: '五码五注', four: '四注', three: '三注', two: '两注' };
+  const grouped = {};
+  for (const r of randomItemsFmt3) {
+    if (!grouped[r.type]) grouped[r.type] = [];
+    grouped[r.type].push(r);
+  }
 
   for (const type of typeOrder) {
     if (!grouped[type]) continue;
@@ -5001,17 +4060,29 @@ function updateRecentSchemeUI() {
   const tabB = document.getElementById('recentTabB');
   const boxA = document.getElementById('recentSchemeA');
   const boxB = document.getElementById('recentSchemeB');
+  // 同步更新方案显示按钮
+  const schemeBtn = document.getElementById('schemeDisplayBtn');
   if (tabA && tabB) {
     if (activeRecentScheme === 'A') {
       tabA.style.background = '#1890ff';
       tabA.style.color = '#fff';
       tabB.style.background = '#fff';
       tabB.style.color = '#666';
+      if (schemeBtn) {
+        schemeBtn.textContent = '福';
+        schemeBtn.style.background = '#1890ff';
+        schemeBtn.style.color = '#fff';
+      }
     } else {
       tabB.style.background = '#52c41a';
       tabB.style.color = '#fff';
       tabA.style.background = '#fff';
       tabA.style.color = '#666';
+      if (schemeBtn) {
+        schemeBtn.textContent = '体';
+        schemeBtn.style.background = '#52c41a';
+        schemeBtn.style.color = '#fff';
+      }
     }
   }
   // 两个方案都显示，但选中的高亮，未选中的半透明
@@ -6766,10 +5837,284 @@ document.addEventListener('touchend', function(e) {
   lastTouchEnd = now;
 }, { passive: false });
 
+// ========== 所有数据功能 ==========
+let allDataList = [];
+let allDataPage = 0;
+const allDataPageSize = 100;
+let allDataCopiedSet = new Set();
+
+function showAllDataModal() {
+  const modal = document.getElementById('allDataModal');
+  modal.style.display = 'flex';
+
+  // 生成全量五码并筛选
+  allDataList = [];
+  allDataCopiedSet = new Set();
+
+  // 遍历所有 C(10,5)=252 种五码组合（不重复数字）
+  const digits = ['0','1','2','3','4','5','6','7','8','9'];
+  function combine(arr, k, start, current) {
+    if (current.length === k) {
+      const source = current.join('');
+      // 条件1-6全量筛选
+      if (sourcePassesAllConditions(source)) {
+        allDataList.push(source);
+      }
+      return;
+    }
+    for (let i = start; i < arr.length; i++) {
+      current.push(arr[i]);
+      combine(arr, k, i + 1, current);
+      current.pop();
+    }
+  }
+  combine(digits, 5, 0, []);
+
+  allDataPage = 0;
+  renderAllData();
+}
+
+// 所有数据：条件1、2、4、5、6筛选（源码级别，不含断组）
+function sourcePassesAllConditions(source) {
+  // ===== 条件1: 胆码 - 数据源至少包含1个胆码 =====
+  const danmaDigits = getSelectedDigits('danmaPicker');
+  if (danmaDigits.length > 0) {
+    const hasAny = danmaDigits.some(d => source.includes(d));
+    if (!hasAny) return false;
+  }
+
+  // ===== 条件2: 和尾 - 排除能组成排除和尾的3个数字组合（组三/豹子自动除外） =====
+  const hezhiDigits = getSelectedDigits('hezhiPicker');
+  if (hezhiDigits.length > 0) {
+    // 源码5个数字不重复，任取3个必然是不同数字=非组三非豹子
+    const sd = source.split('');
+    for (let i = 0; i < sd.length; i++) {
+      for (let j = i + 1; j < sd.length; j++) {
+        for (let k = j + 1; k < sd.length; k++) {
+          const sumTail = (parseInt(sd[i]) + parseInt(sd[j]) + parseInt(sd[k])) % 10;
+          if (hezhiDigits.includes(sumTail.toString())) {
+            return false;
+          }
+        }
+      }
+    }
+  }
+
+  // ===== 条件4: 容错 - 数据源不能同时包含容错中的2个以上数字 =====
+  const rongcuoList = getRongcuoList();
+  for (const rc of rongcuoList) {
+    if (hitRongcuoSource(source, rc)) return false;
+  }
+
+  // ===== 条件5: 杀号 - 百十个同时杀同一个数字则排除含该数字的源码 =====
+  const excludeBai = getSelectedDigits('excludeBaiPicker');
+  const excludeShi = getSelectedDigits('excludeShiPicker');
+  const excludeGe = getSelectedDigits('excludeGePicker');
+  for (let d = 0; d <= 9; d++) {
+    const ds = String(d);
+    if (excludeBai.includes(ds) && excludeShi.includes(ds) && excludeGe.includes(ds)) {
+      if (source.includes(ds)) return false;
+    }
+  }
+
+  // ===== 条件6: 近期号码排除 =====
+  if (!sourcePassesRecentFilter(source)) return false;
+
+  return true;
+}
+
+function renderAllData() {
+  const content = document.getElementById('allDataContent');
+  const countEl = document.getElementById('allDataCount');
+  countEl.textContent = '共 ' + allDataList.length + ' 个五码';
+
+  const start = allDataPage * allDataPageSize;
+  const end = Math.min(start + allDataPageSize, allDataList.length);
+  const pageItems = allDataList.slice(start, end);
+
+  let html = '';
+  for (let i = 0; i < pageItems.length; i++) {
+    const code = pageItems[i];
+    const idx = start + i;
+    const isCopied = allDataCopiedSet.has(code);
+    html += '<div class="all-data-item' + (isCopied ? ' copied' : '') + '" id="alldata-' + idx + '">'
+      + '<span class="all-data-code">' + code + '</span>'
+      + '<button class="all-data-copy-btn' + (isCopied ? ' active' : '') + '" onclick="toggleAllDataCopy(' + idx + ')">' + (isCopied ? '已复制' : '复制') + '</button>'
+      + '</div>';
+  }
+
+  if (end < allDataList.length) {
+    html += '<div style="text-align:center;padding:12px;color:#999;font-size:13px;">已加载 ' + end + ' / ' + allDataList.length + '，'
+      + '<button class="btn-load-more" onclick="allDataLoadMore()">加载更多</button></div>';
+  } else {
+    html += '<div style="text-align:center;padding:12px;color:#999;font-size:13px;">已全部加载（' + allDataList.length + ' 个）</div>';
+  }
+
+  content.innerHTML = html;
+  // 更新已复制计数
+  const copiedCountEl = document.getElementById('allDataCopiedCount');
+  if (copiedCountEl) copiedCountEl.textContent = allDataCopiedSet.size;
+}
+
+function allDataLoadMore() {
+  allDataPage++;
+  // 追加渲染而非替换
+  const content = document.getElementById('allDataContent');
+  // 移除"加载更多"按钮所在div
+  const loadMoreDiv = content.querySelector('.btn-load-more');
+  if (loadMoreDiv) {
+    loadMoreDiv.parentElement.remove();
+  }
+
+  const start = allDataPage * allDataPageSize;
+  const end = Math.min(start + allDataPageSize, allDataList.length);
+  const pageItems = allDataList.slice(start, end);
+
+  let html = '';
+  for (let i = 0; i < pageItems.length; i++) {
+    const code = pageItems[i];
+    const idx = start + i;
+    const isCopied = allDataCopiedSet.has(code);
+    html += '<div class="all-data-item' + (isCopied ? ' copied' : '') + '" id="alldata-' + idx + '">'
+      + '<span class="all-data-code">' + code + '</span>'
+      + '<button class="all-data-copy-btn' + (isCopied ? ' active' : '') + '" onclick="toggleAllDataCopy(' + idx + ')">' + (isCopied ? '已复制' : '复制') + '</button>'
+      + '</div>';
+  }
+
+  if (end < allDataList.length) {
+    html += '<div style="text-align:center;padding:12px;color:#999;font-size:13px;">已加载 ' + end + ' / ' + allDataList.length + '，'
+      + '<button class="btn-load-more" onclick="allDataLoadMore()">加载更多</button></div>';
+  } else {
+    html += '<div style="text-align:center;padding:12px;color:#999;font-size:13px;">已全部加载（' + allDataList.length + ' 个）</div>';
+  }
+
+  content.insertAdjacentHTML('beforeend', html);
+
+  const copiedCountEl = document.getElementById('allDataCopiedCount');
+  if (copiedCountEl) copiedCountEl.textContent = allDataCopiedSet.size;
+}
+
+function toggleAllDataCopy(idx) {
+  const code = allDataList[idx];
+  if (!code) return;
+
+  const item = document.getElementById('alldata-' + idx);
+  const btn = item ? item.querySelector('.all-data-copy-btn') : null;
+
+  if (allDataCopiedSet.has(code)) {
+    // 已复制 → 取消（变暗）
+    allDataCopiedSet.delete(code);
+    if (item) item.classList.remove('copied');
+    if (btn) {
+      btn.classList.remove('active');
+      btn.textContent = '复制';
+    }
+  } else {
+    // 未复制 → 复制并常亮
+    copyToClipboard(code).then(() => {
+      allDataCopiedSet.add(code);
+      if (item) item.classList.add('copied');
+      if (btn) {
+        btn.classList.add('active');
+        btn.textContent = '已复制';
+      }
+      showToast('已复制：' + code);
+      const copiedCountEl = document.getElementById('allDataCopiedCount');
+      if (copiedCountEl) copiedCountEl.textContent = allDataCopiedSet.size;
+    }).catch(() => {
+      showCopyDialog(code, '本行');
+    });
+  }
+}
+
+function closeAllDataModal() {
+  document.getElementById('allDataModal').style.display = 'none';
+}
+
+function copyAllCopiedData() {
+  if (allDataCopiedSet.size === 0) {
+    showToast('暂无已复制的号码');
+    return;
+  }
+  const text = Array.from(allDataCopiedSet).join('\n');
+  copyToClipboard(text).then(() => {
+    showToast('已复制 ' + allDataCopiedSet.size + ' 个号码');
+  }).catch(() => {
+    showCopyDialog(text, '已复制号码');
+  });
+}
+
+function clearAllCopiedData() {
+  allDataCopiedSet.clear();
+  renderAllData();
+  showToast('已清空复制记录');
+}
+
 </script>
 
+<!-- 所有数据弹窗 -->
+<div id="allDataModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:10px;box-sizing:border-box;">
+  <div style="background:#fff;border-radius:12px;width:100%;max-width:600px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;">
+    <!-- 头部 -->
+    <div style="padding:12px 16px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:16px;font-weight:bold;">所有数据</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span style="font-size:12px;color:#999;">已选 <span id="allDataCopiedCount" style="color:#fa8c16;font-weight:bold;">0</span></span>
+        <button onclick="copyAllCopiedData()" style="padding:4px 10px;border:1px solid #fa8c16;border-radius:6px;background:#fff;color:#fa8c16;font-size:12px;cursor:pointer;">复制已选</button>
+        <button onclick="clearAllCopiedData()" style="padding:4px 10px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#666;font-size:12px;cursor:pointer;">清空已选</button>
+        <button onclick="closeAllDataModal()" style="padding:4px 10px;border:none;border-radius:6px;background:#f5f5f5;color:#666;font-size:14px;cursor:pointer;">✕</button>
+      </div>
+    </div>
+    <!-- 计数 -->
+    <div id="allDataCount" style="padding:8px 16px;font-size:13px;color:#666;border-bottom:1px solid #f5f5f5;">共 0 个五码</div>
+    <!-- 内容区 -->
+    <div id="allDataContent" style="flex:1;overflow-y:auto;padding:8px;"></div>
+  </div>
+</div>
 
+<style>
+.all-data-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background 0.2s;
+}
+.all-data-item.copied {
+  background: #fff7e6;
+}
+.all-data-code {
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-family: monospace;
+}
+.all-data-copy-btn {
+  padding: 4px 12px;
+  border: 1px solid #fa8c16;
+  border-radius: 6px;
+  background: #fff;
+  color: #fa8c16;
+  font-size: 12px;
+  cursor: pointer;
+  min-width: 50px;
+  transition: all 0.2s;
+}
+.all-data-copy-btn.active {
+  background: #fa8c16;
+  color: #fff;
+}
+.btn-load-more {
+  padding: 6px 16px;
+  border: 1px solid #1890ff;
+  border-radius: 6px;
+  background: #fff;
+  color: #1890ff;
+  font-size: 13px;
+  cursor: pointer;
+}
+</style>
 
-<div data-trae-edit-ui="true" class="trae-image-download-btn" title="Download image" style="position: fixed; display: none; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background: var(--trae-bg-menu, #222427); border: 1px solid var(--trae-border-l2, rgba(255,255,255,0.12)); box-shadow: var(--trae-floating-shadow, 0px 2px 8px 0px rgba(0,0,0,0.2)); color: var(--trae-icon-default, #f5f9fe); cursor: pointer; z-index: 89990; transition: background 0.15s; pointer-events: auto;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 2v8m0 0L5 7m3 3l3-3M3 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-    </svg></div></body></html>
+</body>
+</html>
