@@ -1163,19 +1163,19 @@ h1 {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
           <div class="input-group" style="margin-bottom:0;">
             <label>五码五注组数</label>
-            <input type="number" id="fmt3WumaCount" value="20" min="0" max="100" inputmode="numeric" onchange="saveConfig()">
+            <input type="number" id="fmt3WumaCount" value="" min="" max="100" inputmode="numeric" onchange="saveConfig()">
           </div>
           <div class="input-group" style="margin-bottom:0;">
             <label>四注组数</label>
-            <input type="number" id="fmt3FourCount" value="5" min="0" max="100" inputmode="numeric" onchange="saveConfig()">
+            <input type="number" id="fmt3FourCount" value="" min="" max="100" inputmode="numeric" onchange="saveConfig()">
           </div>
           <div class="input-group" style="margin-bottom:0;">
             <label>三注组数</label>
-            <input type="number" id="fmt3ThreeCount" value="5" min="0" max="100" inputmode="numeric" onchange="saveConfig()">
+            <input type="number" id="fmt3ThreeCount" value="" min="" max="100" inputmode="numeric" onchange="saveConfig()">
           </div>
           <div class="input-group" style="margin-bottom:0;">
             <label>两注组数</label>
-            <input type="number" id="fmt3TwoCount" value="2" min="0" max="100" inputmode="numeric" onchange="saveConfig()">
+            <input type="number" id="fmt3TwoCount" value="" min="" max="100" inputmode="numeric" onchange="saveConfig()">
           </div>
         </div>
       </div>
@@ -1270,19 +1270,19 @@ h1 {
       <div class="dm-inputs-row" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
         <div class="input-group" style="flex:1;min-width:120px;">
           <label>五码五注组数</label>
-          <input type="number" id="dmWumaCount" value="0" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
+          <input type="number" id="dmWumaCount" value="" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
         </div>
         <div class="input-group" style="flex:1;min-width:120px;">
           <label>两注组数</label>
-          <input type="number" id="dmTwoCount" value="0" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
+          <input type="number" id="dmTwoCount" value="" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
         </div>
         <div class="input-group" style="flex:1;min-width:120px;">
           <label>三注组数</label>
-          <input type="number" id="dmThreeCount" value="0" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
+          <input type="number" id="dmThreeCount" value="" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
         </div>
         <div class="input-group" style="flex:1;min-width:120px;">
           <label>四注组数</label>
-          <input type="number" id="dmFourCount" value="0" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
+          <input type="number" id="dmFourCount" value="" min="0" max="100" inputmode="numeric" style="width:100%;" onchange="saveConfig()">
         </div>
       </div>
       <div class="switch-row" style="margin-top:12px;">
@@ -1408,11 +1408,11 @@ function addDuanzu(p1 = '', p2 = '', p3 = '') {
       <button class="duanzu-delete-btn" onclick="deleteDuanzu(${id})">−</button>
     </div>
     <div class="duanzu-inputs">
-      <input type="text" class="duanzu-p1" placeholder="例：19" inputmode="numeric" value="${p1}" oninput="saveConfig()">
+      <input type="text" class="duanzu-p1" placeholder="" inputmode="numeric" value="${p1}" oninput="saveConfig()">
       <span class="duanzu-sep">-</span>
-      <input type="text" class="duanzu-p2" placeholder="例：678" inputmode="numeric" value="${p2}" oninput="saveConfig()">
+      <input type="text" class="duanzu-p2" placeholder="" inputmode="numeric" value="${p2}" oninput="saveConfig()">
       <span class="duanzu-sep">-</span>
-      <input type="text" class="duanzu-p3" placeholder="例：0235" inputmode="numeric" value="${p3}" oninput="saveConfig()">
+      <input type="text" class="duanzu-p3" placeholder="" inputmode="numeric" value="${p3}" oninput="saveConfig()">
     </div>
   `;
   list.appendChild(item);
@@ -1764,12 +1764,12 @@ function addManualItem() {
   item.id = 'manual-' + id;
   item.innerHTML = `
     <div class="input-group">
-      <label>数据源（4-10位不重复数字）</label>
-      <input type="text" class="source-input" placeholder="例如：12345" maxlength="10" inputmode="numeric" pattern="[0-9]*" oninput="saveConfig()">
+      <label>数据源</label>
+      <input type="text" class="source-input" placeholder="" maxlength="10" inputmode="numeric" pattern="[0-9]*" oninput="saveConfig()">
     </div>
     <div class="input-group">
-      <label>铁胆（单数字/空）</label>
-      <input type="text" class="dan-input" placeholder="例如：5" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="saveConfig()">
+      <label>胆</label>
+      <input type="text" class="dan-input" placeholder="" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="saveConfig()">
     </div>
     <button class="delete-btn" onclick="deleteManualItem(${id})" title="删除">×</button>
   `;
@@ -1986,8 +1986,16 @@ function getGroupKey(code) {
 }
 
 function generateNumberPool(source, dan, isRandom = false) {
-  const allCodes = generateAll3DigitCodes(source);
+  let allCodes = generateAll3DigitCodes(source);
 
+  // 先筛选：保留全部排列参与筛选，避免组选去重时误杀合法排列
+  allCodes = applyFilters(allCodes, isRandom);
+
+  if (dan !== '') {
+    allCodes = allCodes.filter(code => code.includes(dan));
+  }
+
+  // 再按组选去重：每组从通过筛选的排列中随机取一个代表
   const groupMap = {};
   for (const code of allCodes) {
     const key = getGroupKey(code);
@@ -1997,7 +2005,7 @@ function generateNumberPool(source, dan, isRandom = false) {
     groupMap[key].push(code);
   }
 
-  let pool = [];
+  const pool = [];
   const groupKeys = Object.keys(groupMap);
   shuffle(groupKeys);
 
@@ -2005,12 +2013,6 @@ function generateNumberPool(source, dan, isRandom = false) {
     const variants = groupMap[key];
     shuffle(variants);
     pool.push(variants[0]);
-  }
-
-  pool = applyFilters(pool, isRandom);
-
-  if (dan !== '') {
-    pool = pool.filter(code => code.includes(dan));
   }
 
   shuffle(pool);
@@ -4704,12 +4706,12 @@ function loadConfig() {
         el.id = 'manual-' + id;
         el.innerHTML = `
           <div class="input-group">
-            <label>数据源（4-10位不重复数字）</label>
-            <input type="text" class="source-input" placeholder="例如：12345" maxlength="10" inputmode="numeric" pattern="[0-9]*" value="${item.source || ''}" oninput="saveConfig()">
+            <label>数据源</label>
+            <input type="text" class="source-input" placeholder="" maxlength="10" inputmode="numeric" pattern="[0-9]*" value="${item.source || ''}" oninput="saveConfig()">
           </div>
           <div class="input-group">
-            <label>铁胆（单数字/空）</label>
-            <input type="text" class="dan-input" placeholder="例如：5" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="${item.dan || ''}" oninput="saveConfig()">
+            <label>胆</label>
+            <input type="text" class="dan-input" placeholder="" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="${item.dan || ''}" oninput="saveConfig()">
           </div>
           <button class="delete-btn" onclick="deleteManualItem(${id})" title="删除">×</button>
         `;
@@ -4917,10 +4919,10 @@ function init() {
   const threeVal = parseInt(document.getElementById('fmt3ThreeCount').value) || 0;
   const twoVal = parseInt(document.getElementById('fmt3TwoCount').value) || 0;
   if (wumaVal === 0 && fourVal === 0 && threeVal === 0 && twoVal === 0) {
-    document.getElementById('fmt3WumaCount').value = 20;
-    document.getElementById('fmt3FourCount').value = 5;
-    document.getElementById('fmt3ThreeCount').value = 5;
-    document.getElementById('fmt3TwoCount').value = 2;
+    document.getElementById('fmt3WumaCount').value = 0;
+    document.getElementById('fmt3FourCount').value = 0;
+    document.getElementById('fmt3ThreeCount').value = 0;
+    document.getElementById('fmt3TwoCount').value = 0;
     saveConfig();
   }
 
